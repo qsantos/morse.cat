@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<style>
+#feedback {
+    width:200px;
+    height:200px;
+    margin: 0 auto;
+    font-weight: bold;
+}
+#feedback.success {
+    color: white;
+    background-color: #36B37E;
+}
+#feedback.failure {
+    color: white;
+    background-color: #FF5630;
+}
+#feedback_character {
+    font-variant-caps: small-caps;
+    font-size: 50px;
+    font-family: sans-serif;
+    text-align: center;
+}
+#feedback_cw {
+    font-size: 40px;
+    text-align: center;
+}
+</style>
+<script src="./jscwlib.js"></script>
+
+<div id="player"></div>
+<div id="feedback">
+    <div id="feedback_character"></div>
+    <div id="feedback_cw"></div>
+</div>
+<div id="lamp" style="width:20px; height:20px; border:1px solid black;"></div>
+
+<script>
+const m = new jscw({"wpm": 20, "freq": 550});
+m.setText("?8OS, .VZHJ 7,MEJ QOH74 D3,4F QHD7F HC2TJ HYC,M 1HW4Y JQ,6T 5,E4B ,RRTA 34NIF BBE6B");
+m.renderPlayer('player', m);
+const played = [];
+let nextIndex = 0;
+const feedback = document.getElementById('feedback');
+const feedback_character = document.getElementById('feedback_character');
+const feedback_cw = document.getElementById('feedback_cw');
+
+document.addEventListener('keypress', function(event) {
+    const user_input = event.key.toLowerCase();
+    if (user_input == ' ' && !m.getRemaining()) {
+        m.play();
+        return;
+    }
+    if (nextIndex >= played.length) {
+        return;
+    }
+    if (user_input == ' ') {
+        while (nextIndex < played.length) {
+            if (played[nextIndex] == ' ') {
+                nextIndex += 1;
+                break;
+            }
+            nextIndex += 1;
+        }
+        return;
+    }
+    const expected = played[nextIndex].toLowerCase();
+    if (expected == user_input) {
+        feedback.classList.remove('failure');
+        feedback.classList.add('success');
+    } else {
+        feedback.classList.remove('success');
+        feedback.classList.add('failure');
+    }
+    feedback_character.innerText = expected;
+    feedback_cw.innerText = m.alphabet[expected];
+    nextIndex += 1;
+})
+
+m.onPlay = function() {
+    played.length = 0;
+    nextIndex = 0;
+}
+
+m.onCharacterPlay = function(c) {
+    played.push(c.c);
+    console.log(played);
+}
+
+document.body.focus();
+</script>
