@@ -41,7 +41,7 @@
 <div id="lamp" style="width:20px; height:20px; border:1px solid black;"></div>
 
 <script>
-const charset = ",./0123456789=?ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+const charset = ",./0123456789=?abcdefghijklmnopqrstuvwxyz";
 const word_length = 5;
 const word_count = 10;
 const text = Array.from({length: word_count}, () =>
@@ -59,17 +59,17 @@ const feedback_wrong_character = document.getElementById('feedback_wrong_charact
 const feedback_character = document.getElementById('feedback_character');
 const feedback_cw = document.getElementById('feedback_cw');
 
-// prevent Firefox's quick search from catching key presses on forward slash
 document.addEventListener('keydown', function(event) {
     if (event.key == '/') {
+        // disable Firefox's quick search when pressing forward slash
         event.preventDefault();
     }
-});
-
-document.addEventListener('keypress', function(event) {
     const user_input = event.key.toLowerCase();
     if (user_input == ' ' && !m.getRemaining()) {
         m.play();
+        return;
+    }
+    if (charset.indexOf(user_input) == -1) {
         return;
     }
     if (nextIndex >= played.length) {
