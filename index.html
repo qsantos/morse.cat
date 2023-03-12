@@ -35,8 +35,16 @@
 <div id="lamp" style="width:20px; height:20px; border:1px solid black;"></div>
 
 <script>
+const charset = ",./0123456789?ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+const word_length = 5;
+const word_count = 10;
+const text = Array.from({length: word_count}, () =>
+    Array.from({length: word_length}, () =>
+        charset[Math.floor(Math.random() * charset.length)]
+    ).join('')
+).join(' ')
 const m = new jscw({"wpm": 20, "freq": 550});
-m.setText("?8OS, .VZHJ 7,MEJ QOH74 D3,4F QHD7F HC2TJ HYC,M 1HW4Y JQ,6T 5,E4B ,RRTA 34NIF BBE6B");
+m.setText(text);
 m.renderPlayer('player', m);
 const played = [];
 let nextIndex = 0;
