@@ -14,11 +14,16 @@
     color: white;
     background-color: #FF5630;
 }
-#feedback_character {
+#feedback_wrong_character, #feedback_character {
+    min-height: 1.25em;
+    line-height: 1.25;
     font-variant-caps: small-caps;
     font-size: 50px;
     font-family: sans-serif;
     text-align: center;
+}
+#feedback_wrong_character {
+    text-decoration: line-through;
 }
 #feedback_cw {
     font-size: 40px;
@@ -29,6 +34,7 @@
 
 <div id="player"></div>
 <div id="feedback">
+    <div id="feedback_wrong_character"></div>
     <div id="feedback_character"></div>
     <div id="feedback_cw"></div>
 </div>
@@ -49,6 +55,7 @@ m.renderPlayer('player', m);
 const played = [];
 let nextIndex = 0;
 const feedback = document.getElementById('feedback');
+const feedback_wrong_character = document.getElementById('feedback_wrong_character');
 const feedback_character = document.getElementById('feedback_character');
 const feedback_cw = document.getElementById('feedback_cw');
 
@@ -82,9 +89,11 @@ document.addEventListener('keypress', function(event) {
     if (expected == user_input) {
         feedback.classList.remove('failure');
         feedback.classList.add('success');
+        feedback_wrong_character.innerText = '';
     } else {
         feedback.classList.remove('success');
         feedback.classList.add('failure');
+        feedback_wrong_character.innerText = user_input;
     }
     feedback_character.innerText = expected;
     feedback_cw.innerText = m.alphabet[expected];
