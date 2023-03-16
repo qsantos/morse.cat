@@ -72,7 +72,7 @@ document.addEventListener('keydown', function(event) {
         m.play();
         return;
     }
-    if (charset.indexOf(user_input) == -1) {
+    if (user_input != ' ' && charset.indexOf(user_input) == -1) {
         return;
     }
     if (nextIndex >= played.length) {
