@@ -47,13 +47,17 @@
 const charset = ",./0123456789=?abcdefghijklmnopqrstuvwxyz";
 const word_length = 5;
 const word_count = 10;
-const text = Array.from({length: word_count}, () =>
-    Array.from({length: word_length}, () =>
+
+const m = new jscw({"wpm": 20, "eff": 15, "freq": 550});
+
+function push_word() {
+    const word = Array.from({length: word_length}, () =>
         charset[Math.floor(Math.random() * charset.length)]
-    ).join('')
-).join(' ')
-const m = new jscw({"wpm": 20, "freq": 550});
-m.setText(text);
+    ).join('');
+    m.setText(word + ' ');
+}
+
+push_word();
 m.renderPlayer('player', m);
 const played = [];
 let nextIndex = 0;
@@ -68,73 +72,38 @@ document.addEventListener('keydown', function(event) {
         event.preventDefault();
     }
     const user_input = event.key.toLowerCase();
-    if (user_input == ' ' && !m.getRemaining()) {
-        m.play();
+    if (!m.getRemaining()) {
+        // not playing
+        if (user_input == ' ') {
+            m.play();
+        }
         return;
     }
     if (user_input != ' ' && charset.indexOf(user_input) == -1) {
         return;
     }
-    if (nextIndex >= played.length) {
-        return;
-    }
 
-    // skip to next word
-    if (user_input == ' ') {
-        while (nextIndex < played.length) {
-            if (played[nextIndex] == ' ') {
-                nextIndex += 1;
-                break;
-            }
-            nextIndex += 1;
-        }
-        return;
-    }
-
-    // look for user input in played characters
-    let playedIndex;
-    for (let otherIndex = nextIndex; otherIndex < played.length; otherIndex++) {
-        if (played[otherIndex] == user_input) {
-            playedIndex = otherIndex;
-            break;
-        }
-    }
-
-    if (playedIndex === undefined) {
-        // user input not found in played characters
-        feedback.classList.remove('success');
-        feedback.classList.add('failure');
-        feedback.classList.remove('skipped');
-        feedback_wrong_character.innerText = user_input;
-    } else if (playedIndex == nextIndex) {
-        // user input is the next played character
-        feedback.classList.remove('failure');
-        feedback.classList.add('success');
-        feedback.classList.remove('skipped');
-        feedback_wrong_character.innerText = '';
+    // played[nextIndex] is undefined if nextIndex >= played.length
+    const expected = played[nextIndex]?.toLowerCase();
+    if (user_input == expected) {
+        // correct
+        nextIndex += 1;
+        console.log('Correct: ' + user_input);
     } else {
-        // user input found later in the played characters
-        feedback.classList.remove('success');
-        feedback.classList.remove('failure');
-        feedback.classList.add('skipped');
-        feedback_wrong_character.innerText = '';
-        nextIndex = playedIndex;
+        // incorrect
+        m.stop();
+        console.log('Expected ' + expected);
     }
-
-    const expected = played[nextIndex].toLowerCase();
-    feedback_character.innerText = expected;
-    feedback_cw.innerText = m.alphabet[expected];
-    nextIndex += 1;
 })
-
-m.onPlay = function() {
-    played.length = 0;
-    nextIndex = 0;
-}
 
 m.onCharacterPlay = function(c) {
     played.push(c.c);
-    console.log(played);
+    console.log(c);
+}
+
+m.onFinished = function() {
+    push_word();
+    m.play();
 }
 
 document.body.focus();
