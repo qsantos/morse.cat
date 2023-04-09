@@ -106,7 +106,7 @@ document.addEventListener('keydown', function(event) {
         m.stop();
         feedback.classList.remove('success');
         feedback.classList.add('failure');
-        feedback_wrong_character.innerText = user_input;
+        feedback_wrong_character.innerText = user_input == ' ' ? 'Space' : user_input;
         console.log('Expected ' + expected);
     }
 
