@@ -74,11 +74,14 @@ function start() {
 }
 
 document.addEventListener('keydown', function(event) {
-    if (event.key == '/') {
-        // disable Firefox's quick search when pressing forward slash
+    const user_input = event.key.toLowerCase();
+
+    // disable Firefox's quick search when pressing forward slash
+    if (user_input == '/') {
         event.preventDefault();
     }
-    const user_input = event.key.toLowerCase();
+
+    // hitting space starts the keying
     if (!m.getRemaining()) {
         // not playing
         if (user_input == ' ') {
@@ -86,6 +89,8 @@ document.addEventListener('keydown', function(event) {
         }
         return;
     }
+
+    // ignore non-copy user inputs (not in the charset, and not a space)
     if (user_input != ' ' && charset.indexOf(user_input) == -1) {
         return;
     }
