@@ -73,6 +73,16 @@ function start() {
     feedback_cw.innerText = '';
 }
 
+function character_to_string(c) {
+    if (c === undefined) {
+        return '-';
+    } else if (c == ' ') {
+        return 'Space';
+    } else {
+        return c;
+    }
+}
+
 document.addEventListener('keydown', function(event) {
     const user_input = event.key.toLowerCase();
 
@@ -106,12 +116,12 @@ document.addEventListener('keydown', function(event) {
         m.stop();
         feedback.classList.remove('success');
         feedback.classList.add('failure');
-        feedback_wrong_character.innerText = user_input == ' ' ? 'Space' : user_input;
+        feedback_wrong_character.innerText = character_to_string(user_input);
         console.log('Expected ' + expected);
     }
 
-    feedback_character.innerText = expected == ' ' ? 'Space' : expected;
-    feedback_cw.innerText = m.alphabet[expected];
+    feedback_character.innerText = character_to_string(expected);
+    feedback_cw.innerText = m.alphabet[expected] || '';
 })
 
 m.onCharacterPlay = function(c) {
