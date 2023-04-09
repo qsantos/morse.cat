@@ -110,7 +110,7 @@ document.addEventListener('keydown', function(event) {
         console.log('Expected ' + expected);
     }
 
-    feedback_character.innerText = expected;
+    feedback_character.innerText = expected == ' ' ? 'Space' : expected;
     feedback_cw.innerText = m.alphabet[expected];
 })
 
