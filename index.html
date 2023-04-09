@@ -14,9 +14,6 @@
 #feedback.failure {
     background-color: #FF5630;
 }
-#feedback.skipped {
-    background-color: #fa931e;
-}
 #feedback_wrong_character, #feedback_character {
     min-height: 1.25em;
     line-height: 1.25;
@@ -69,6 +66,11 @@ function start() {
     played.length = 0;
     push_word();
     m.play();
+    feedback.classList.add('success');
+    feedback.classList.remove('failure');
+    feedback_wrong_character.innerText = '';
+    feedback_character.innerText = '';
+    feedback_cw.innerText = '';
 }
 
 document.addEventListener('keydown', function(event) {
@@ -97,8 +99,14 @@ document.addEventListener('keydown', function(event) {
     } else {
         // incorrect
         m.stop();
+        feedback.classList.remove('success');
+        feedback.classList.add('failure');
+        feedback_wrong_character.innerText = user_input;
         console.log('Expected ' + expected);
     }
+
+    feedback_character.innerText = expected;
+    feedback_cw.innerText = m.alphabet[expected];
 })
 
 m.onCharacterPlay = function(c) {
