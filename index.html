@@ -50,7 +50,7 @@ function push_word() {
     const word = Array.from({length: word_length}, () =>
         charset[Math.floor(Math.random() * charset.length)]
     ).join('');
-    m.setText(word + ' ');
+    m.setText(' ' + word);
 }
 
 m.renderPlayer('player', m);
@@ -62,9 +62,9 @@ const feedback_character = document.getElementById('feedback_character');
 const feedback_cw = document.getElementById('feedback_cw');
 
 function start() {
-    played.length = 0;
-    nextIndex = 0;
     push_word();
+    played.length = 0;
+    nextIndex = 1;  // skip leading space
     m.play();
     feedback.classList.add('success');
     feedback.classList.remove('failure');
