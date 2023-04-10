@@ -32,7 +32,6 @@
 </style>
 <script src="./jscwlib.js"></script>
 
-<div id="player"></div>
 <div id="copied"></div>
 <div id="feedback">
     <div id="feedback_wrong_character"></div>
@@ -54,7 +53,6 @@ function push_word() {
     m.setText(' ' + word);
 }
 
-m.renderPlayer('player', m);
 const played = [];
 let nextIndex = 0;
 const copied = document.getElementById('copied');
