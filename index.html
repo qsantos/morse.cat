@@ -33,6 +33,7 @@
 <script src="./jscwlib.js"></script>
 
 <div id="player"></div>
+<div id="copied"></div>
 <div id="feedback">
     <div id="feedback_wrong_character"></div>
     <div id="feedback_character"></div>
@@ -56,6 +57,7 @@ function push_word() {
 m.renderPlayer('player', m);
 const played = [];
 let nextIndex = 0;
+const copied = document.getElementById('copied');
 const feedback = document.getElementById('feedback');
 const feedback_wrong_character = document.getElementById('feedback_wrong_character');
 const feedback_character = document.getElementById('feedback_character');
@@ -110,14 +112,13 @@ document.addEventListener('keydown', function(event) {
     if (user_input == expected) {
         // correct
         nextIndex += 1;
-        console.log('Correct: ' + user_input);
+        copied.innerText = played.slice(0, nextIndex).join('');
     } else {
         // incorrect
         m.stop();
         feedback.classList.remove('success');
         feedback.classList.add('failure');
         feedback_wrong_character.innerText = character_to_string(user_input);
-        console.log('Expected ' + expected);
     }
 
     feedback_character.innerText = character_to_string(expected);
@@ -126,7 +127,6 @@ document.addEventListener('keydown', function(event) {
 
 m.onCharacterPlay = function(c) {
     played.push(c.c);
-    console.log(c);
 }
 
 m.onFinished = function() {
