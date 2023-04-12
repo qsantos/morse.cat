@@ -48,7 +48,9 @@
         const charset = ",./0123456789=?abcdefghijklmnopqrstuvwxyz";
         const word_length = 5;
 
-        const m = new jscw({"wpm": 20, "eff": 20, "freq": 550});
+        const freq = 550;
+        const error_freq = 200;
+        const m = new jscw({"wpm": 20, "eff": 20});
 
         function push_word() {
             const word = Array.from({length: word_length}, () =>
@@ -65,10 +67,17 @@
         const feedback_character = document.getElementById('feedback_character');
         const feedback_cw = document.getElementById('feedback_cw');
 
+        function onFinished() {
+            push_word();
+            m.play();
+        }
+
         function start() {
             push_word();
             played.length = 0;
             nextIndex = 1;  // skip leading space
+            m.setFreq(freq);
+            m.onFinished = onFinished;
             m.play();
             feedback.classList.add('success');
             feedback.classList.remove('failure');
@@ -117,7 +126,10 @@
                 copied.innerText = played.slice(0, nextIndex).join('');
             } else {
                 // incorrect
+                m.onFinished = undefined;
                 m.stop();
+                m.setFreq(error_freq);
+                m.play('T');
                 feedback.classList.remove('success');
                 feedback.classList.add('failure');
                 feedback_wrong_character.innerText = character_to_string(user_input);
@@ -129,11 +141,6 @@
 
         m.onCharacterPlay = function(c) {
             played.push(c.c);
-        }
-
-        m.onFinished = function() {
-            push_word();
-            m.play();
         }
 
         document.body.focus();
