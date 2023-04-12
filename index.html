@@ -126,7 +126,11 @@
                 copied.innerText = played.slice(0, nextIndex).join('');
             } else {
                 // incorrect
-                m.onFinished = undefined;
+                m.onFinished = function() {
+                    m.onFinished = undefined;
+                    m.setFreq(freq);
+                    m.play(expected);
+                };
                 m.stop();
                 m.setFreq(error_freq);
                 m.play('T');
