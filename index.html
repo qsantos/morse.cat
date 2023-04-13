@@ -11,6 +11,7 @@
             font-weight: bold;
             color: white;
             background-color: #3677b3;
+            text-align: center;
         }
         #feedback.success {
             background-color: #36B37E;
@@ -24,14 +25,12 @@
             font-variant-caps: small-caps;
             font-size: 50px;
             font-family: sans-serif;
-            text-align: center;
         }
         #feedback_wrong_character {
             text-decoration: line-through;
         }
         #feedback_cw {
             font-size: 40px;
-            text-align: center;
         }
         </style>
         <script src="./jscwlib.js"></script>
@@ -39,9 +38,10 @@
     <body>
         <div id="copied"></div>
         <div id="feedback">
-            <div id="feedback_wrong_character"></div>
-            <div id="feedback_character"></div>
-            <div id="feedback_cw"></div>
+            <div id="progress">&nbsp;</div>
+            <div id="feedback_wrong_character">&nbsp;</div>
+            <div id="feedback_character">&nbsp;</div>
+            <div id="feedback_cw">&nbsp;</div>
         </div>
         <div id="lamp" style="width:20px; height:20px; border:1px solid black;"></div>
         <script>
@@ -62,6 +62,7 @@
         const played = [];
         let nextIndex = 0;
         const copied = document.getElementById('copied');
+        const progress = document.getElementById('progress');
         const feedback = document.getElementById('feedback');
         const feedback_wrong_character = document.getElementById('feedback_wrong_character');
         const feedback_character = document.getElementById('feedback_character');
@@ -139,6 +140,7 @@
                 feedback_wrong_character.innerText = character_to_string(user_input);
             }
 
+            progress.innerText = 'You copied ' + (nextIndex - 1) + ' characters';
             feedback_character.innerText = character_to_string(expected);
             feedback_cw.innerText = m.alphabet[expected] || '';
         })
