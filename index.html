@@ -61,6 +61,7 @@
 
         const played = [];
         let nextIndex = 0;
+        let inGame = false;
         const copied = document.getElementById('copied');
         const progress = document.getElementById('progress');
         const feedback = document.getElementById('feedback');
@@ -69,6 +70,7 @@
         const feedback_cw = document.getElementById('feedback_cw');
 
         function onFinished() {
+            // continue playing with next word
             push_word();
             m.play();
         }
@@ -76,6 +78,7 @@
         function start() {
             push_word();
             played.length = 0;
+            inGame = true;
             nextIndex = 1;  // skip leading space
             m.setFreq(freq);
             m.onFinished = onFinished;
@@ -106,7 +109,7 @@
             }
 
             // hitting space starts the keying
-            if (!m.getRemaining()) {
+            if (!inGame) {
                 // not playing
                 if (user_input == 'enter') {
                     start();
@@ -132,6 +135,7 @@
                     m.setFreq(freq);
                     m.play(expected);
                 };
+                inGame = false;
                 m.stop();
                 m.setFreq(error_freq);
                 m.play('T');
