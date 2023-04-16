@@ -39,13 +39,13 @@
         <h1>Morse 😺</h1>
         <div id="copied"></div>
         <div id="feedback">
-            <div id="progress">&nbsp;</div>
             <div id="feedback_wrong_character">&nbsp;</div>
             <div id="feedback_character">&nbsp;</div>
             <div id="feedback_cw">&nbsp;</div>
         </div>
         <div id="session_duration"></div>
         <div id="session_characters"></div>
+        <div id="total_characters"></div>
         <div id="lamp" style="width:20px; height:20px; border:1px solid black;"></div>
         <script>
         const charset = ",./0123456789=?abcdefghijklmnopqrstuvwxyz";
@@ -63,10 +63,11 @@
         }
 
         const played = [];
-        let nextIndex = 0;
         let inSession = false;
         let sessionStart = undefined;
         let sessionDurationUpdater = undefined;
+        let sessionCopiedCharacters = 0;
+        let totalCopiedCharacters = +(localStorage.getItem('totalCopiedCharacters') || 0);
         const copied = document.getElementById('copied');
         const progress = document.getElementById('progress');
         const feedback = document.getElementById('feedback');
@@ -76,11 +77,19 @@
         const session_duration = document.getElementById('session_duration');
         const total_duration = document.getElementById('session_duration');
         const session_characters = document.getElementById('session_characters');
+        const total_characters = document.getElementById('total_characters');
 
         function updateStats() {
             const sessionDuration = Math.round((Date.now() - sessionStart) / 1000);
             session_duration.innerText = 'Practised for ' + sessionDuration + ' seconds';
-            session_characters.innerText = 'Copied ' + (nextIndex - 1) + ' characters';
+            session_characters.innerText = 'Copied ' + sessionCopiedCharacters + ' characters';
+            total_characters.innerText = 'Copied ' + totalCopiedCharacters + ' characters in total';
+        }
+
+        function incrementCopiedCharacters() {
+            sessionCopiedCharacters += 1;
+            totalCopiedCharacters += 1;
+            localStorage.setItem('totalCopiedCharacters', totalCopiedCharacters)
         }
 
         function onFinished() {
@@ -96,7 +105,7 @@
             sessionStart = Date.now();
             updateStats();
             sessionDurationUpdater = setInterval(updateStats, 100);
-            nextIndex = 1;  // skip leading space
+            sessionCopiedCharacters = 0;
             m.setFreq(freq);
             m.onFinished = onFinished;
             m.play();
@@ -165,11 +174,11 @@
             }
 
             // played[nextIndex] is undefined if nextIndex >= played.length
-            const expected = played[nextIndex]?.toLowerCase();
+            const expected = played[sessionCopiedCharacters]?.toLowerCase();
             if (user_input == expected) {
                 // correct
-                nextIndex += 1;
-                copied.innerText = played.slice(0, nextIndex).join('');
+                incrementCopiedCharacters();
+                copied.innerText = played.slice(0, sessionCopiedCharacters).join('');
             } else {
                 // incorrect
                 stop();
@@ -179,12 +188,16 @@
                 feedback_wrong_character.innerText = character_to_string(user_input);
             }
 
-            progress.innerText = 'You copied ' + (nextIndex - 1) + ' characters';
             feedback_character.innerText = character_to_string(expected);
             feedback_cw.innerText = m.alphabet[expected] || '';
         })
 
         m.onCharacterPlay = function(c) {
+            // skip leading space
+            if (played.length == 0 && c.c == ' ') {
+                return;
+            }
+            // add character
             played.push(c.c);
         }
 
