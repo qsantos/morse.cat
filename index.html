@@ -44,6 +44,7 @@
             <div id="feedback_character">&nbsp;</div>
             <div id="feedback_cw">&nbsp;</div>
         </div>
+        <div id="session_duration"></div>
         <div id="lamp" style="width:20px; height:20px; border:1px solid black;"></div>
         <script>
         const charset = ",./0123456789=?abcdefghijklmnopqrstuvwxyz";
@@ -63,12 +64,20 @@
         const played = [];
         let nextIndex = 0;
         let inGame = false;
+        let sessionStart = undefined;
+        let sessionDurationUpdater = undefined;
         const copied = document.getElementById('copied');
         const progress = document.getElementById('progress');
         const feedback = document.getElementById('feedback');
         const feedback_wrong_character = document.getElementById('feedback_wrong_character');
         const feedback_character = document.getElementById('feedback_character');
         const feedback_cw = document.getElementById('feedback_cw');
+        const session_duration = document.getElementById('session_duration');
+
+        function updateSessionDuration() {
+            const sessionDuration = Math.round((Date.now() - sessionStart) / 1000);
+            session_duration.innerText = 'Practised for ' + sessionDuration + ' seconds';
+        }
 
         function onFinished() {
             // continue playing with next word
@@ -80,6 +89,9 @@
             push_word();
             played.length = 0;
             inGame = true;
+            sessionStart = Date.now();
+            updateSessionDuration();
+            sessionDurationUpdater = setInterval(updateSessionDuration, 100);
             nextIndex = 1;  // skip leading space
             m.setFreq(freq);
             m.onFinished = onFinished;
@@ -137,6 +149,9 @@
                     m.play(expected);
                 };
                 inGame = false;
+                updateSessionDuration();
+                clearInterval(sessionDurationUpdater);
+                sessionDurationUpdater = undefined;
                 m.stop();
                 m.setFreq(error_freq);
                 m.play('T');
