@@ -94,8 +94,12 @@
 
         function onFinished() {
             // continue playing with next word
-            push_word();
-            m.play();
+            // Note: onFinished might be called while the last character has not
+            //       quite finished playing; adding a 50 ms delay seems to fix it
+            setTimeout(function() {
+                push_word();
+                m.play();
+            }, 50);
         }
 
         function start() {
