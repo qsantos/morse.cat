@@ -103,6 +103,25 @@
             feedback_cw.innerText = '';
         }
 
+        function stop() {
+            inGame = false;
+            m.onFinished = undefined;
+            updateSessionDuration();
+            clearInterval(sessionDurationUpdater);
+            sessionDurationUpdater = undefined;
+            m.stop();
+            m.setFreq(error_freq);
+        }
+
+        function replay_after_mistake(c) {
+            m.onFinished = function() {
+                m.onFinished = undefined;
+                m.setFreq(freq);
+                m.play(c);
+            };
+            m.play('T');
+        }
+
         function character_to_string(c) {
             if (c === undefined) {
                 return '-';
@@ -143,18 +162,8 @@
                 copied.innerText = played.slice(0, nextIndex).join('');
             } else {
                 // incorrect
-                m.onFinished = function() {
-                    m.onFinished = undefined;
-                    m.setFreq(freq);
-                    m.play(expected);
-                };
-                inGame = false;
-                updateSessionDuration();
-                clearInterval(sessionDurationUpdater);
-                sessionDurationUpdater = undefined;
-                m.stop();
-                m.setFreq(error_freq);
-                m.play('T');
+                stop();
+                replay_after_mistake(expected);
                 feedback.classList.remove('success');
                 feedback.classList.add('failure');
                 feedback_wrong_character.innerText = character_to_string(user_input);
