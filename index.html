@@ -63,7 +63,7 @@
 
         const played = [];
         let nextIndex = 0;
-        let inGame = false;
+        let inSession = false;
         let sessionStart = undefined;
         let sessionDurationUpdater = undefined;
         const copied = document.getElementById('copied');
@@ -88,7 +88,7 @@
         function start() {
             push_word();
             played.length = 0;
-            inGame = true;
+            inSession = true;
             sessionStart = Date.now();
             updateSessionDuration();
             sessionDurationUpdater = setInterval(updateSessionDuration, 100);
@@ -104,7 +104,7 @@
         }
 
         function stop() {
-            inGame = false;
+            inSession = false;
             m.onFinished = undefined;
             updateSessionDuration();
             clearInterval(sessionDurationUpdater);
@@ -141,12 +141,18 @@
             }
 
             // hitting space starts the keying
-            if (!inGame) {
-                // not playing
-                if (user_input == 'enter') {
-                    start();
-                }
+            if (!inSession && user_input == 'enter') {
+                start();
+            }
+
+            // ignore other inputs when not in session
+            if (!inSession) {
                 return;
+            }
+
+            // stop when user hits Escape key
+            if (user_input == 'escape') {
+                stop();
             }
 
             // ignore non-copy user inputs (not in the charset, and not a space)
