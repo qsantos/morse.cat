@@ -45,6 +45,7 @@
             <div id="feedback_cw">&nbsp;</div>
         </div>
         <div id="session_duration"></div>
+        <div id="session_characters"></div>
         <div id="lamp" style="width:20px; height:20px; border:1px solid black;"></div>
         <script>
         const charset = ",./0123456789=?abcdefghijklmnopqrstuvwxyz";
@@ -73,10 +74,13 @@
         const feedback_character = document.getElementById('feedback_character');
         const feedback_cw = document.getElementById('feedback_cw');
         const session_duration = document.getElementById('session_duration');
+        const total_duration = document.getElementById('session_duration');
+        const session_characters = document.getElementById('session_characters');
 
-        function updateSessionDuration() {
+        function updateStats() {
             const sessionDuration = Math.round((Date.now() - sessionStart) / 1000);
             session_duration.innerText = 'Practised for ' + sessionDuration + ' seconds';
+            session_characters.innerText = 'Copied ' + (nextIndex - 1) + ' characters';
         }
 
         function onFinished() {
@@ -90,8 +94,8 @@
             played.length = 0;
             inSession = true;
             sessionStart = Date.now();
-            updateSessionDuration();
-            sessionDurationUpdater = setInterval(updateSessionDuration, 100);
+            updateStats();
+            sessionDurationUpdater = setInterval(updateStats, 100);
             nextIndex = 1;  // skip leading space
             m.setFreq(freq);
             m.onFinished = onFinished;
@@ -106,7 +110,7 @@
         function stop() {
             inSession = false;
             m.onFinished = undefined;
-            updateSessionDuration();
+            updateStats();
             clearInterval(sessionDurationUpdater);
             sessionDurationUpdater = undefined;
             m.stop();
