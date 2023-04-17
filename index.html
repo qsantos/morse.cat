@@ -80,11 +80,12 @@
         const total_characters = document.getElementById('total_characters');
 
         function updateStats() {
-            const sessionDuration = Math.round((Date.now() - sessionStart) / 1000);
+            const sessionDuration = sessionStart === undefined ? 0 : Math.round((Date.now() - sessionStart) / 1000);
             session_duration.innerText = 'Practised for ' + sessionDuration + ' seconds';
             session_characters.innerText = 'Copied ' + sessionCopiedCharacters + ' characters';
             total_characters.innerText = 'Copied ' + totalCopiedCharacters + ' characters in total';
         }
+        updateStats();
 
         function incrementCopiedCharacters() {
             sessionCopiedCharacters += 1;
