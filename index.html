@@ -48,6 +48,7 @@
     <body>
         <h1>Morse 😺</h1>
         <div id="copied"></div>
+        <div id="info"></div>
         <div id="feedback">
             <div id="feedback_wrong_character">&nbsp;</div>
             <div id="feedback_character">&nbsp;</div>
@@ -88,6 +89,7 @@
         const total_duration = document.getElementById('session_duration');
         const session_characters = document.getElementById('session_characters');
         const total_characters = document.getElementById('total_characters');
+        const info = document.getElementById('info');
 
         function updateStats() {
             const sessionDuration = sessionStart === undefined ? 0 : Math.round((Date.now() - sessionStart) / 1000);
@@ -211,7 +213,11 @@
             played.push(c.c);
         }
 
-        document.body.focus();
+        window.addEventListener('blur', () => {
+            info.innerText = 'Focus lost!';
+            stop();
+        });
+        window.focus();
         </script>
     </body>
 </html>
