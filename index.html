@@ -104,13 +104,8 @@
         }
 
         function onFinished() {
-            // continue playing with next word
-            // Note: onFinished might be called while the last character has not
-            //       quite finished playing; adding a 50 ms delay seems to fix it
-            setTimeout(function() {
-                push_word();
-                m.play();
-            }, 50);
+            push_word();
+            m.play();
         }
 
         function start() {
@@ -138,7 +133,6 @@
             clearInterval(sessionDurationUpdater);
             sessionDurationUpdater = undefined;
             m.stop();
-            m.setFreq(error_freq);
         }
 
         function replay_after_mistake(c) {
@@ -147,7 +141,8 @@
                 m.setFreq(freq);
                 m.play(c);
             };
-            m.play('T');
+            m.setFreq(error_freq);
+            m.play('T ');
         }
 
         function character_to_string(c) {
