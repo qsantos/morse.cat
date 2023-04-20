@@ -130,6 +130,9 @@
         }
 
         function stop() {
+            if (!inSession) {
+                return;
+            }
             inSession = false;
             m.onFinished = undefined;
             updateStats();
