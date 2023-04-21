@@ -54,9 +54,7 @@
             <div id="feedback_character">&nbsp;</div>
             <div id="feedback_cw">&nbsp;</div>
         </div>
-        <div id="session_duration"></div>
-        <div id="session_characters"></div>
-        <div id="total_characters"></div>
+        <div id="stats"></div>
         <div id="lamp" style="width:20px; height:20px; border:1px solid black;"></div>
         <script>
         const charset = ",./0123456789=?abcdefghijklmnopqrstuvwxyz";
@@ -77,36 +75,62 @@
         let inSession = false;
         let sessionStart = undefined;
         let sessionDurationUpdater = undefined;
+
+        // stats
+        // CHARACTERS
+        let totalCopiedCharacters = +(localStorage.getItem('totalCopiedCharacters') || 0);
         let sessionCopiedCharacters = 0;
         let bestSessionCopiedCharacters = +(localStorage.getItem('bestSessionCopiedCharacters') || 0);
-        let totalCopiedCharacters = +(localStorage.getItem('totalCopiedCharacters') || 0);
+        // WORDS
+        let totalCopiedWords = +(localStorage.getItem('totalCopiedWords') || 0);
+        let sessionCopiedWords = 0;
+        let bestSessionCopiedWords = +(localStorage.getItem('bestSessionCopiedWords') || 0);
+
         const copied = document.getElementById('copied');
         const progress = document.getElementById('progress');
         const feedback = document.getElementById('feedback');
         const feedback_wrong_character = document.getElementById('feedback_wrong_character');
         const feedback_character = document.getElementById('feedback_character');
         const feedback_cw = document.getElementById('feedback_cw');
-        const session_duration = document.getElementById('session_duration');
-        const total_duration = document.getElementById('session_duration');
-        const session_characters = document.getElementById('session_characters');
-        const total_characters = document.getElementById('total_characters');
+        const stats = document.getElementById('stats');
         const info = document.getElementById('info');
 
         function updateStats() {
             const sessionDuration = sessionStart === undefined ? 0 : Math.round((Date.now() - sessionStart) / 1000);
-            session_duration.innerText = 'Practised for ' + sessionDuration + ' seconds';
-            session_characters.innerText = 'Copied ' + sessionCopiedCharacters + ' characters (best: ' + bestSessionCopiedCharacters + ')';
-            total_characters.innerText = 'Copied ' + totalCopiedCharacters + ' characters in total';
+            const duration = 'Practised for ' + sessionDuration + ' seconds<br>';
+            const sessionCharacters = 'Copied ' + sessionCopiedCharacters + ' characters (best: ' + bestSessionCopiedCharacters + ')<br>';
+            const totalCharacters = 'Copied ' + totalCopiedCharacters + ' characters in total<br>';
+            const sessionWords = 'Copied ' + sessionCopiedWords + ' words (best: ' + bestSessionCopiedWords + ')<br>';
+            const totalWords = 'Copied ' + totalCopiedWords + ' words in total<br>';
+            stats.innerHTML = duration + sessionCharacters + totalCharacters + sessionWords + totalWords;
         }
         updateStats();
 
-        function incrementCopiedCharacters() {
-            sessionCopiedCharacters += 1;
-            localStorage.setItem('totalCopiedCharacters', totalCopiedCharacters)
+        function incrementCopiedCharacters(c) {
+            // CHARACTERS
+            // total
             totalCopiedCharacters += 1;
+            localStorage.setItem('totalCopiedCharacters', totalCopiedCharacters)
+            // session
+            sessionCopiedCharacters += 1;
+            // best session
             if (sessionCopiedCharacters > bestSessionCopiedCharacters) {
                 bestSessionCopiedCharacters = sessionCopiedCharacters;
                 localStorage.setItem('bestSessionCopiedCharacters', bestSessionCopiedCharacters)
+            }
+
+            // WORDS
+            if (c == ' ') {
+                // total
+                totalCopiedWords += 1;
+                localStorage.setItem('totalCopiedWords', totalCopiedWords);
+                // session
+                sessionCopiedWords += 1;
+                // best session
+                if (sessionCopiedWords > bestSessionCopiedWords) {
+                    bestSessionCopiedWords = sessionCopiedWords;
+                    localStorage.setItem('bestSessionCopiedWords', bestSessionCopiedWords);
+                }
             }
         }
 
@@ -123,6 +147,7 @@
             updateStats();
             sessionDurationUpdater = setInterval(updateStats, 100);
             sessionCopiedCharacters = 0;
+            sessionCopiedWords = 0;
             m.setFreq(freq);
             m.onFinished = onFinished;
             m.play();
@@ -200,7 +225,7 @@
             const expected = played[sessionCopiedCharacters]?.toLowerCase();
             if (user_input == expected) {
                 // correct
-                incrementCopiedCharacters();
+                incrementCopiedCharacters(expected);
                 copied.innerText = played.slice(0, sessionCopiedCharacters).join('');
             } else {
                 // incorrect
