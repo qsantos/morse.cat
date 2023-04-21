@@ -78,6 +78,7 @@
         let sessionStart = undefined;
         let sessionDurationUpdater = undefined;
         let sessionCopiedCharacters = 0;
+        let bestSessionCopiedCharacters = +(localStorage.getItem('bestSessionCopiedCharacters') || 0);
         let totalCopiedCharacters = +(localStorage.getItem('totalCopiedCharacters') || 0);
         const copied = document.getElementById('copied');
         const progress = document.getElementById('progress');
@@ -94,15 +95,19 @@
         function updateStats() {
             const sessionDuration = sessionStart === undefined ? 0 : Math.round((Date.now() - sessionStart) / 1000);
             session_duration.innerText = 'Practised for ' + sessionDuration + ' seconds';
-            session_characters.innerText = 'Copied ' + sessionCopiedCharacters + ' characters';
+            session_characters.innerText = 'Copied ' + sessionCopiedCharacters + ' characters (best: ' + bestSessionCopiedCharacters + ')';
             total_characters.innerText = 'Copied ' + totalCopiedCharacters + ' characters in total';
         }
         updateStats();
 
         function incrementCopiedCharacters() {
             sessionCopiedCharacters += 1;
-            totalCopiedCharacters += 1;
             localStorage.setItem('totalCopiedCharacters', totalCopiedCharacters)
+            totalCopiedCharacters += 1;
+            if (sessionCopiedCharacters > bestSessionCopiedCharacters) {
+                bestSessionCopiedCharacters = sessionCopiedCharacters;
+                localStorage.setItem('bestSessionCopiedCharacters', bestSessionCopiedCharacters)
+            }
         }
 
         function onFinished() {
