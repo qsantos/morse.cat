@@ -78,13 +78,13 @@
 
         // stats
         // CHARACTERS
-        let totalCopiedCharacters = +(localStorage.getItem('totalCopiedCharacters') || 0);
+        let totalCopiedCharacters = localStorage.getItem('totalCopiedCharacters') ^ 0;
         let sessionCopiedCharacters = 0;
-        let bestSessionCopiedCharacters = +(localStorage.getItem('bestSessionCopiedCharacters') || 0);
+        let bestSessionCopiedCharacters = localStorage.getItem('bestSessionCopiedCharacters') ^ 0;
         // WORDS
-        let totalCopiedWords = +(localStorage.getItem('totalCopiedWords') || 0);
+        let totalCopiedWords = localStorage.getItem('totalCopiedWords') ^ 0;
         let sessionCopiedWords = 0;
-        let bestSessionCopiedWords = +(localStorage.getItem('bestSessionCopiedWords') || 0);
+        let bestSessionCopiedWords = localStorage.getItem('bestSessionCopiedWords') ^ 0;
 
         const copied = document.getElementById('copied');
         const progress = document.getElementById('progress');
