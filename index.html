@@ -85,6 +85,10 @@
         let totalCopiedWords = localStorage.getItem('totalCopiedWords') ^ 0;
         let sessionCopiedWords = 0;
         let bestSessionCopiedWords = localStorage.getItem('bestSessionCopiedWords') ^ 0;
+        // SCORE
+        let totalScore = localStorage.getItem('totalScore') ^ 0;
+        let sessionScore = 0;
+        let bestSessionScore = localStorage.getItem('bestSessionScore') ^ 0;
 
         const copied = document.getElementById('copied');
         const progress = document.getElementById('progress');
@@ -97,12 +101,16 @@
 
         function updateStats() {
             const sessionDuration = sessionStart === undefined ? 0 : Math.round((Date.now() - sessionStart) / 1000);
-            const duration = 'Practised for ' + sessionDuration + ' seconds<br>';
-            const sessionCharacters = 'Copied ' + sessionCopiedCharacters + ' characters (best: ' + bestSessionCopiedCharacters + ')<br>';
-            const totalCharacters = 'Copied ' + totalCopiedCharacters + ' characters in total<br>';
-            const sessionWords = 'Copied ' + sessionCopiedWords + ' words (best: ' + bestSessionCopiedWords + ')<br>';
-            const totalWords = 'Copied ' + totalCopiedWords + ' words in total<br>';
-            stats.innerHTML = duration + sessionCharacters + totalCharacters + sessionWords + totalWords;
+            stats.innerHTML = (
+                'Practised for ' + sessionDuration + ' seconds<br>' +
+                'Copied ' + sessionCopiedCharacters + ' characters (best: ' + bestSessionCopiedCharacters + ')<br>' +
+                'Copied ' + totalCopiedCharacters + ' characters in total<br>' +
+                'Copied ' + sessionCopiedWords + ' words (best: ' + bestSessionCopiedWords + ')<br>' +
+                'Copied ' + totalCopiedWords + ' words in total<br>' +
+                'Current score is ' + sessionScore + ' (best: ' + bestSessionScore + ')<br>' +
+                'Total score is ' + totalScore + '<br>' +
+                ''
+            )
         }
         updateStats();
 
@@ -132,6 +140,18 @@
                     localStorage.setItem('bestSessionCopiedWords', bestSessionCopiedWords);
                 }
             }
+
+            // SCORE
+            // total
+            totalScore += sessionCopiedWords + 1;
+            localStorage.setItem('totalScore', totalScore);
+            // session
+            sessionScore += sessionCopiedWords + 1;
+            // best score
+            if (sessionScore > bestSessionScore) {
+                bestSessionScore = sessionScore;
+                localStorage.setItem('bestSessionScore', bestSessionScore);
+            }
         }
 
         function onFinished() {
@@ -148,6 +168,7 @@
             sessionDurationUpdater = setInterval(updateStats, 100);
             sessionCopiedCharacters = 0;
             sessionCopiedWords = 0;
+            sessionScore = 0;
             m.setFreq(freq);
             m.onFinished = onFinished;
             m.play();
