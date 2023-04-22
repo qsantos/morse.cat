@@ -56,17 +56,43 @@
         </div>
         <div id="stats"></div>
         <div id="lamp" style="width:20px; height:20px; border:1px solid black;"></div>
+        <form id="settings">
+            <label for="settings-wpm">Speed:</label>
+            <input id="settings-wpm" oninput="update_settings()" type="number" value="20" min="1" step="0.5" />
+            <abbr title="Words Per Minute">WPM</abbr>
+            <br>
+            <label for="settings-tone">Tone:</label>
+            <input id="settings-tone" oninput="update_settings()" type="number" value="600" min="10" step="10" />
+            Hz
+            <br>
+            <label for="settings-error-tone">Error Tone:</label>
+            <input id="settings-error-tone" oninput="update_settings()" type="number" value="200" min="10" step="10" />
+            Hz
+            <br>
+            <label for="settings-word-length">Size of words:</label>
+            <input id="settings-word-length" oninput="update_settings()" type="number" value="5" min="1" />
+            characters
+            <br>
+            <label for="settings-charset">Customize Charset:</label>
+            <br>
+            <textarea id="settings-charset" oninput="update_charset()">KMURESNAPTLWI.JZ=FOY,VG5/Q92H38B?47C1D60X</textarea>
+            <br>
+        </form>
+        </form>
         <script>
-        const charset = ",./0123456789=?abcdefghijklmnopqrstuvwxyz";
-        const word_length = 5;
+        const settings = {
+            wpm: 0,
+            tone: 0,
+            error_tone: 0,
+            word_length: 0,
+            charset: '',
+        };
 
-        const freq = 550;
-        const error_freq = 200;
-        const m = new jscw({"wpm": 20, "eff": 20});
+        const m = new jscw();
 
         function push_word() {
-            const word = Array.from({length: word_length}, () =>
-                charset[Math.floor(Math.random() * charset.length)]
+            const word = Array.from({length: settings.word_length}, () =>
+                settings.charset[Math.floor(Math.random() * settings.charset.length)]
             ).join('');
             m.setText(' ' + word);
         }
@@ -98,6 +124,16 @@
         const feedback_cw = document.getElementById('feedback_cw');
         const stats = document.getElementById('stats');
         const info = document.getElementById('info');
+
+        function update_settings() {
+            stop();
+            settings.wpm = document.getElementById('settings-wpm').value;
+            settings.tone = document.getElementById('settings-tone').value;
+            settings.error_tone = document.getElementById('settings-error-tone').value;
+            settings.word_length = document.getElementById('settings-word-length').value;
+            settings.charset = document.getElementById('settings-charset').value;
+        }
+        update_settings();
 
         function updateStats() {
             const sessionDuration = sessionStart === undefined ? 0 : Math.round((Date.now() - sessionStart) / 1000);
@@ -169,7 +205,9 @@
             sessionCopiedCharacters = 0;
             sessionCopiedWords = 0;
             sessionScore = 0;
-            m.setFreq(freq);
+            m.setWpm(settings.wpm);
+            m.setEff(settings.wpm);
+            m.setFreq(settings.tone);
             m.onFinished = onFinished;
             m.play();
             feedback.classList.add('success');
@@ -195,12 +233,12 @@
         function replay_after_mistake(c) {
             m.onFinished = function() {
                 m.onFinished = undefined;
-                m.setFreq(freq);
+                m.setFreq(settings.tone);
                 if (c !== undefined) {
                     m.play(c);
                 }
             };
-            m.setFreq(error_freq);
+            m.setFreq(settings.error_tone);
             m.play('T ');
         }
 
@@ -238,7 +276,7 @@
             }
 
             // ignore non-copy user inputs (not in the charset, and not a space)
-            if (user_input != ' ' && charset.indexOf(user_input) == -1) {
+            if (user_input != ' ' && settings.charset.indexOf(user_input) == -1) {
                 return;
             }
 
