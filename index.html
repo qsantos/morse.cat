@@ -192,7 +192,7 @@
         }
 
         function lcwo_lesson_of_charset(charset) {
-            const s = new Set(charset);
+            const s = new Set(charset.toUpperCase());
             let i = 0;
             while (i < lcwo_lessons.length) {
                 const c = lcwo_lessons[i];
@@ -207,14 +207,13 @@
         }
 
         function restore_lcwo_lesson() {
-            const charset = document.getElementById('settings-charset').value;
-            const lcwo_lesson = lcwo_lesson_of_charset(charset);
+            const lcwo_lesson = lcwo_lesson_of_charset(settings.charset);
             document.getElementById('settings-lcwo-lesson').value = lcwo_lesson;
         }
 
         function update_charset() {
-            restore_lcwo_lesson();
             update_settings();
+            restore_lcwo_lesson();
         }
 
         function update_lcwo_lesson() {
@@ -228,7 +227,7 @@
 
         function toggle_chars(event, chars) {
             const s = new Set(chars);
-            const charset_without_chars = Array.from(settings.charset).filter(c => !s.has(c)).join('');
+            const charset_without_chars = Array.from(settings.charset).filter(c => !s.has(c.toUpperCase())).join('');
             if (event.target.checked) {
                 settings.charset = chars + charset_without_chars;
             } else {
