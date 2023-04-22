@@ -32,7 +32,7 @@
         #feedback_cw {
             font-size: 40px;
         }
-        #copied {
+        #history {
             font-family: monospace;
             font-size: 20px;
             text-transform: uppercase;
@@ -47,7 +47,7 @@
     </head>
     <body>
         <h1>Morse 😺</h1>
-        <div id="copied"></div>
+        <div id="history"></div>
         <div id="info"></div>
         <div id="feedback">
             <div id="feedback_wrong_character">&nbsp;</div>
@@ -173,7 +173,7 @@
         let sessionScore = 0;
         let bestSessionScore = localStorage.getItem('bestSessionScore') ^ 0;
 
-        const element_copied = document.getElementById('copied');
+        const element_history = document.getElementById('history');
         const element_feedback = document.getElementById('feedback');
         const element_feedback_wrong_character = document.getElementById('feedback_wrong_character');
         const element_feedback_character = document.getElementById('feedback_character');
@@ -296,6 +296,11 @@
             )
         }
         updateStats();
+
+        function updateHistory() {
+            element_history.innerHTML = copiedText + '<br>' + [...history.slice(-10).map(entry => entry.copiedText || '')].reverse().join('<br>');
+        }
+        updateHistory();
 
         function incrementCopiedCharacters(c) {
             copiedText += c;
@@ -458,7 +463,7 @@
             if (user_input == expected) {
                 // correct
                 incrementCopiedCharacters(expected);
-                element_copied.innerText = copiedText;
+                updateHistory();
             } else {
                 // incorrect
                 stop(expected, user_input);
