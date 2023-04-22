@@ -405,11 +405,11 @@
                 m.onFinished = undefined;
                 m.setFreq(settings.tone);
                 if (c !== undefined) {
-                    m.play(c);
+                    m.play(' ' + c);
                 }
             };
             m.setFreq(settings.error_tone);
-            m.play('T ');
+            m.play('T');
         }
 
         function character_to_string(c) {
