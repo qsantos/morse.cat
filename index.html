@@ -371,7 +371,7 @@
             }
 
             // ignore non-copy user inputs (not in the charset, and not a space)
-            if (user_input != ' ' && settings.charset.indexOf(user_input) == -1) {
+            if (user_input != ' ' && settings.charset.toLowerCase().indexOf(user_input) == -1) {
                 return;
             }
 
