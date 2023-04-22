@@ -448,6 +448,11 @@
                 return;
             }
 
+            // stop space from scrolling the page while in session
+            if (user_input == ' ') {
+                event.preventDefault();
+            }
+
             // stop when user hits Escape key
             if (user_input == 'escape') {
                 stop();
