@@ -234,6 +234,7 @@
                 settings.charset = charset_without_chars;
             }
             document.getElementById('settings-charset').value = settings.charset;
+            onSettingsChange();
             updateLCWOLessonFromCharset();
         }
 
