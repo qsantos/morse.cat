@@ -489,8 +489,15 @@
             if (played.length == 0 && c.c == ' ') {
                 return;
             }
+
             // add character
             played.push(c.c);
+
+            // detect when user has stopped copying
+            if (played.length - copiedText.length > 10) {
+                elementinfo.innerText = 'Are you still there?';
+                stop();
+            }
         }
 
         element_feedback.addEventListener('blur', () => {
