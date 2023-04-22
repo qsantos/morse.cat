@@ -120,18 +120,18 @@
             <br>
             <label for="settings-charset">Customize Charset:</label>
             <br>
-            <textarea id="settings-charset" oninput="update_charset()">KMURESNAPTLWI.JZ=FOY,VG5/Q92H38B?47C1D60X</textarea>
+            <textarea id="settings-charset" oninput="update_charset()"></textarea>
             <br>
         </form>
         </form>
         <script>
         const lcwo_lessons = 'KMURESNAPTLWI.JZ=FOY,VG5/Q92H38B?47C1D60X';
-        const settings = {
-            wpm: 0,
-            tone: 0,
-            error_tone: 0,
-            word_length: 0,
-            charset: '',
+        const settings = JSON.parse(localStorage.getItem('settings')) || {
+            wpm: 20,
+            tone: 600,
+            error_tone: 200,
+            word_length: 5,
+            charset: lcwo_lessons,
         };
 
         const m = new jscw();
@@ -178,6 +178,7 @@
             settings.error_tone = document.getElementById('settings-error-tone').value;
             settings.word_length = document.getElementById('settings-word-length').value;
             settings.charset = document.getElementById('settings-charset').value;
+            localStorage.setItem('settings', JSON.stringify(settings));
         }
 
         function lcwo_lesson_of_charset(charset) {
@@ -197,12 +198,16 @@
             return 40;
         }
 
-        function update_charset() {
+        function restore_lcwo_lesson() {
             const charset = document.getElementById('settings-charset').value;
             const lcwo_lesson = lcwo_lesson_of_charset(charset);
             if (lcwo_lesson) {
                 document.getElementById('settings-lcwo-lesson').value = lcwo_lesson;
             }
+        }
+
+        function update_charset() {
+            restore_lcwo_lesson();
             update_settings();
         }
 
@@ -215,7 +220,15 @@
             update_settings();
         }
 
-        update_charset();
+        function restore_settings() {
+            document.getElementById('settings-wpm').value = settings.wpm;
+            document.getElementById('settings-tone').value = settings.tone;
+            document.getElementById('settings-error-tone').value = settings.error_tone;
+            document.getElementById('settings-word-length').value = settings.word_length;
+            document.getElementById('settings-charset').value = settings.charset;
+            restore_lcwo_lesson();
+        }
+        restore_settings();
 
         function updateStats() {
             const sessionDuration = sessionStart === undefined ? 0 : Math.round((Date.now() - sessionStart) / 1000);
