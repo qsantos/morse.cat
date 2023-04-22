@@ -58,23 +58,23 @@
         <div id="lamp" style="width:20px; height:20px; border:1px solid black;"></div>
         <form id="settings">
             <label for="settings-wpm">Speed:</label>
-            <input id="settings-wpm" oninput="update_settings()" type="number" value="20" min="1" step="0.5" />
+            <input id="settings-wpm" oninput="onSettingsChange()" type="number" value="20" min="1" step="0.5" />
             <abbr title="Words Per Minute">WPM</abbr>
             <br>
             <label for="settings-tone">Tone:</label>
-            <input id="settings-tone" oninput="update_settings()" type="number" value="600" min="10" step="10" />
+            <input id="settings-tone" oninput="onSettingsChange()" type="number" value="600" min="10" step="10" />
             Hz
             <br>
             <label for="settings-error-tone">Error Tone:</label>
-            <input id="settings-error-tone" oninput="update_settings()" type="number" value="200" min="10" step="10" />
+            <input id="settings-error-tone" oninput="onSettingsChange()" type="number" value="200" min="10" step="10" />
             Hz
             <br>
             <label for="settings-word-length">Size of words:</label>
-            <input id="settings-word-length" oninput="update_settings()" type="number" value="5" min="1" />
+            <input id="settings-word-length" oninput="onSettingsChange()" type="number" value="5" min="1" />
             characters
             <br>
             <label for="settings-lcwo-lesson"><a href="https://lcwo.net/" title="Learn CW Online">LCWO</A> Lesson:</label>
-            <select id="settings-lcwo-lesson" oninput="update_lcwo_lesson()">
+            <select id="settings-lcwo-lesson" oninput="onLCWOLessonInput()">
                 <option value="0">-</option>
                 <option value="1">1 - K, M</option>
                 <option value="2">2 - U</option>
@@ -120,13 +120,13 @@
             <br>
             <label for="settings-charset">Customize Charset:</label>
             <br>
-            <textarea id="settings-charset" oninput="update_charset()"></textarea>
+            <textarea id="settings-charset" oninput="onCustomCharsetInput()"></textarea>
             <br>
-            <input id="settings-charset-latin" type="checkbox" oninput="toggle_chars(event, latin)">
+            <input id="settings-charset-latin" type="checkbox" oninput="onToggleChars(event, latin)">
             <label for="settings-charset-latin"><code>A-Z</code></label>
-            <input id="settings-charset-digits" type="checkbox" oninput="toggle_chars(event, digits)">
+            <input id="settings-charset-digits" type="checkbox" oninput="onToggleChars(event, digits)">
             <label for="settings-charset-digits"><code>0-9</Code></label>
-            <input id="settings-charset-punct" type="checkbox" oninput="toggle_chars(event, punct)">
+            <input id="settings-charset-punct" type="checkbox" oninput="onToggleChars(event, punct)">
             <label for="settings-charset-punct"><code>.,:?'-/()"=+×@</code></label>
         </form>
         </form>
@@ -181,7 +181,7 @@
         const stats = document.getElementById('stats');
         const info = document.getElementById('info');
 
-        function update_settings() {
+        function onSettingsChange() {
             stop();
             settings.wpm = document.getElementById('settings-wpm').value;
             settings.tone = document.getElementById('settings-tone').value;
@@ -206,26 +206,26 @@
             return s.size == 0 && i > 0 ? i - 1 : 0;
         }
 
-        function restore_lcwo_lesson() {
+        function updateLCWOLessonFromCharset() {
             const lcwo_lesson = lcwo_lesson_of_charset(settings.charset);
             document.getElementById('settings-lcwo-lesson').value = lcwo_lesson;
         }
 
-        function update_charset() {
-            update_settings();
-            restore_lcwo_lesson();
+        function onCustomCharsetInput() {
+            onSettingsChange();
+            updateLCWOLessonFromCharset();
         }
 
-        function update_lcwo_lesson() {
+        function onLCWOLessonInput() {
             const lcwo_lesson = document.getElementById('settings-lcwo-lesson').value ^ 0;
             if (lcwo_lesson === 0) {
                 return;
             }
             document.getElementById('settings-charset').value = lcwo_lessons.substring(0, lcwo_lesson + 1);
-            update_settings();
+            onSettingsChange();
         }
 
-        function toggle_chars(event, chars) {
+        function onToggleChars(event, chars) {
             const s = new Set(chars);
             const charset_without_chars = Array.from(settings.charset).filter(c => !s.has(c.toUpperCase())).join('');
             if (event.target.checked) {
@@ -234,7 +234,7 @@
                 settings.charset = charset_without_chars;
             }
             document.getElementById('settings-charset').value = settings.charset;
-            restore_lcwo_lesson();
+            updateLCWOLessonFromCharset();
         }
 
         function restore_settings() {
@@ -243,7 +243,7 @@
             document.getElementById('settings-error-tone').value = settings.error_tone;
             document.getElementById('settings-word-length').value = settings.word_length;
             document.getElementById('settings-charset').value = settings.charset;
-            restore_lcwo_lesson();
+            updateLCWOLessonFromCharset();
         }
         restore_settings();
 
