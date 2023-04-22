@@ -189,14 +189,12 @@
                 const c = lcwo_lessons[i];
                 if (s.has(c)) {
                     s.delete(c);
-                } else if (s.size == 0) {
-                    return i - 1;
                 } else {
-                    return null;
+                    break;
                 }
                 i += 1.
             }
-            return 40;
+            return s.size == 0 && i > 0 ? i - 1 : 0;
         }
 
         function restore_lcwo_lesson() {
