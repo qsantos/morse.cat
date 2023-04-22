@@ -73,6 +73,51 @@
             <input id="settings-word-length" oninput="update_settings()" type="number" value="5" min="1" />
             characters
             <br>
+            <label for="settings-lcwo-lesson"><a href="https://lcwo.net/" title="Learn CW Online">LCWO</A> Lesson:</label>
+            <select id="settings-lcwo-lesson" oninput="update_lcwo_lesson()">
+                <option value="0">-</option>
+                <option value="1">1 - K, M</option>
+                <option value="2">2 - U</option>
+                <option value="3">3 - R</option>
+                <option value="4">4 - E</option>
+                <option value="5">5 - S</option>
+                <option value="6">6 - N</option>
+                <option value="7">7 - A</option>
+                <option value="8">8 - P</option>
+                <option value="9">9 - T</option>
+                <option value="10">10 - L</option>
+                <option value="11">11 - W</option>
+                <option value="12">12 - I</option>
+                <option value="13">13 - .</option>
+                <option value="14">14 - J</option>
+                <option value="15">15 - Z</option>
+                <option value="16">16 - =</option>
+                <option value="17">17 - F</option>
+                <option value="18">18 - O</option>
+                <option value="19">19 - Y</option>
+                <option value="20">20 - ,</option>
+                <option value="21">21 - V</option>
+                <option value="22">22 - G</option>
+                <option value="23">23 - 5</option>
+                <option value="24">24 - /</option>
+                <option value="25">25 - Q</option>
+                <option value="26">26 - 9</option>
+                <option value="27">27 - 2</option>
+                <option value="28">28 - H</option>
+                <option value="29">29 - 3</option>
+                <option value="30">30 - 8</option>
+                <option value="31">31 - B</option>
+                <option value="32">32 - ?</option>
+                <option value="33">33 - 4</option>
+                <option value="34">34 - 7</option>
+                <option value="35">35 - C</option>
+                <option value="36">36 - 1</option>
+                <option value="37">37 - D</option>
+                <option value="38">38 - 6</option>
+                <option value="39">39 - 0</option>
+                <option value="40">40 - X</option>
+            </select>
+            <br>
             <label for="settings-charset">Customize Charset:</label>
             <br>
             <textarea id="settings-charset" oninput="update_charset()">KMURESNAPTLWI.JZ=FOY,VG5/Q92H38B?47C1D60X</textarea>
@@ -80,6 +125,7 @@
         </form>
         </form>
         <script>
+        const lcwo_lessons = 'KMURESNAPTLWI.JZ=FOY,VG5/Q92H38B?47C1D60X';
         const settings = {
             wpm: 0,
             tone: 0,
@@ -133,7 +179,43 @@
             settings.word_length = document.getElementById('settings-word-length').value;
             settings.charset = document.getElementById('settings-charset').value;
         }
-        update_settings();
+
+        function lcwo_lesson_of_charset(charset) {
+            const s = new Set(charset);
+            let i = 0;
+            while (i < lcwo_lessons.length) {
+                const c = lcwo_lessons[i];
+                if (s.has(c)) {
+                    s.delete(c);
+                } else if (s.size == 0) {
+                    return i - 1;
+                } else {
+                    return null;
+                }
+                i += 1.
+            }
+            return 40;
+        }
+
+        function update_charset() {
+            const charset = document.getElementById('settings-charset').value;
+            const lcwo_lesson = lcwo_lesson_of_charset(charset);
+            if (lcwo_lesson) {
+                document.getElementById('settings-lcwo-lesson').value = lcwo_lesson;
+            }
+            update_settings();
+        }
+
+        function update_lcwo_lesson() {
+            const lcwo_lesson = document.getElementById('settings-lcwo-lesson').value ^ 0;
+            if (lcwo_lesson === 0) {
+                return;
+            }
+            document.getElementById('settings-charset').value = lcwo_lessons.substring(0, lcwo_lesson + 1);
+            update_settings();
+        }
+
+        update_charset();
 
         function updateStats() {
             const sessionDuration = sessionStart === undefined ? 0 : Math.round((Date.now() - sessionStart) / 1000);
