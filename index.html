@@ -122,9 +122,18 @@
             <br>
             <textarea id="settings-charset" oninput="update_charset()"></textarea>
             <br>
+            <input id="settings-charset-latin" type="checkbox" oninput="toggle_chars(event, latin)">
+            <label for="settings-charset-latin"><code>A-Z</code></label>
+            <input id="settings-charset-digits" type="checkbox" oninput="toggle_chars(event, digits)">
+            <label for="settings-charset-digits"><code>0-9</Code></label>
+            <input id="settings-charset-punct" type="checkbox" oninput="toggle_chars(event, punct)">
+            <label for="settings-charset-punct"><code>.,:?'-/()"=+×@</code></label>
         </form>
         </form>
         <script>
+        const latin = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';  // A-Z
+        const digits = '0123456789';  // 0-9
+        const punct = '.,:?\'-/()"=+×@';
         const lcwo_lessons = 'KMURESNAPTLWI.JZ=FOY,VG5/Q92H38B?47C1D60X';
         const settings = JSON.parse(localStorage.getItem('settings')) || {
             wpm: 20,
@@ -215,6 +224,18 @@
             }
             document.getElementById('settings-charset').value = lcwo_lessons.substring(0, lcwo_lesson + 1);
             update_settings();
+        }
+
+        function toggle_chars(event, chars) {
+            const s = new Set(chars);
+            const charset_without_chars = Array.from(settings.charset).filter(c => !s.has(c)).join('');
+            if (event.target.checked) {
+                settings.charset = chars + charset_without_chars;
+            } else {
+                settings.charset = charset_without_chars;
+            }
+            document.getElementById('settings-charset').value = settings.charset;
+            restore_lcwo_lesson();
         }
 
         function restore_settings() {
