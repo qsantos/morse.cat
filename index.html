@@ -29,6 +29,10 @@
         #feedback_wrong_character {
             text-decoration: line-through;
         }
+        .strike {
+            text-decoration: line-through;
+            color: red;
+        }
         #feedback_cw {
             font-size: 40px;
         }
@@ -297,8 +301,19 @@
         }
         updateStats();
 
+        function formatHistoryEntry(entry) {
+            if (entry.mistake) {
+                const { expected_character, mistaken_character } = entry.mistake;
+                return entry.copiedText + `<span class="strike">${mistaken_character}</span>${expected_character}`;
+            } else {
+                return entry.copiedText;
+            }
+        }
+
         function updateHistory() {
-            element_history.innerHTML = copiedText + '<br>' + [...history.slice(-10).map(entry => entry.copiedText || '')].reverse().join('<br>');
+            const entries = history.slice(-10);
+            const formattedEntries = [...entries.map(formatHistoryEntry)];
+            element_history.innerHTML = copiedText + '<br>' + formattedEntries.reverse().join('<br>');
         }
         updateHistory();
 
@@ -351,8 +366,6 @@
 
         function start() {
             push_word();
-            played.length = 0;
-            copiedText = '';
             inSession = true;
             sessionStart = new Date();
             updateStats();
@@ -401,6 +414,10 @@
             // - play session in tab B
             // - play session in tab A
             localStorage.setItem('history', JSON.stringify(history));
+
+            played.length = 0;
+            copiedText = '';
+            updateHistory();
 
             inSession = false;
             m.onFinished = undefined;
