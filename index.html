@@ -200,9 +200,7 @@
         function restore_lcwo_lesson() {
             const charset = document.getElementById('settings-charset').value;
             const lcwo_lesson = lcwo_lesson_of_charset(charset);
-            if (lcwo_lesson) {
-                document.getElementById('settings-lcwo-lesson').value = lcwo_lesson;
-            }
+            document.getElementById('settings-lcwo-lesson').value = lcwo_lesson;
         }
 
         function update_charset() {
