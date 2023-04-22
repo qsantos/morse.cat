@@ -211,9 +211,41 @@
             document.getElementById('settings-lcwo-lesson').value = lcwo_lesson;
         }
 
+        // returns true when setA contains setB
+        function contains(setA, setB) {
+            return [...setB].every(x => setA.has(x));
+        }
+
+        // returns true when setA and setB intersects
+        function intersects(setA, setB) {
+            return [...setB].some(x => setA.has(x));
+        }
+
+        function updateToggleFromCharset(id, chars) {
+            const toggleChars = new Set(chars);
+            const selectedChars = new Set(settings.charset.toUpperCase());
+            const element = document.getElementById(id);
+            if (contains(selectedChars, toggleChars)) {
+                element.checked = true;
+                element.indeterminate = false;
+            } else if (intersects(selectedChars, toggleChars)) {
+                element.indeterminate = true;
+            } else {
+                element.checked = false;
+                element.indeterminate = false;
+            }
+        }
+
+        function updateTogglesFromCharset() {
+            updateToggleFromCharset('settings-charset-latin', latin);
+            updateToggleFromCharset('settings-charset-digits', digits);
+            updateToggleFromCharset('settings-charset-punct', punct);
+        }
+
         function onCustomCharsetInput() {
             onSettingsChange();
             updateLCWOLessonFromCharset();
+            updateTogglesFromCharset();
         }
 
         function onLCWOLessonInput() {
@@ -223,11 +255,12 @@
             }
             document.getElementById('settings-charset').value = lcwo_lessons.substring(0, lcwo_lesson + 1);
             onSettingsChange();
+            updateTogglesFromCharset();
         }
 
         function onToggleChars(event, chars) {
             const s = new Set(chars);
-            const charset_without_chars = Array.from(settings.charset).filter(c => !s.has(c.toUpperCase())).join('');
+            const charset_without_chars = [...settings.charset].filter(c => !s.has(c.toUpperCase())).join('');
             if (event.target.checked) {
                 settings.charset = chars + charset_without_chars;
             } else {
@@ -245,6 +278,7 @@
             document.getElementById('settings-word-length').value = settings.word_length;
             document.getElementById('settings-charset').value = settings.charset;
             updateLCWOLessonFromCharset();
+            updateTogglesFromCharset();
         }
         restore_settings();
 
