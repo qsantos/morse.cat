@@ -133,6 +133,7 @@
             word_length: 5,
             charset: lcwo_lessons,
         };
+        const history = JSON.parse(localStorage.getItem('history')) || [];
 
         const m = new jscw();
 
@@ -231,7 +232,7 @@
         restore_settings();
 
         function updateStats() {
-            const sessionDuration = sessionStart === undefined ? 0 : Math.round((Date.now() - sessionStart) / 1000);
+            const sessionDuration = sessionStart === undefined ? 0 : Math.round((new Date().getTime() - sessionStart.getTime()) / 1000);
             stats.innerHTML = (
                 'Practised for ' + sessionDuration + ' seconds<br>' +
                 'Copied ' + sessionCopiedCharacters + ' characters (best: ' + bestSessionCopiedCharacters + ')<br>' +
@@ -294,7 +295,7 @@
             push_word();
             played.length = 0;
             inSession = true;
-            sessionStart = Date.now();
+            sessionStart = new Date();
             updateStats();
             sessionDurationUpdater = setInterval(updateStats, 100);
             sessionCopiedCharacters = 0;
@@ -313,10 +314,33 @@
             info.innerText = '';
         }
 
-        function stop() {
+        function stop(expected, user_input) {
             if (!inSession) {
                 return;
             }
+
+            const session = {
+                id: self.crypto.randomUUID(),
+                started: sessionStart.toISOString(),
+                finished: new Date().toISOString(),
+                copied: played.slice(0, sessionCopiedCharacters).join(''),
+                mistake: !expected ? null : {
+                    expected_character: expected,
+                    mistaken_character: user_input,
+                },
+                settings: settings,
+                copiedCharacters: sessionCopiedCharacters,
+                copiedWords: sessionCopiedWords,
+                score: sessionScore,
+            };
+            history.push(session);
+            // NOTE: in the following scenario, the session from tab B will be lost
+            // - open in tab A
+            // - open in tab B
+            // - play session in tab B
+            // - play session in tab A
+            localStorage.setItem('history', JSON.stringify(history));
+
             inSession = false;
             m.onFinished = undefined;
             updateStats();
@@ -383,7 +407,7 @@
                 copied.innerText = played.slice(0, sessionCopiedCharacters).join('');
             } else {
                 // incorrect
-                stop();
+                stop(expected, user_input);
                 replay_after_mistake(expected);
                 feedback.classList.remove('success');
                 feedback.classList.add('failure');
