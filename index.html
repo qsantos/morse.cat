@@ -49,7 +49,7 @@
         <h1>Morse 😺</h1>
         <div id="history"></div>
         <div id="info"></div>
-        <div id="feedback">
+        <div id="feedback" tabindex="1">
             <div id="feedback_wrong_character">&nbsp;</div>
             <div id="feedback_character">&nbsp;</div>
             <div id="feedback_cw">&nbsp;</div>
@@ -372,6 +372,7 @@
             element_feedback_cw.innerText = '';
             elementinfo.innerText = '';
             updateHistory();
+            element_feedback.focus();
         }
 
         function stop(expected, user_input) {
@@ -492,11 +493,10 @@
             played.push(c.c);
         }
 
-        window.addEventListener('blur', () => {
+        element_feedback.addEventListener('blur', () => {
             elementinfo.innerText = 'Focus lost!';
             stop();
         });
-        window.focus();
         </script>
     </body>
 </html>
