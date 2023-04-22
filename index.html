@@ -33,6 +33,10 @@
             text-decoration: line-through;
             color: red;
         }
+        .meta {
+            font-size: 15px;
+            color: #444;
+        }
         #feedback_cw {
             font-size: 40px;
         }
@@ -302,12 +306,12 @@
         updateStats();
 
         function formatHistoryEntry(entry) {
+            let ret = `<span class="meta"><time datetime="${entry.started}">${entry.started}</time>:</span> ${entry.copiedText}`;
             if (entry.mistake) {
                 const { expected_character, mistaken_character } = entry.mistake;
-                return entry.copiedText + `<span class="strike">${mistaken_character}</span>${expected_character}`;
-            } else {
-                return entry.copiedText;
+                ret += `<span class="strike">${mistaken_character}</span>${expected_character}`;
             }
+            return ret;
         }
 
         function updateHistory() {
