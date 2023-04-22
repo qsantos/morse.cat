@@ -154,6 +154,7 @@
         }
 
         const played = [];
+        let copiedText = '';
         let inSession = false;
         let sessionStart = undefined;
         let sessionDurationUpdater = undefined;
@@ -253,7 +254,7 @@
             if (lcwo_lesson === 0) {
                 return;
             }
-            document.getElementById('settings-charset').value = lcwo_lessons.substring(0, lcwo_lesson + 1);
+            document.getElementById('settings-charset').value = lcwo_lessons.slice(0, lcwo_lesson + 1);
             onSettingsChange();
             updateTogglesFromCharset();
         }
@@ -298,6 +299,8 @@
         updateStats();
 
         function incrementCopiedCharacters(c) {
+            copiedText += c;
+
             // CHARACTERS
             // total
             totalCopiedCharacters += 1;
@@ -345,6 +348,7 @@
         function start() {
             push_word();
             played.length = 0;
+            copiedText = '';
             inSession = true;
             sessionStart = new Date();
             updateStats();
@@ -374,7 +378,7 @@
                 id: self.crypto.randomUUID(),
                 started: sessionStart.toISOString(),
                 finished: new Date().toISOString(),
-                copied: played.slice(0, sessionCopiedCharacters).join(''),
+                copiedText: copiedText,
                 mistake: !expected ? null : {
                     expected_character: expected,
                     mistaken_character: user_input,
@@ -455,7 +459,7 @@
             if (user_input == expected) {
                 // correct
                 incrementCopiedCharacters(expected);
-                copied.innerText = played.slice(0, sessionCopiedCharacters).join('');
+                copied.innerText = copiedText;
             } else {
                 // incorrect
                 stop(expected, user_input);
