@@ -447,6 +447,9 @@
 
         function start() {
             push_word();
+            played.length = 0;
+            copiedText = '';
+            updateHistory();
             inSession = true;
             sessionStart = new Date();
             updateStats();
@@ -495,10 +498,6 @@
             // - play session in tab B
             // - play session in tab A
             localStorage.setItem('history', JSON.stringify(history));
-
-            played.length = 0;
-            copiedText = '';
-            updateHistory();
 
             inSession = false;
             m.onFinished = undefined;
