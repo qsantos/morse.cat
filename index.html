@@ -187,6 +187,12 @@
         let dayScore = localStorage.getItem('dayScore') ^ 0;
         let bestSessionScore = localStorage.getItem('bestSessionScore') ^ 0;
         let bestDayScore = localStorage.getItem('bestDayScore') ^ 0;
+        // TIME
+        let totalTime = localStorage.getItem('totalTime') ^ 0;
+        let sessionTime = localStorage.getItem('sessionTime') ^ 0;
+        let dayTime = localStorage.getItem('dayTime') ^ 0;
+        let bestSessionTime = localStorage.getItem('bestSessionTime') ^ 0;
+        let bestDayTime = localStorage.getItem('bestDayTime') ^ 0;
 
         const element_history = document.getElementById('history');
         const element_feedback = document.getElementById('feedback');
@@ -298,9 +304,10 @@
         restore_settings();
 
         function updateStats() {
-            const sessionDuration = sessionStart === undefined ? 0 : Math.round((new Date().getTime() - sessionStart.getTime()) / 1000);
             element_stats.innerHTML = (
-                'Practised for ' + sessionDuration + ' seconds<br>' +
+                'Practised for ' + sessionTime + ' seconds (best: ' + bestSessionTime + ')<br>' +
+                'Practised for ' + dayTime + ' seconds today (best: ' + bestDayTime + ')<br>' +
+                'Practised for ' + totalTime + ' seconds in total<br>' +
                 'Copied ' + sessionCopiedCharacters + ' characters (best: ' + bestSessionCopiedCharacters + ')<br>' +
                 'Copied ' + dayCopiedCharacters + ' characters today (best: ' + bestDayCopiedCharacters + ')<br>' +
                 'Copied ' + totalCopiedCharacters + ' characters in total<br>' +
@@ -333,9 +340,10 @@
 
         function incrementCopiedCharacters(c) {
             copiedText += c;
-
             const now = new Date();
             const today = now.toISOString().slice(0, 10);  // "YYYY-MM-DD"
+
+            // reset day stats when UTC midnight passes
             if (statsUpdated < today) {
                 dayCopiedCharacters = 0;
                 dayCopiedWords = 0;
@@ -395,22 +403,41 @@
             // total
             totalScore += score;
             localStorage.setItem('totalScore', totalScore);
-            // day
-            dayScore += score;
-            localStorage.setItem('dayScore', dayScore);
             // session
             sessionScore += score;
             localStorage.setItem('sessionScore', sessionScore);
-            // best score
+            // day
+            dayScore += score;
+            localStorage.setItem('dayScore', dayScore);
+            // best session
             if (sessionScore > bestSessionScore) {
                 bestSessionScore = sessionScore;
                 localStorage.setItem('bestSessionScore', bestSessionScore);
             }
             // best day
             if (dayScore > bestDayScore) {
-                bestDayScore = daySCore;
+                bestDayScore = dayScore;
                 localStorage.setItem('bestDayScore', bestDayScore);
             }
+
+            // TIME
+            const elapsedSinceStart = Math.round((new Date().getTime() - sessionStart.getTime()) / 1000);
+            const newElapsed = elapsedSinceStart - sessionTime;
+            // total
+            totalTime += newElapsed;
+            localStorage.setItem('totalTime', totalTime);
+            // session
+            sessionTime += newElapsed;
+            localStorage.setItem('sessionTime', sessionTime);
+            // day
+            dayTime += newElapsed;
+            localStorage.setItem('dayTime', dayTime);
+            // best session
+            bestSessionTime += newElapsed;
+            localStorage.setItem('bestSessionTime', bestSessionTime);
+            // best day
+            bestDayTime += newElapsed;
+            localStorage.setItem('bestDayTime', bestDayTime);
         }
 
         function onFinished() {
