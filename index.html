@@ -375,14 +375,15 @@
             }
 
             // SCORE
+            const score = sessionCopiedWords + 1;
             // total
-            totalScore += sessionCopiedWords + 1;
+            totalScore += score;
             localStorage.setItem('totalScore', totalScore);
             // day
-            dayScore += 1;
+            dayScore += score;
             localStorage.setItem('dayScore', dayScore);
             // session
-            sessionScore += sessionCopiedWords + 1;
+            sessionScore += score;
             localStorage.setItem('sessionScore', sessionScore);
             // best score
             if (sessionScore > bestSessionScore) {
