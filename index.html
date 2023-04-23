@@ -171,17 +171,17 @@
         let statsUpdated = localStorage.getItem('statsUpdated');
         // CHARACTERS
         let totalCopiedCharacters = localStorage.getItem('totalCopiedCharacters') ^ 0;
-        let sessionCopiedCharacters = 0;
+        let sessionCopiedCharacters = localStorage.getItem('sessionCopiedCharacters') ^ 0;
         let dayCopiedCharacters = localStorage.getItem('dayCopiedCharacters') ^ 0;
         let bestSessionCopiedCharacters = localStorage.getItem('bestSessionCopiedCharacters') ^ 0;
         // WORDS
         let totalCopiedWords = localStorage.getItem('totalCopiedWords') ^ 0;
-        let sessionCopiedWords = 0;
+        let sessionCopiedWords = localStorage.getItem('sessionCopiedWords') ^ 0;
         let dayCopiedWords = localStorage.getItem('dayCopiedWords') ^ 0;
         let bestSessionCopiedWords = localStorage.getItem('bestSessionCopiedWords') ^ 0;
         // SCORE
         let totalScore = localStorage.getItem('totalScore') ^ 0;
-        let sessionScore = 0;
+        let sessionScore = localStorage.getItem('sessionScore') ^ 0;
         let dayScore = localStorage.getItem('dayScore') ^ 0;
         let bestSessionScore = localStorage.getItem('bestSessionScore') ^ 0;
 
@@ -346,6 +346,7 @@
             localStorage.setItem('totalCopiedCharacters', totalCopiedCharacters)
             // session
             sessionCopiedCharacters += 1;
+            localStorage.setItem('sessionCopiedCharacters', sessionCopiedCharacters);
             // day
             dayCopiedCharacters += 1;
             localStorage.setItem('dayCopiedCharacters', dayCopiedCharacters)
@@ -362,6 +363,7 @@
                 localStorage.setItem('totalCopiedWords', totalCopiedWords);
                 // session
                 sessionCopiedWords += 1;
+                localStorage.setItem('sessionCopiedWords', sessionCopiedWords);
                 // day
                 dayCopiedWords += 1;
                 localStorage.setItem('dayCopiedWords', dayCopiedWords);
@@ -381,6 +383,7 @@
             localStorage.setItem('dayScore', dayScore);
             // session
             sessionScore += sessionCopiedWords + 1;
+            localStorage.setItem('sessionScore', sessionScore);
             // best score
             if (sessionScore > bestSessionScore) {
                 bestSessionScore = sessionScore;
