@@ -347,6 +347,7 @@
                 dayCopiedCharacters = 0;
                 dayCopiedWords = 0;
                 dayScore = 0;
+                dayTime = 0;
                 // dayCopiedWords might not be updated later
                 localStorage.setItem('dayCopiedWOrds', dayCopiedWords);
             }
@@ -420,7 +421,7 @@
             }
 
             // TIME
-            const elapsedSinceStart = Math.round((new Date().getTime() - sessionStart.getTime()) / 1000);
+            const elapsedSinceStart = Math.round((now.getTime() - sessionStart.getTime()) / 1000);
             const newElapsed = elapsedSinceStart - sessionTime;
             // total
             totalTime += newElapsed;
@@ -432,11 +433,15 @@
             dayTime += newElapsed;
             localStorage.setItem('dayTime', dayTime);
             // best session
-            bestSessionTime += newElapsed;
-            localStorage.setItem('bestSessionTime', bestSessionTime);
+            if (sessionTime > bestSessionTime) {
+                bestSessionTime = sessionTime;
+                localStorage.setItem('bestSessionTime', bestSessionTime);
+            }
             // best day
-            bestDayTime += newElapsed;
-            localStorage.setItem('bestDayTime', bestDayTime);
+            if (dayTime > bestDayTime) {
+                bestDayTime = dayTime;
+                localStorage.setItem('bestDayTime', bestDayTime);
+            }
         }
 
         function onFinished() {
@@ -456,6 +461,7 @@
             sessionCopiedCharacters = 0;
             sessionCopiedWords = 0;
             sessionScore = 0;
+            sessionTime = 0;
             m.setWpm(settings.wpm);
             m.setEff(settings.wpm);
             m.setFreq(settings.tone);
