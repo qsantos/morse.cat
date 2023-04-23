@@ -187,7 +187,7 @@
         const element_feedback_character = document.getElementById('feedback_character');
         const element_feedback_cw = document.getElementById('feedback_cw');
         const element_stats = document.getElementById('stats');
-        const elementinfo = document.getElementById('info');
+        const element_info = document.getElementById('info');
 
         function onSettingsChange() {
             stop();
@@ -387,7 +387,7 @@
             element_feedback_wrong_character.innerText = '';
             element_feedback_character.innerText = '';
             element_feedback_cw.innerText = '';
-            elementinfo.innerText = '';
+            element_info.innerText = '';
             updateHistory();
             element_feedback.focus();
         }
@@ -516,13 +516,13 @@
 
             // detect when user has stopped copying
             if (played.length - copiedText.length > 10) {
-                elementinfo.innerText = 'Are you still there?';
+                element_info.innerText = 'Are you still there?';
                 stop();
             }
         }
 
         element_feedback.addEventListener('blur', () => {
-            elementinfo.innerText = 'Focus lost!';
+            element_info.innerText = 'Focus lost!';
             stop();
         });
         </script>
