@@ -174,16 +174,19 @@
         let sessionCopiedCharacters = localStorage.getItem('sessionCopiedCharacters') ^ 0;
         let dayCopiedCharacters = localStorage.getItem('dayCopiedCharacters') ^ 0;
         let bestSessionCopiedCharacters = localStorage.getItem('bestSessionCopiedCharacters') ^ 0;
+        let bestDayCopiedCharacters = localStorage.getItem('bestDayCopiedCharacters') ^ 0;
         // WORDS
         let totalCopiedWords = localStorage.getItem('totalCopiedWords') ^ 0;
         let sessionCopiedWords = localStorage.getItem('sessionCopiedWords') ^ 0;
         let dayCopiedWords = localStorage.getItem('dayCopiedWords') ^ 0;
         let bestSessionCopiedWords = localStorage.getItem('bestSessionCopiedWords') ^ 0;
+        let bestDayCopiedWords = localStorage.getItem('bestDayCopiedWords') ^ 0;
         // SCORE
         let totalScore = localStorage.getItem('totalScore') ^ 0;
         let sessionScore = localStorage.getItem('sessionScore') ^ 0;
         let dayScore = localStorage.getItem('dayScore') ^ 0;
         let bestSessionScore = localStorage.getItem('bestSessionScore') ^ 0;
+        let bestDayScore = localStorage.getItem('bestDayScore') ^ 0;
 
         const element_history = document.getElementById('history');
         const element_feedback = document.getElementById('feedback');
@@ -299,9 +302,11 @@
             element_stats.innerHTML = (
                 'Practised for ' + sessionDuration + ' seconds<br>' +
                 'Copied ' + sessionCopiedCharacters + ' characters (best: ' + bestSessionCopiedCharacters + ')<br>' +
-                'Copied ' + totalCopiedCharacters + ' characters in total (today: ' + dayCopiedCharacters + ')<br>' +
+                'Copied ' + dayCopiedCharacters + ' characters today (best: ' + bestDayCopiedCharacters + ')<br>' +
+                'Copied ' + totalCopiedCharacters + ' characters in total<br>' +
                 'Copied ' + sessionCopiedWords + ' words (best: ' + bestSessionCopiedWords + ')<br>' +
-                'Copied ' + totalCopiedWords + ' words in total (today: ' + dayCopiedWords + ')<br>' +
+                'Copied ' + dayCopiedWords + ' words today (best: ' + bestDayCopiedWords + ')<br>' +
+                'Copied ' + totalCopiedWords + ' words in total<br>' +
                 'Current score is ' + sessionScore + ' (best: ' + bestSessionScore + ')<br>' +
                 'Total score is ' + totalScore + ' (today: ' + dayScore + ')<br>' +
                 ''
@@ -355,6 +360,11 @@
                 bestSessionCopiedCharacters = sessionCopiedCharacters;
                 localStorage.setItem('bestSessionCopiedCharacters', bestSessionCopiedCharacters)
             }
+            // best day
+            if (dayCopiedCharacters > bestDayCopiedCharacters) {
+                bestDayCopiedCharacters = dayCopiedCharacters;
+                localStorage.setItem('bestDayCopiedCharacters', bestDayCopiedCharacters);
+            }
 
             // WORDS
             if (c == ' ') {
@@ -371,6 +381,11 @@
                 if (sessionCopiedWords > bestSessionCopiedWords) {
                     bestSessionCopiedWords = sessionCopiedWords;
                     localStorage.setItem('bestSessionCopiedWords', bestSessionCopiedWords);
+                }
+                // best day
+                if (dayCopiedWords > bestDayCopiedWords) {
+                    bestDayCopiedWords = dayCopiedWords;
+                    localStorage.setItem('bestDayCopiedWords', bestDayCopiedWords);
                 }
             }
 
@@ -389,6 +404,11 @@
             if (sessionScore > bestSessionScore) {
                 bestSessionScore = sessionScore;
                 localStorage.setItem('bestSessionScore', bestSessionScore);
+            }
+            // best day
+            if (dayScore > bestDayScore) {
+                bestDayScore = daySCore;
+                localStorage.setItem('bestDayScore', bestDayScore);
             }
         }
 
