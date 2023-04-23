@@ -168,17 +168,21 @@
         let sessionDurationUpdater = undefined;
 
         // stats
+        let statsUpdated = localStorage.getItem('statsUpdated');
         // CHARACTERS
         let totalCopiedCharacters = localStorage.getItem('totalCopiedCharacters') ^ 0;
         let sessionCopiedCharacters = 0;
+        let dayCopiedCharacters = localStorage.getItem('dayCopiedCharacters') ^ 0;
         let bestSessionCopiedCharacters = localStorage.getItem('bestSessionCopiedCharacters') ^ 0;
         // WORDS
         let totalCopiedWords = localStorage.getItem('totalCopiedWords') ^ 0;
         let sessionCopiedWords = 0;
+        let dayCopiedWords = localStorage.getItem('dayCopiedWords') ^ 0;
         let bestSessionCopiedWords = localStorage.getItem('bestSessionCopiedWords') ^ 0;
         // SCORE
         let totalScore = localStorage.getItem('totalScore') ^ 0;
         let sessionScore = 0;
+        let dayScore = localStorage.getItem('dayScore') ^ 0;
         let bestSessionScore = localStorage.getItem('bestSessionScore') ^ 0;
 
         const element_history = document.getElementById('history');
@@ -295,11 +299,11 @@
             element_stats.innerHTML = (
                 'Practised for ' + sessionDuration + ' seconds<br>' +
                 'Copied ' + sessionCopiedCharacters + ' characters (best: ' + bestSessionCopiedCharacters + ')<br>' +
-                'Copied ' + totalCopiedCharacters + ' characters in total<br>' +
+                'Copied ' + totalCopiedCharacters + ' characters in total (today: ' + dayCopiedCharacters + ')<br>' +
                 'Copied ' + sessionCopiedWords + ' words (best: ' + bestSessionCopiedWords + ')<br>' +
-                'Copied ' + totalCopiedWords + ' words in total<br>' +
+                'Copied ' + totalCopiedWords + ' words in total (today: ' + dayCopiedWords + ')<br>' +
                 'Current score is ' + sessionScore + ' (best: ' + bestSessionScore + ')<br>' +
-                'Total score is ' + totalScore + '<br>' +
+                'Total score is ' + totalScore + ' (today: ' + dayScore + ')<br>' +
                 ''
             )
         }
@@ -324,12 +328,27 @@
         function incrementCopiedCharacters(c) {
             copiedText += c;
 
+            const now = new Date();
+            const today = now.toISOString().slice(0, 10);  // "YYYY-MM-DD"
+            if (statsUpdated < today) {
+                dayCopiedCharacters = 0;
+                dayCopiedWords = 0;
+                dayScore = 0;
+                // dayCopiedWords might not be updated later
+                localStorage.setItem('dayCopiedWOrds', dayCopiedWords);
+            }
+            statsUpdated = now;
+            localStorage.setItem('statsUpdated', statsUpdated);
+
             // CHARACTERS
             // total
             totalCopiedCharacters += 1;
             localStorage.setItem('totalCopiedCharacters', totalCopiedCharacters)
             // session
             sessionCopiedCharacters += 1;
+            // day
+            dayCopiedCharacters += 1;
+            localStorage.setItem('dayCopiedCharacters', dayCopiedCharacters)
             // best session
             if (sessionCopiedCharacters > bestSessionCopiedCharacters) {
                 bestSessionCopiedCharacters = sessionCopiedCharacters;
@@ -343,6 +362,9 @@
                 localStorage.setItem('totalCopiedWords', totalCopiedWords);
                 // session
                 sessionCopiedWords += 1;
+                // day
+                dayCopiedWords += 1;
+                localStorage.setItem('dayCopiedWords', dayCopiedWords);
                 // best session
                 if (sessionCopiedWords > bestSessionCopiedWords) {
                     bestSessionCopiedWords = sessionCopiedWords;
@@ -354,6 +376,9 @@
             // total
             totalScore += sessionCopiedWords + 1;
             localStorage.setItem('totalScore', totalScore);
+            // day
+            dayScore += 1;
+            localStorage.setItem('dayScore', dayScore);
             // session
             sessionScore += sessionCopiedWords + 1;
             // best score
