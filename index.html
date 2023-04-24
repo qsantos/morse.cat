@@ -25,7 +25,7 @@
             text-align: right;
         }
         #stats>table th {
-            width: 120px;
+            width: 140px;
             height: 40px;
         }
         #feedback {
@@ -360,44 +360,46 @@
                 <thead>
                     <tr>
                         <th></th>
-                        <th>Current Session</th>
-                        <th>Best Session</th>
-                        <th>Current Day</th>
-                        <th>Best Day</th>
-                        <th>Total</th>
+                        <th>Time</th>
+                        <th>Characters</th>
+                        <th>Words</th>
+                        <th>Score</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <th>Time</th>
+                        <th>Current Session</th>
                         <td>${sessionTime} s</td>
-                        <td>${bestSessionTime} s</td>
-                        <td>${dayTime} s</td>
-                        <td>${bestDayTime} s</td>
-                        <td>${totalTime} s</td>
-                    </tr>
-                    <tr>
-                        <th>Characters</th>
                         <td>${sessionCopiedCharacters}</td>
-                        <td>${bestSessionCopiedCharacters}</td>
-                        <td>${dayCopiedCharacters}</td>
-                        <td>${bestDayCopiedCharacters}</td>
-                        <td>${totalCopiedCharacters}</td>
-                    </tr>
-                    <tr>
-                        <th>Words</th>
                         <td>${sessionCopiedWords}</td>
-                        <td>${bestSessionCopiedWords}</td>
-                        <td>${dayCopiedWords}</td>
-                        <td>${bestDayCopiedWords}</td>
-                        <td>${totalCopiedWords}</td>
+                        <td>${sessionScore}</td>
                     </tr>
                     <tr>
-                        <th>Score</th>
-                        <td>${sessionScore}</td>
+                        <th>Best Session</th>
+                        <td>${bestSessionTime} s</td>
+                        <td>${bestSessionCopiedCharacters}</td>
+                        <td>${bestSessionCopiedWords}</td>
                         <td>${bestSessionScore}</td>
+                    </tr>
+                    <tr>
+                        <th>Current Day</th>
+                        <td>${dayTime} s</td>
+                        <td>${dayCopiedCharacters}</td>
+                        <td>${dayCopiedWords}</td>
                         <td>${dayScore}</td>
+                    </tr>
+                    <tr>
+                        <th>Best Day</th>
+                        <td>${bestDayTime} s</td>
+                        <td>${bestDayCopiedCharacters}</td>
+                        <td>${bestDayCopiedWords}</td>
                         <td>${bestDayScore}</td>
+                    </tr>
+                    <tr>
+                        <th>Total</th>
+                        <td>${totalTime} s</td>
+                        <td>${totalCopiedCharacters}</td>
+                        <td>${totalCopiedWords}</td>
                         <td>${totalScore}</td>
                     </tr>
                 </tbody>
