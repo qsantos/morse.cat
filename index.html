@@ -4,6 +4,30 @@
         <meta charset="utf-8">
         <title>Morse 😺</title>
         <style>
+        body {
+            position: relative;
+            margin: 5px 20px;
+        }
+        h1 {
+            font-size: 50px;
+            font-family: sans-serif;
+            text-align: center;
+        }
+        nav {
+            position: absolute;
+            top: 0;
+            right: 0;
+        }
+        nav>img {
+            width:50px;
+        }
+        #stats>table {
+            text-align: right;
+        }
+        #stats>table th {
+            width: 120px;
+            height: 40px;
+        }
         #feedback {
             width:200px;
             height:200px;
@@ -40,7 +64,10 @@
         #feedback_cw {
             font-size: 40px;
         }
+        #settings {
+        }
         #history {
+            position: relative;
             font-family: monospace;
             font-size: 20px;
             text-transform: uppercase;
@@ -49,22 +76,30 @@
             padding: 5px;
             margin: 15px;
             background-color:#fcf8f8;
+            list-style: none;
+            color: linear-gradient(#f69d3c, #3f87a6);;
+            overflow: hidden;
         }
         </style>
         <script src="./jscwlib.js"></script>
     </head>
     <body>
         <h1>Morse 😺</h1>
-        <div id="history"></div>
+        <nav>
+            <img src="ftchart-bar.svg" id="button stats-button" onclick="document.getElementById('stats').showModal()">
+            <img src="ftgear.svg" id="button settings-button" onclick="document.getElementById('settings').showModal()">
+        </nav>
         <div id="info"></div>
         <div id="feedback" tabindex="1">
             <div id="feedback_wrong_character">&nbsp;</div>
             <div id="feedback_character">&nbsp;</div>
             <div id="feedback_cw">&nbsp;</div>
         </div>
-        <div id="stats"></div>
         <div id="lamp" style="width:20px; height:20px; border:1px solid black;"></div>
-        <form id="settings">
+        <ul id="history"></ul>
+        <dialog id="stats"></dialog>
+        <dialog id="settings">
+            <h3>Settings</h3>
             <label for="settings-wpm">Speed:</label>
             <input id="settings-wpm" oninput="onSettingsChange()" type="number" value="20" min="1" step="0.5" />
             <abbr title="Words Per Minute">WPM</abbr>
@@ -136,7 +171,7 @@
             <label for="settings-charset-digits"><code>0-9</Code></label>
             <input id="settings-charset-punct" type="checkbox" oninput="onToggleChars(event, punct)">
             <label for="settings-charset-punct"><code>.,:?'-/()"=+×@</code></label>
-        </form>
+        </dialog>
         <script>
         const latin = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';  // A-Z
         const digits = '0123456789';  // 0-9
@@ -320,18 +355,54 @@
             localStorage.setItem('statsUpdated', statsUpdated.toISOString());
 
             element_stats.innerHTML = `
-                Practised for ${sessionTime} seconds (best: ${bestSessionTime})<br>
-                Practised for ${dayTime} seconds today (best: ${bestDayTime})<br>
-                Practised for ${totalTime} seconds in total<br>
-                Copied ${sessionCopiedCharacters} characters (best: ${bestSessionCopiedCharacters})<br>
-                Copied ${dayCopiedCharacters} characters today (best: ${bestDayCopiedCharacters})<br>
-                Copied ${totalCopiedCharacters} characters in total<br>
-                Copied ${sessionCopiedWords} words (best: ${bestSessionCopiedWords})<br>
-                Copied ${dayCopiedWords} words today (best: ${bestDayCopiedWords})<br>
-                Copied ${totalCopiedWords} words in total<br>
-                Current score is ${sessionScore} (best: ${bestSessionScore})<br>
-                Today\'s score is ${dayScore} (best: ${bestDayScore})<br>
-                Total score is ${totalScore}<br>
+            <h3>Statistics</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Current Session</th>
+                        <th>Best Session</th>
+                        <th>Current Day</th>
+                        <th>Best Day</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th>Time</th>
+                        <td>${sessionTime} s</td>
+                        <td>${bestSessionTime} s</td>
+                        <td>${dayTime} s</td>
+                        <td>${bestDayTime} s</td>
+                        <td>${totalTime} s</td>
+                    </tr>
+                    <tr>
+                        <th>Characters</th>
+                        <td>${sessionCopiedCharacters}</td>
+                        <td>${bestSessionCopiedCharacters}</td>
+                        <td>${dayCopiedCharacters}</td>
+                        <td>${bestDayCopiedCharacters}</td>
+                        <td>${totalCopiedCharacters}</td>
+                    </tr>
+                    <tr>
+                        <th>Words</th>
+                        <td>${sessionCopiedWords}</td>
+                        <td>${bestSessionCopiedWords}</td>
+                        <td>${dayCopiedWords}</td>
+                        <td>${bestDayCopiedWords}</td>
+                        <td>${totalCopiedWords}</td>
+                    </tr>
+                    <tr>
+                        <th>Score</th>
+                        <td>${sessionScore}</td>
+                        <td>${bestSessionScore}</td>
+                        <td>${dayScore}</td>
+                        <td>${bestDayScore}</td>
+                        <td>${totalScore}</td>
+                    </tr>
+                </tbody>
+            </table>
+
             `;
         }
         updateStats();
@@ -342,13 +413,13 @@
                 const { expected_character, mistaken_character } = entry.mistake;
                 ret += `<span class="strike">${mistaken_character}</span>${expected_character}`;
             }
-            return ret;
+            return '<li>' + ret + '<li>';
         }
 
         function updateHistory() {
             const entries = history.slice(-10);
             const formattedEntries = [...entries.map(formatHistoryEntry)];
-            element_history.innerHTML = copiedText + '<br>' + formattedEntries.reverse().join('<br>');
+            element_history.innerHTML = '<li>' + copiedText + '</li>' + formattedEntries.reverse().join('');
         }
         updateHistory();
 
