@@ -303,6 +303,22 @@
         restore_settings();
 
         function updateStats() {
+            // reset day stats when UTC midnight passes
+            const now = new Date();
+            const today = now.toISOString().slice(0, 10);  // "YYYY-MM-DD"
+            if (statsUpdated < today) {
+                dayCopiedCharacters = 0;
+                localStorage.setItem('dayCopiedCharacters', dayCopiedCharacters);
+                dayCopiedWords = 0;
+                localStorage.setItem('dayCopiedWOrds', dayCopiedWords);
+                dayScore = 0;
+                localStorage.setItem('dayScore', dayScore);
+                dayTime = 0;
+                localStorage.setItem('dayTime', dayTime);
+            }
+            statsUpdated = now;
+            localStorage.setItem('statsUpdated', statsUpdated);
+
             element_stats.innerHTML = (
                 'Practised for ' + sessionTime + ' seconds (best: ' + bestSessionTime + ')<br>' +
                 'Practised for ' + dayTime + ' seconds today (best: ' + bestDayTime + ')<br>' +
@@ -339,20 +355,6 @@
 
         function incrementCopiedCharacters(c) {
             copiedText += c;
-            const now = new Date();
-            const today = now.toISOString().slice(0, 10);  // "YYYY-MM-DD"
-
-            // reset day stats when UTC midnight passes
-            if (statsUpdated < today) {
-                dayCopiedCharacters = 0;
-                dayCopiedWords = 0;
-                dayScore = 0;
-                dayTime = 0;
-                // dayCopiedWords might not be updated later
-                localStorage.setItem('dayCopiedWOrds', dayCopiedWords);
-            }
-            statsUpdated = now;
-            localStorage.setItem('statsUpdated', statsUpdated);
 
             // CHARACTERS
             // total
@@ -421,6 +423,7 @@
             }
 
             // TIME
+            const now = new Date();
             const elapsedSinceStart = Math.round((now.getTime() - sessionStart.getTime()) / 1000);
             const newElapsed = elapsedSinceStart - sessionTime;
             // total
