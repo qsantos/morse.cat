@@ -319,21 +319,20 @@
             statsUpdated = now;
             localStorage.setItem('statsUpdated', statsUpdated.toISOString());
 
-            element_stats.innerHTML = (
-                'Practised for ' + sessionTime + ' seconds (best: ' + bestSessionTime + ')<br>' +
-                'Practised for ' + dayTime + ' seconds today (best: ' + bestDayTime + ')<br>' +
-                'Practised for ' + totalTime + ' seconds in total<br>' +
-                'Copied ' + sessionCopiedCharacters + ' characters (best: ' + bestSessionCopiedCharacters + ')<br>' +
-                'Copied ' + dayCopiedCharacters + ' characters today (best: ' + bestDayCopiedCharacters + ')<br>' +
-                'Copied ' + totalCopiedCharacters + ' characters in total<br>' +
-                'Copied ' + sessionCopiedWords + ' words (best: ' + bestSessionCopiedWords + ')<br>' +
-                'Copied ' + dayCopiedWords + ' words today (best: ' + bestDayCopiedWords + ')<br>' +
-                'Copied ' + totalCopiedWords + ' words in total<br>' +
-                'Current score is ' + sessionScore + ' (best: ' + bestSessionScore + ')<br>' +
-                'Today\'s score is ' + dayScore + ' (best: ' + bestDayScore + ')<br>' +
-                'Total score is ' + totalScore + '<br>' +
-                ''
-            )
+            element_stats.innerHTML = `
+                Practised for ${sessionTime} seconds (best: ${bestSessionTime})<br>
+                Practised for ${dayTime} seconds today (best: ${bestDayTime})<br>
+                Practised for ${totalTime} seconds in total<br>
+                Copied ${sessionCopiedCharacters} characters (best: ${bestSessionCopiedCharacters})<br>
+                Copied ${dayCopiedCharacters} characters today (best: ${bestDayCopiedCharacters})<br>
+                Copied ${totalCopiedCharacters} characters in total<br>
+                Copied ${sessionCopiedWords} words (best: ${bestSessionCopiedWords})<br>
+                Copied ${dayCopiedWords} words today (best: ${bestDayCopiedWords})<br>
+                Copied ${totalCopiedWords} words in total<br>
+                Current score is ${sessionScore} (best: ${bestSessionScore})<br>
+                Today\'s score is ${dayScore} (best: ${bestDayScore})<br>
+                Total score is ${totalScore}<br>
+            `;
         }
         updateStats();
 
