@@ -317,7 +317,7 @@
                 localStorage.setItem('dayTime', dayTime);
             }
             statsUpdated = now;
-            localStorage.setItem('statsUpdated', statsUpdated);
+            localStorage.setItem('statsUpdated', statsUpdated.toISOString());
 
             element_stats.innerHTML = (
                 'Practised for ' + sessionTime + ' seconds (best: ' + bestSessionTime + ')<br>' +
