@@ -417,7 +417,7 @@ function stop(expected, userInput) {
 }
 
 function replayAfterMistake(c) {
-    m.onFinished = function() {
+    m.onFinished = () => {
         m.onFinished = undefined;
         m.setFreq(settings.tone);
         if (c !== undefined) {
@@ -490,7 +490,7 @@ document.addEventListener('keydown', (event) => {
     feedbackCwElement.innerText = m.alphabet[expected] || '';
 });
 
-m.onCharacterPlay = function(c) {
+m.onCharacterPlay = (c) => {
     // skip leading space
     if (played.length === 0 && c.c === ' ') {
         return;
