@@ -60,7 +60,7 @@ let bestSessionTime = loadInteger('bestSessionTime');
 let bestDayTime = loadInteger('bestDayTime');
 
 let historyElement;
-let feedbackEleemnt;
+let feedbackElement;
 let feedbacWrongCharacterElement;
 let feedbackCharacterElement;
 let feedbackCwElement;
@@ -69,7 +69,7 @@ let infoElement;
 
 function setElements() {
     historyElement = document.getElementById('history');
-    feedbackEleemnt = document.getElementById('feedback');
+    feedbackElement = document.getElementById('feedback');
     feedbacWrongCharacterElement = document.getElementById('feedback_wrong_character');
     feedbackCharacterElement = document.getElementById('feedback_character');
     feedbackCwElement = document.getElementById('feedback_cw');
@@ -378,13 +378,13 @@ function start() {
     m.setFreq(settings.tone);
     m.onFinished = onFinished;
     m.play();
-    feedbackEleemnt.classList.add('success');
-    feedbackEleemnt.classList.remove('failure');
+    feedbackElement.classList.add('success');
+    feedbackElement.classList.remove('failure');
     feedbacWrongCharacterElement.innerText = '';
     feedbackCharacterElement.innerText = '';
     feedbackCwElement.innerText = '';
     infoElement.innerText = '';
-    feedbackEleemnt.focus();
+    feedbackElement.focus();
     updateStats();
     updateHistory();
 }
@@ -489,8 +489,8 @@ document.addEventListener('keydown', (event) => {
         // incorrect
         stop(expected, userInput);
         replayAfterMistake(expected);
-        feedbackEleemnt.classList.remove('success');
-        feedbackEleemnt.classList.add('failure');
+        feedbackElement.classList.remove('success');
+        feedbackElement.classList.add('failure');
         feedbacWrongCharacterElement.innerText = stringFromCharacter(userInput);
     }
 
@@ -516,7 +516,7 @@ m.onCharacterPlay = (c) => {
 
 document.addEventListener('DOMContentLoaded', () => {
     setElements();
-    feedbackEleemnt.addEventListener('blur', () => {
+    feedbackElement.addEventListener('blur', () => {
         infoElement.innerText = 'Focus lost!';
         stop();
     });
