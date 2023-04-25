@@ -9,7 +9,7 @@ const settings = JSON.parse(localStorage.getItem('settings')) || {
     word_length: 5,
     charset: lcwoLessons,
 };
-const history = JSON.parse(localStorage.getItem('history')) || [];
+const sessionHistory = JSON.parse(localStorage.getItem('history')) || [];
 
 const m = new jscw();
 
@@ -254,7 +254,7 @@ function formatHistoryEntry(entry) {
 }
 
 function updateHistory() {
-    const entries = history.slice(-10);
+    const entries = sessionHistory.slice(-10);
     const formattedEntries = [...entries.map(formatHistoryEntry)];
     historyElement.innerHTML = `<li>${copiedText}</li>${formattedEntries.reverse().join('')}`;
 }
@@ -404,13 +404,13 @@ function stop(expected, userInput) {
         copiedWords: sessionCopiedWords,
         score: sessionScore,
     };
-    history.push(session);
+    sessionHistory.push(session);
     // NOTE: in the following scenario, the session from tab B will be lost
     // - open in tab A
     // - open in tab B
     // - play session in tab B
     // - play session in tab A
-    localStorage.setItem('history', JSON.stringify(history));
+    localStorage.setItem('history', JSON.stringify(sessionHistory));
 
     inSession = false;
     m.onFinished = undefined;
