@@ -24,32 +24,36 @@ let inSession = false;
 let sessionStart;
 let sessionDurationUpdater;
 
+function loadInteger(name) {
+    return parseInt(localStorage.getItem(name), 10) || 0;
+}
+
 // stats
 let statsUpdated = localStorage.getItem('statsUpdated');
 // CHARACTERS
-let totalCopiedCharacters = localStorage.getItem('totalCopiedCharacters') ^ 0;
-let sessionCopiedCharacters = localStorage.getItem('sessionCopiedCharacters') ^ 0;
-let dayCopiedCharacters = localStorage.getItem('dayCopiedCharacters') ^ 0;
-let bestSessionCopiedCharacters = localStorage.getItem('bestSessionCopiedCharacters') ^ 0;
-let bestDayCopiedCharacters = localStorage.getItem('bestDayCopiedCharacters') ^ 0;
+let totalCopiedCharacters = loadInteger('totalCopiedCharacters');
+let sessionCopiedCharacters = loadInteger('sessionCopiedCharacters');
+let dayCopiedCharacters = loadInteger('dayCopiedCharacters');
+let bestSessionCopiedCharacters = loadInteger('bestSessionCopiedCharacters');
+let bestDayCopiedCharacters = loadInteger('bestDayCopiedCharacters');
 // WORDS
-let totalCopiedWords = localStorage.getItem('totalCopiedWords') ^ 0;
-let sessionCopiedWords = localStorage.getItem('sessionCopiedWords') ^ 0;
-let dayCopiedWords = localStorage.getItem('dayCopiedWords') ^ 0;
-let bestSessionCopiedWords = localStorage.getItem('bestSessionCopiedWords') ^ 0;
-let bestDayCopiedWords = localStorage.getItem('bestDayCopiedWords') ^ 0;
+let totalCopiedWords = loadInteger('totalCopiedWords');
+let sessionCopiedWords = loadInteger('sessionCopiedWords');
+let dayCopiedWords = loadInteger('dayCopiedWords');
+let bestSessionCopiedWords = loadInteger('bestSessionCopiedWords');
+let bestDayCopiedWords = loadInteger('bestDayCopiedWords');
 // SCORE
-let totalScore = localStorage.getItem('totalScore') ^ 0;
-let sessionScore = localStorage.getItem('sessionScore') ^ 0;
-let dayScore = localStorage.getItem('dayScore') ^ 0;
-let bestSessionScore = localStorage.getItem('bestSessionScore') ^ 0;
-let bestDayScore = localStorage.getItem('bestDayScore') ^ 0;
+let totalScore = loadInteger('totalScore');
+let sessionScore = loadInteger('sessionScore');
+let dayScore = loadInteger('dayScore');
+let bestSessionScore = loadInteger('bestSessionScore');
+let bestDayScore = loadInteger('bestDayScore');
 // TIME
-let totalTime = localStorage.getItem('totalTime') ^ 0;
-let sessionTime = localStorage.getItem('sessionTime') ^ 0;
-let dayTime = localStorage.getItem('dayTime') ^ 0;
-let bestSessionTime = localStorage.getItem('bestSessionTime') ^ 0;
-let bestDayTime = localStorage.getItem('bestDayTime') ^ 0;
+let totalTime = loadInteger('totalTime');
+let sessionTime = loadInteger('sessionTime');
+let dayTime = loadInteger('dayTime');
+let bestSessionTime = loadInteger('bestSessionTime');
+let bestDayTime = loadInteger('bestDayTime');
 
 let historyElement;
 let feedbackEleemnt;
@@ -137,7 +141,7 @@ function onCustomCharsetInput() {
 }
 
 function onLCWOLessonInput() {
-    const lcwoLesson = document.getElementById('settings-lcwo-lesson').value ^ 0;
+    const lcwoLesson = parseInt(document.getElementById('settings-lcwo-lesson').value, 10) || 0;
     if (lcwoLesson === 0) {
         return;
     }
