@@ -91,7 +91,7 @@ function lcwoLessonFromCharset(charset) {
         }
         i += 1;
     }
-    return s.size == 0 && i > 0 ? i - 1 : 0;
+    return s.size === 0 && i > 0 ? i - 1 : 0;
 }
 
 function updateLCWOLessonFromCharset() {
@@ -280,7 +280,7 @@ function incrementCopiedCharacters(c) {
     }
 
     // WORDS
-    if (c == ' ') {
+    if (c === ' ') {
         // total
         totalCopiedWords += 1;
         localStorage.setItem('totalCopiedWords', totalCopiedWords);
@@ -431,7 +431,7 @@ function replayAfterMistake(c) {
 function stringFromCharacter(c) {
     if (c === undefined) {
         return '-';
-    } else if (c == ' ') {
+    } else if (c === ' ') {
         return 'Space';
     } else {
         return c;
@@ -442,12 +442,12 @@ document.addEventListener('keydown', (event) => {
     const userInput = event.key.toLowerCase();
 
     // disable Firefox's quick search when pressing forward slash
-    if (userInput == '/') {
+    if (userInput === '/') {
         event.preventDefault();
     }
 
     // hitting space starts the keying
-    if (!inSession && userInput == 'enter') {
+    if (!inSession && userInput === 'enter') {
         start();
     }
 
@@ -457,23 +457,23 @@ document.addEventListener('keydown', (event) => {
     }
 
     // stop space from scrolling the page while in session
-    if (userInput == ' ') {
+    if (userInput === ' ') {
         event.preventDefault();
     }
 
     // stop when user hits Escape key
-    if (userInput == 'escape') {
+    if (userInput === 'escape') {
         stop();
     }
 
     // ignore non-copy user inputs (not in the charset, and not a space)
-    if (userInput != ' ' && settings.charset.toLowerCase().indexOf(userInput) == -1) {
+    if (userInput !== ' ' && settings.charset.toLowerCase().indexOf(userInput) === -1) {
         return;
     }
 
     // played[nextIndex] is undefined if nextIndex >= played.length
     const expected = played[sessionCopiedCharacters]?.toLowerCase();
-    if (userInput == expected) {
+    if (userInput === expected) {
         // correct
         incrementCopiedCharacters(expected);
         updateHistory();
@@ -492,7 +492,7 @@ document.addEventListener('keydown', (event) => {
 
 m.onCharacterPlay = function(c) {
     // skip leading space
-    if (played.length == 0 && c.c == ' ') {
+    if (played.length === 0 && c.c === ' ') {
         return;
     }
 
