@@ -2,14 +2,26 @@ const latin = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'; // A-Z
 const digits = '0123456789'; // 0-9
 const punct = '.,:?\'-/()"=+×@';
 const lcwoLessons = 'KMURESNAPTLWI.JZ=FOY,VG5/Q92H38B?47C1D60X';
-const settings = JSON.parse(localStorage.getItem('settings')) || {
-    wpm: 20,
-    tone: 600,
-    error_tone: 200,
-    word_length: 5,
-    charset: lcwoLessons,
-};
-const sessionHistory = JSON.parse(localStorage.getItem('history')) || [];
+const settings = (() => {
+    try {
+        return JSON.parse(localStorage.getItem('settings') || '');
+    } catch (e) {
+        return {
+            wpm: 20,
+            tone: 600,
+            error_tone: 200,
+            word_length: 5,
+            charset: lcwoLessons,
+        };
+    }
+})();
+const sessionHistory = (() => {
+    try {
+        return JSON.parse(localStorage.getItem('history') || '');
+    } catch (e) {
+        return [];
+    }
+})();
 
 const m = new jscw();
 
