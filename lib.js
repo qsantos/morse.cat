@@ -387,7 +387,7 @@ function stop(expected, userInput) {
     }
 
     const session = {
-        id: self.crypto.randomUUID(),
+        id: crypto.randomUUID(),
         started: sessionStart.toISOString(),
         finished: new Date().toISOString(),
         copiedText,
