@@ -51,13 +51,23 @@ let dayTime = localStorage.getItem('dayTime') ^ 0;
 let bestSessionTime = localStorage.getItem('bestSessionTime') ^ 0;
 let bestDayTime = localStorage.getItem('bestDayTime') ^ 0;
 
-const element_history = document.getElementById('history');
-const element_feedback = document.getElementById('feedback');
-const element_feedback_wrong_character = document.getElementById('feedback_wrong_character');
-const element_feedback_character = document.getElementById('feedback_character');
-const element_feedback_cw = document.getElementById('feedback_cw');
-const element_stats = document.getElementById('stats');
-const element_info = document.getElementById('info');
+let element_history;
+let element_feedback;
+let element_feedback_wrong_character;
+let element_feedback_character;
+let element_feedback_cw;
+let element_stats;
+let element_info;
+
+function setElements() {
+    element_history = document.getElementById('history');
+    element_feedback = document.getElementById('feedback');
+    element_feedback_wrong_character = document.getElementById('feedback_wrong_character');
+    element_feedback_character = document.getElementById('feedback_character');
+    element_feedback_cw = document.getElementById('feedback_cw');
+    element_stats = document.getElementById('stats');
+    element_info = document.getElementById('info');
+}
 
 function onSettingsChange() {
     stop();
@@ -158,7 +168,6 @@ function restore_settings() {
     updateLCWOLessonFromCharset();
     updateTogglesFromCharset();
 }
-restore_settings();
 
 function updateStats() {
     // reset day stats when UTC midnight passes
@@ -230,7 +239,6 @@ function updateStats() {
 
     `;
 }
-updateStats();
 
 function formatHistoryEntry(entry) {
     let ret = `<span class="meta"><time datetime="${entry.started}">${entry.started}</time>:</span> ${entry.copiedText}`;
@@ -246,7 +254,6 @@ function updateHistory() {
     const formattedEntries = [...entries.map(formatHistoryEntry)];
     element_history.innerHTML = `<li>${copiedText}</li>${formattedEntries.reverse().join('')}`;
 }
-updateHistory();
 
 function incrementCopiedCharacters(c) {
     copiedText += c;
@@ -499,7 +506,13 @@ m.onCharacterPlay = function(c) {
     }
 };
 
-element_feedback.addEventListener('blur', () => {
-    element_info.innerText = 'Focus lost!';
-    stop();
+document.addEventListener('DOMContentLoaded', () => {
+    setElements();
+    element_feedback.addEventListener('blur', () => {
+        element_info.innerText = 'Focus lost!';
+        stop();
+    });
+    updateStats();
+    updateHistory();
+    restore_settings();
 });
