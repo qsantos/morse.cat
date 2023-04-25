@@ -1,19 +1,19 @@
 const latin = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'; // A-Z
 const digits = '0123456789'; // 0-9
 const punct = '.,:?\'-/()"=+×@';
-const lcwo_lessons = 'KMURESNAPTLWI.JZ=FOY,VG5/Q92H38B?47C1D60X';
+const lcwoLessons = 'KMURESNAPTLWI.JZ=FOY,VG5/Q92H38B?47C1D60X';
 const settings = JSON.parse(localStorage.getItem('settings')) || {
     wpm: 20,
     tone: 600,
     error_tone: 200,
     word_length: 5,
-    charset: lcwo_lessons,
+    charset: lcwoLessons,
 };
 const history = JSON.parse(localStorage.getItem('history')) || [];
 
 const m = new jscw();
 
-function push_word() {
+function pushWord() {
     const word = Array.from({ length: settings.word_length }, () => settings.charset[Math.floor(Math.random() * settings.charset.length)]).join('');
     m.setText(` ${word}`);
 }
@@ -51,22 +51,22 @@ let dayTime = localStorage.getItem('dayTime') ^ 0;
 let bestSessionTime = localStorage.getItem('bestSessionTime') ^ 0;
 let bestDayTime = localStorage.getItem('bestDayTime') ^ 0;
 
-let element_history;
-let element_feedback;
-let element_feedback_wrong_character;
-let element_feedback_character;
-let element_feedback_cw;
-let element_stats;
-let element_info;
+let historyElement;
+let feedbackEleemnt;
+let feedbacWrongCharacterElement;
+let feedbackCharacterElement;
+let feedbackCwElement;
+let statsElement;
+let infoElement;
 
 function setElements() {
-    element_history = document.getElementById('history');
-    element_feedback = document.getElementById('feedback');
-    element_feedback_wrong_character = document.getElementById('feedback_wrong_character');
-    element_feedback_character = document.getElementById('feedback_character');
-    element_feedback_cw = document.getElementById('feedback_cw');
-    element_stats = document.getElementById('stats');
-    element_info = document.getElementById('info');
+    historyElement = document.getElementById('history');
+    feedbackEleemnt = document.getElementById('feedback');
+    feedbacWrongCharacterElement = document.getElementById('feedback_wrong_character');
+    feedbackCharacterElement = document.getElementById('feedback_character');
+    feedbackCwElement = document.getElementById('feedback_cw');
+    statsElement = document.getElementById('stats');
+    infoElement = document.getElementById('info');
 }
 
 function onSettingsChange() {
@@ -79,11 +79,11 @@ function onSettingsChange() {
     localStorage.setItem('settings', JSON.stringify(settings));
 }
 
-function lcwo_lesson_of_charset(charset) {
+function lcwoLessonFromCharset(charset) {
     const s = new Set(charset.toUpperCase());
     let i = 0;
-    while (i < lcwo_lessons.length) {
-        const c = lcwo_lessons[i];
+    while (i < lcwoLessons.length) {
+        const c = lcwoLessons[i];
         if (s.has(c)) {
             s.delete(c);
         } else {
@@ -95,8 +95,8 @@ function lcwo_lesson_of_charset(charset) {
 }
 
 function updateLCWOLessonFromCharset() {
-    const lcwo_lesson = lcwo_lesson_of_charset(settings.charset);
-    document.getElementById('settings-lcwo-lesson').value = lcwo_lesson;
+    const lcwoLesson = lcwoLessonFromCharset(settings.charset);
+    document.getElementById('settings-lcwo-lesson').value = lcwoLesson;
 }
 
 // returns true when setA contains setB
@@ -137,29 +137,29 @@ function onCustomCharsetInput() {
 }
 
 function onLCWOLessonInput() {
-    const lcwo_lesson = document.getElementById('settings-lcwo-lesson').value ^ 0;
-    if (lcwo_lesson === 0) {
+    const lcwoLesson = document.getElementById('settings-lcwo-lesson').value ^ 0;
+    if (lcwoLesson === 0) {
         return;
     }
-    document.getElementById('settings-charset').value = lcwo_lessons.slice(0, lcwo_lesson + 1);
+    document.getElementById('settings-charset').value = lcwoLessons.slice(0, lcwoLesson + 1);
     onSettingsChange();
     updateTogglesFromCharset();
 }
 
 function onToggleChars(event, chars) {
     const s = new Set(chars);
-    const charset_without_chars = [...settings.charset].filter((c) => !s.has(c.toUpperCase())).join('');
+    const charsetWithoutChars = [...settings.charset].filter((c) => !s.has(c.toUpperCase())).join('');
     if (event.target.checked) {
-        settings.charset = chars + charset_without_chars;
+        settings.charset = chars + charsetWithoutChars;
     } else {
-        settings.charset = charset_without_chars;
+        settings.charset = charsetWithoutChars;
     }
     document.getElementById('settings-charset').value = settings.charset;
     onSettingsChange();
     updateLCWOLessonFromCharset();
 }
 
-function restore_settings() {
+function restoreSettings() {
     document.getElementById('settings-wpm').value = settings.wpm;
     document.getElementById('settings-tone').value = settings.tone;
     document.getElementById('settings-error-tone').value = settings.error_tone;
@@ -186,7 +186,7 @@ function updateStats() {
     statsUpdated = now;
     localStorage.setItem('statsUpdated', statsUpdated.toISOString());
 
-    element_stats.innerHTML = `
+    statsElement.innerHTML = `
     <h3>Statistics</h3>
     <table>
         <thead>
@@ -243,8 +243,8 @@ function updateStats() {
 function formatHistoryEntry(entry) {
     let ret = `<span class="meta"><time datetime="${entry.started}">${entry.started}</time>:</span> ${entry.copiedText}`;
     if (entry.mistake) {
-        const { expected_character, mistaken_character } = entry.mistake;
-        ret += `<span class="strike">${mistaken_character}</span>${expected_character}`;
+        const { expectedCharacter, mistakenCharacter } = entry.mistake;
+        ret += `<span class="strike">${mistakenCharacter}</span>${expectedCharacter}`;
     }
     return `<li>${ret}<li>`;
 }
@@ -252,7 +252,7 @@ function formatHistoryEntry(entry) {
 function updateHistory() {
     const entries = history.slice(-10);
     const formattedEntries = [...entries.map(formatHistoryEntry)];
-    element_history.innerHTML = `<li>${copiedText}</li>${formattedEntries.reverse().join('')}`;
+    historyElement.innerHTML = `<li>${copiedText}</li>${formattedEntries.reverse().join('')}`;
 }
 
 function incrementCopiedCharacters(c) {
@@ -350,12 +350,12 @@ function incrementCopiedCharacters(c) {
 }
 
 function onFinished() {
-    push_word();
+    pushWord();
     m.play();
 }
 
 function start() {
-    push_word();
+    pushWord();
     played.length = 0;
     copiedText = '';
     inSession = true;
@@ -370,18 +370,18 @@ function start() {
     m.setFreq(settings.tone);
     m.onFinished = onFinished;
     m.play();
-    element_feedback.classList.add('success');
-    element_feedback.classList.remove('failure');
-    element_feedback_wrong_character.innerText = '';
-    element_feedback_character.innerText = '';
-    element_feedback_cw.innerText = '';
-    element_info.innerText = '';
-    element_feedback.focus();
+    feedbackEleemnt.classList.add('success');
+    feedbackEleemnt.classList.remove('failure');
+    feedbacWrongCharacterElement.innerText = '';
+    feedbackCharacterElement.innerText = '';
+    feedbackCwElement.innerText = '';
+    infoElement.innerText = '';
+    feedbackEleemnt.focus();
     updateStats();
     updateHistory();
 }
 
-function stop(expected, user_input) {
+function stop(expected, userInput) {
     if (!inSession) {
         return;
     }
@@ -392,8 +392,8 @@ function stop(expected, user_input) {
         finished: new Date().toISOString(),
         copiedText,
         mistake: !expected ? null : {
-            expected_character: expected,
-            mistaken_character: user_input,
+            expectedCharacter: expected,
+            mistakenCharacter: userInput,
         },
         settings,
         copiedCharacters: sessionCopiedCharacters,
@@ -416,7 +416,7 @@ function stop(expected, user_input) {
     m.stop();
 }
 
-function replay_after_mistake(c) {
+function replayAfterMistake(c) {
     m.onFinished = function() {
         m.onFinished = undefined;
         m.setFreq(settings.tone);
@@ -428,7 +428,7 @@ function replay_after_mistake(c) {
     m.play('T');
 }
 
-function character_to_string(c) {
+function stringFromCharacter(c) {
     if (c === undefined) {
         return '-';
     } else if (c == ' ') {
@@ -439,15 +439,15 @@ function character_to_string(c) {
 }
 
 document.addEventListener('keydown', (event) => {
-    const user_input = event.key.toLowerCase();
+    const userInput = event.key.toLowerCase();
 
     // disable Firefox's quick search when pressing forward slash
-    if (user_input == '/') {
+    if (userInput == '/') {
         event.preventDefault();
     }
 
     // hitting space starts the keying
-    if (!inSession && user_input == 'enter') {
+    if (!inSession && userInput == 'enter') {
         start();
     }
 
@@ -457,37 +457,37 @@ document.addEventListener('keydown', (event) => {
     }
 
     // stop space from scrolling the page while in session
-    if (user_input == ' ') {
+    if (userInput == ' ') {
         event.preventDefault();
     }
 
     // stop when user hits Escape key
-    if (user_input == 'escape') {
+    if (userInput == 'escape') {
         stop();
     }
 
     // ignore non-copy user inputs (not in the charset, and not a space)
-    if (user_input != ' ' && settings.charset.toLowerCase().indexOf(user_input) == -1) {
+    if (userInput != ' ' && settings.charset.toLowerCase().indexOf(userInput) == -1) {
         return;
     }
 
     // played[nextIndex] is undefined if nextIndex >= played.length
     const expected = played[sessionCopiedCharacters]?.toLowerCase();
-    if (user_input == expected) {
+    if (userInput == expected) {
         // correct
         incrementCopiedCharacters(expected);
         updateHistory();
     } else {
         // incorrect
-        stop(expected, user_input);
-        replay_after_mistake(expected);
-        element_feedback.classList.remove('success');
-        element_feedback.classList.add('failure');
-        element_feedback_wrong_character.innerText = character_to_string(user_input);
+        stop(expected, userInput);
+        replayAfterMistake(expected);
+        feedbackEleemnt.classList.remove('success');
+        feedbackEleemnt.classList.add('failure');
+        feedbacWrongCharacterElement.innerText = stringFromCharacter(userInput);
     }
 
-    element_feedback_character.innerText = character_to_string(expected);
-    element_feedback_cw.innerText = m.alphabet[expected] || '';
+    feedbackCharacterElement.innerText = stringFromCharacter(expected);
+    feedbackCwElement.innerText = m.alphabet[expected] || '';
 });
 
 m.onCharacterPlay = function(c) {
@@ -501,18 +501,18 @@ m.onCharacterPlay = function(c) {
 
     // detect when user has stopped copying
     if (played.length - copiedText.length > 10) {
-        element_info.innerText = 'Are you still there?';
+        infoElement.innerText = 'Are you still there?';
         stop();
     }
 };
 
 document.addEventListener('DOMContentLoaded', () => {
     setElements();
-    element_feedback.addEventListener('blur', () => {
-        element_info.innerText = 'Focus lost!';
+    feedbackEleemnt.addEventListener('blur', () => {
+        infoElement.innerText = 'Focus lost!';
         stop();
     });
     updateStats();
     updateHistory();
-    restore_settings();
+    restoreSettings();
 });
