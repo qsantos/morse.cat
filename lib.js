@@ -81,7 +81,7 @@ function lcwo_lesson_of_charset(charset) {
         } else {
             break;
         }
-        i += 1.
+        i += 1;
     }
     return s.size == 0 && i > 0 ? i - 1 : 0;
 }
