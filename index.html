@@ -528,10 +528,8 @@
             push_word();
             played.length = 0;
             copiedText = '';
-            updateHistory();
             inSession = true;
             sessionStart = new Date();
-            updateStats();
             sessionDurationUpdater = setInterval(updateStats, 100);
             sessionCopiedCharacters = 0;
             sessionCopiedWords = 0;
@@ -548,8 +546,9 @@
             element_feedback_character.innerText = '';
             element_feedback_cw.innerText = '';
             element_info.innerText = '';
-            updateHistory();
             element_feedback.focus();
+            updateStats();
+            updateHistory();
         }
 
         function stop(expected, user_input) {
