@@ -1,5 +1,5 @@
-const latin = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';  // A-Z
-const digits = '0123456789';  // 0-9
+const latin = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'; // A-Z
+const digits = '0123456789'; // 0-9
 const punct = '.,:?\'-/()"=+×@';
 const lcwo_lessons = 'KMURESNAPTLWI.JZ=FOY,VG5/Q92H38B?47C1D60X';
 const settings = JSON.parse(localStorage.getItem('settings')) || {
@@ -14,17 +14,15 @@ const history = JSON.parse(localStorage.getItem('history')) || [];
 const m = new jscw();
 
 function push_word() {
-    const word = Array.from({length: settings.word_length}, () =>
-        settings.charset[Math.floor(Math.random() * settings.charset.length)]
-    ).join('');
-    m.setText(' ' + word);
+    const word = Array.from({ length: settings.word_length }, () => settings.charset[Math.floor(Math.random() * settings.charset.length)]).join('');
+    m.setText(` ${word}`);
 }
 
 const played = [];
 let copiedText = '';
 let inSession = false;
-let sessionStart = undefined;
-let sessionDurationUpdater = undefined;
+let sessionStart;
+let sessionDurationUpdater;
 
 // stats
 let statsUpdated = localStorage.getItem('statsUpdated');
@@ -93,12 +91,12 @@ function updateLCWOLessonFromCharset() {
 
 // returns true when setA contains setB
 function contains(setA, setB) {
-    return [...setB].every(x => setA.has(x));
+    return [...setB].every((x) => setA.has(x));
 }
 
 // returns true when setA and setB intersects
 function intersects(setA, setB) {
-    return [...setB].some(x => setA.has(x));
+    return [...setB].some((x) => setA.has(x));
 }
 
 function updateToggleFromCharset(id, chars) {
@@ -140,7 +138,7 @@ function onLCWOLessonInput() {
 
 function onToggleChars(event, chars) {
     const s = new Set(chars);
-    const charset_without_chars = [...settings.charset].filter(c => !s.has(c.toUpperCase())).join('');
+    const charset_without_chars = [...settings.charset].filter((c) => !s.has(c.toUpperCase())).join('');
     if (event.target.checked) {
         settings.charset = chars + charset_without_chars;
     } else {
@@ -165,7 +163,7 @@ restore_settings();
 function updateStats() {
     // reset day stats when UTC midnight passes
     const now = new Date();
-    const today = now.toISOString().slice(0, 10);  // "YYYY-MM-DD"
+    const today = now.toISOString().slice(0, 10); // "YYYY-MM-DD"
     if (statsUpdated < today) {
         dayCopiedCharacters = 0;
         localStorage.setItem('dayCopiedCharacters', dayCopiedCharacters);
@@ -240,13 +238,13 @@ function formatHistoryEntry(entry) {
         const { expected_character, mistaken_character } = entry.mistake;
         ret += `<span class="strike">${mistaken_character}</span>${expected_character}`;
     }
-    return '<li>' + ret + '<li>';
+    return `<li>${ret}<li>`;
 }
 
 function updateHistory() {
     const entries = history.slice(-10);
     const formattedEntries = [...entries.map(formatHistoryEntry)];
-    element_history.innerHTML = '<li>' + copiedText + '</li>' + formattedEntries.reverse().join('');
+    element_history.innerHTML = `<li>${copiedText}</li>${formattedEntries.reverse().join('')}`;
 }
 updateHistory();
 
@@ -256,17 +254,17 @@ function incrementCopiedCharacters(c) {
     // CHARACTERS
     // total
     totalCopiedCharacters += 1;
-    localStorage.setItem('totalCopiedCharacters', totalCopiedCharacters)
+    localStorage.setItem('totalCopiedCharacters', totalCopiedCharacters);
     // session
     sessionCopiedCharacters += 1;
     localStorage.setItem('sessionCopiedCharacters', sessionCopiedCharacters);
     // day
     dayCopiedCharacters += 1;
-    localStorage.setItem('dayCopiedCharacters', dayCopiedCharacters)
+    localStorage.setItem('dayCopiedCharacters', dayCopiedCharacters);
     // best session
     if (sessionCopiedCharacters > bestSessionCopiedCharacters) {
         bestSessionCopiedCharacters = sessionCopiedCharacters;
-        localStorage.setItem('bestSessionCopiedCharacters', bestSessionCopiedCharacters)
+        localStorage.setItem('bestSessionCopiedCharacters', bestSessionCopiedCharacters);
     }
     // best day
     if (dayCopiedCharacters > bestDayCopiedCharacters) {
@@ -385,12 +383,12 @@ function stop(expected, user_input) {
         id: self.crypto.randomUUID(),
         started: sessionStart.toISOString(),
         finished: new Date().toISOString(),
-        copiedText: copiedText,
+        copiedText,
         mistake: !expected ? null : {
             expected_character: expected,
             mistaken_character: user_input,
         },
-        settings: settings,
+        settings,
         copiedCharacters: sessionCopiedCharacters,
         copiedWords: sessionCopiedWords,
         score: sessionScore,
@@ -416,7 +414,7 @@ function replay_after_mistake(c) {
         m.onFinished = undefined;
         m.setFreq(settings.tone);
         if (c !== undefined) {
-            m.play(' ' + c);
+            m.play(` ${c}`);
         }
     };
     m.setFreq(settings.error_tone);
@@ -433,7 +431,7 @@ function character_to_string(c) {
     }
 }
 
-document.addEventListener('keydown', function(event) {
+document.addEventListener('keydown', (event) => {
     const user_input = event.key.toLowerCase();
 
     // disable Firefox's quick search when pressing forward slash
@@ -483,7 +481,7 @@ document.addEventListener('keydown', function(event) {
 
     element_feedback_character.innerText = character_to_string(expected);
     element_feedback_cw.innerText = m.alphabet[expected] || '';
-})
+});
 
 m.onCharacterPlay = function(c) {
     // skip leading space
@@ -499,7 +497,7 @@ m.onCharacterPlay = function(c) {
         element_info.innerText = 'Are you still there?';
         stop();
     }
-}
+};
 
 element_feedback.addEventListener('blur', () => {
     element_info.innerText = 'Focus lost!';
