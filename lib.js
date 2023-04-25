@@ -28,6 +28,10 @@ function loadInteger(name) {
     return parseInt(localStorage.getItem(name), 10) || 0;
 }
 
+function saveInteger(name, value) {
+    localStorage.setItem(name, JSON.stringify(value));
+}
+
 // stats
 let statsUpdated = localStorage.getItem('statsUpdated');
 // CHARACTERS
@@ -179,13 +183,13 @@ function updateStats() {
     const today = now.toISOString().slice(0, 10); // "YYYY-MM-DD"
     if (statsUpdated < today) {
         dayCopiedCharacters = 0;
-        localStorage.setItem('dayCopiedCharacters', dayCopiedCharacters);
+        saveInteger('dayCopiedCharacters', dayCopiedCharacters);
         dayCopiedWords = 0;
-        localStorage.setItem('dayCopiedWOrds', dayCopiedWords);
+        saveInteger('dayCopiedWOrds', dayCopiedWords);
         dayScore = 0;
-        localStorage.setItem('dayScore', dayScore);
+        saveInteger('dayScore', dayScore);
         dayTime = 0;
-        localStorage.setItem('dayTime', dayTime);
+        saveInteger('dayTime', dayTime);
     }
     statsUpdated = now;
     localStorage.setItem('statsUpdated', statsUpdated.toISOString());
@@ -265,44 +269,44 @@ function incrementCopiedCharacters(c) {
     // CHARACTERS
     // total
     totalCopiedCharacters += 1;
-    localStorage.setItem('totalCopiedCharacters', totalCopiedCharacters);
+    saveInteger('totalCopiedCharacters', totalCopiedCharacters);
     // session
     sessionCopiedCharacters += 1;
-    localStorage.setItem('sessionCopiedCharacters', sessionCopiedCharacters);
+    saveInteger('sessionCopiedCharacters', sessionCopiedCharacters);
     // day
     dayCopiedCharacters += 1;
-    localStorage.setItem('dayCopiedCharacters', dayCopiedCharacters);
+    saveInteger('dayCopiedCharacters', dayCopiedCharacters);
     // best session
     if (sessionCopiedCharacters > bestSessionCopiedCharacters) {
         bestSessionCopiedCharacters = sessionCopiedCharacters;
-        localStorage.setItem('bestSessionCopiedCharacters', bestSessionCopiedCharacters);
+        saveInteger('bestSessionCopiedCharacters', bestSessionCopiedCharacters);
     }
     // best day
     if (dayCopiedCharacters > bestDayCopiedCharacters) {
         bestDayCopiedCharacters = dayCopiedCharacters;
-        localStorage.setItem('bestDayCopiedCharacters', bestDayCopiedCharacters);
+        saveInteger('bestDayCopiedCharacters', bestDayCopiedCharacters);
     }
 
     // WORDS
     if (c === ' ') {
         // total
         totalCopiedWords += 1;
-        localStorage.setItem('totalCopiedWords', totalCopiedWords);
+        saveInteger('totalCopiedWords', totalCopiedWords);
         // session
         sessionCopiedWords += 1;
-        localStorage.setItem('sessionCopiedWords', sessionCopiedWords);
+        saveInteger('sessionCopiedWords', sessionCopiedWords);
         // day
         dayCopiedWords += 1;
-        localStorage.setItem('dayCopiedWords', dayCopiedWords);
+        saveInteger('dayCopiedWords', dayCopiedWords);
         // best session
         if (sessionCopiedWords > bestSessionCopiedWords) {
             bestSessionCopiedWords = sessionCopiedWords;
-            localStorage.setItem('bestSessionCopiedWords', bestSessionCopiedWords);
+            saveInteger('bestSessionCopiedWords', bestSessionCopiedWords);
         }
         // best day
         if (dayCopiedWords > bestDayCopiedWords) {
             bestDayCopiedWords = dayCopiedWords;
-            localStorage.setItem('bestDayCopiedWords', bestDayCopiedWords);
+            saveInteger('bestDayCopiedWords', bestDayCopiedWords);
         }
     }
 
@@ -310,22 +314,22 @@ function incrementCopiedCharacters(c) {
     const score = sessionCopiedWords + 1;
     // total
     totalScore += score;
-    localStorage.setItem('totalScore', totalScore);
+    saveInteger('totalScore', totalScore);
     // session
     sessionScore += score;
-    localStorage.setItem('sessionScore', sessionScore);
+    saveInteger('sessionScore', sessionScore);
     // day
     dayScore += score;
-    localStorage.setItem('dayScore', dayScore);
+    saveInteger('dayScore', dayScore);
     // best session
     if (sessionScore > bestSessionScore) {
         bestSessionScore = sessionScore;
-        localStorage.setItem('bestSessionScore', bestSessionScore);
+        saveInteger('bestSessionScore', bestSessionScore);
     }
     // best day
     if (dayScore > bestDayScore) {
         bestDayScore = dayScore;
-        localStorage.setItem('bestDayScore', bestDayScore);
+        saveInteger('bestDayScore', bestDayScore);
     }
 
     // TIME
@@ -334,22 +338,22 @@ function incrementCopiedCharacters(c) {
     const newElapsed = elapsedSinceStart - sessionTime;
     // total
     totalTime += newElapsed;
-    localStorage.setItem('totalTime', totalTime);
+    saveInteger('totalTime', totalTime);
     // session
     sessionTime += newElapsed;
-    localStorage.setItem('sessionTime', sessionTime);
+    saveInteger('sessionTime', sessionTime);
     // day
     dayTime += newElapsed;
-    localStorage.setItem('dayTime', dayTime);
+    saveInteger('dayTime', dayTime);
     // best session
     if (sessionTime > bestSessionTime) {
         bestSessionTime = sessionTime;
-        localStorage.setItem('bestSessionTime', bestSessionTime);
+        saveInteger('bestSessionTime', bestSessionTime);
     }
     // best day
     if (dayTime > bestDayTime) {
         bestDayTime = dayTime;
-        localStorage.setItem('bestDayTime', bestDayTime);
+        saveInteger('bestDayTime', bestDayTime);
     }
 }
 
