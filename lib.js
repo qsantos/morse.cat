@@ -529,8 +529,10 @@ m.onCharacterPlay = (c) => {
 document.addEventListener('DOMContentLoaded', () => {
     setElements();
     feedbackElement.addEventListener('blur', () => {
-        infoElement.innerText = 'Focus lost!';
-        stop();
+        if (inSession) {
+            infoElement.innerText = 'Focus lost!';
+            stop();
+        }
     });
     updateStats();
     updateHistory();
