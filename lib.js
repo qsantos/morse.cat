@@ -455,6 +455,14 @@ function stop(expected, userInput) {
     m.stop();
 }
 
+function fail(expected, userInput) {
+    stop(expected, userInput);
+    replayAfterMistake(expected);
+    feedbackElement.classList.remove('success');
+    feedbackElement.classList.add('failure');
+    feedbacWrongCharacterElement.innerText = stringFromCharacter(userInput);
+}
+
 function replayAfterMistake(c) {
     m.onFinished = () => {
         m.onFinished = undefined;
@@ -518,11 +526,7 @@ document.addEventListener('keydown', (event) => {
         updateHistory();
     } else {
         // incorrect
-        stop(expected, userInput);
-        replayAfterMistake(expected);
-        feedbackElement.classList.remove('success');
-        feedbackElement.classList.add('failure');
-        feedbacWrongCharacterElement.innerText = stringFromCharacter(userInput);
+        fail(expected, userInput);
     }
 
     feedbackCharacterElement.innerText = stringFromCharacter(expected);
@@ -530,6 +534,10 @@ document.addEventListener('keydown', (event) => {
 });
 
 m.onCharacterPlay = (c) => {
+    if (!inSession) {
+        return;
+    }
+
     // skip leading space
     if (played.length === 0 && c.c === ' ') {
         return;
@@ -540,8 +548,8 @@ m.onCharacterPlay = (c) => {
 
     // detect when user has stopped copying
     if (played.length - copiedText.length > 10) {
+        fail();
         infoElement.innerText = 'Are you still there?';
-        stop();
     }
 };
 
