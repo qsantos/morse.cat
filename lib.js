@@ -547,9 +547,9 @@ m.onCharacterPlay = (c) => {
     played.push(c.c);
 
     // detect when user has stopped copying
-    if (played.length - copiedText.length > 10) {
+    if (played.length - copiedText.length > 3) {
         fail();
-        infoElement.innerText = 'Are you still there?';
+        infoElement.innerText = 'Too slow!';
     }
 };
 
