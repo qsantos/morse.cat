@@ -30,18 +30,30 @@ function pushWord() {
     m.setText(` ${word}`);
 }
 
+/** @type {string[]} */
 const played = [];
 let copiedText = '';
 let inSession = false;
+/** @type {Date} */
 let sessionStart;
+/** @type {number} */
 let sessionDurationUpdater;
 
-function loadInteger(name) {
-    return parseInt(localStorage.getItem(name), 10) || 0;
+/** Load an integer from the local storage
+ *  @param {string} key - The key to load from the local storage
+ *  @return {number} - The value loaded and parsed from the local storage
+*/
+function loadInteger(key) {
+    // parseInt may return NaN; we use 0 as the default value instead
+    return parseInt(localStorage.getItem(key) || '', 10) || 0;
 }
 
-function saveInteger(name, value) {
-    localStorage.setItem(name, JSON.stringify(value));
+/** Save an integer to the local storage
+ *  @param {string} key - The key to use in the local storage
+ *  @param {number} value - The value to save
+*/
+function saveInteger(key, value) {
+    localStorage.setItem(key, JSON.stringify(value));
 }
 
 // stats
@@ -71,12 +83,19 @@ let dayTime = loadInteger('dayTime');
 let bestSessionTime = loadInteger('bestSessionTime');
 let bestDayTime = loadInteger('bestDayTime');
 
+/** @type {Element} */
 let historyElement;
+/** @type {Element} */
 let feedbackElement;
+/** @type {Element} */
 let feedbacWrongCharacterElement;
+/** @type {Element} */
 let feedbackCharacterElement;
+/** @type {Element} */
 let feedbackCwElement;
+/** @type {Element} */
 let statsElement;
+/** @type {Element} */
 let infoElement;
 
 function setElements() {
