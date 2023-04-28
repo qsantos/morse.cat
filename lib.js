@@ -197,7 +197,7 @@ function updateStats() {
         dayCopiedCharacters = 0;
         saveInteger('dayCopiedCharacters', dayCopiedCharacters);
         dayCopiedWords = 0;
-        saveInteger('dayCopiedWOrds', dayCopiedWords);
+        saveInteger('dayCopiedWords', dayCopiedWords);
         dayScore = 0;
         saveInteger('dayScore', dayScore);
         dayTime = 0;
