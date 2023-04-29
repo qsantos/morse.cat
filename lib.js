@@ -141,7 +141,7 @@ function setElements() {
 }
 
 function onSettingsChange() {
-    stop();
+    stopSession();
     settings.wpm = getInputElement('settings-wpm').value;
     settings.tone = getInputElement('settings-tone').value;
     settings.error_tone = getInputElement('settings-error-tone').value;
@@ -387,7 +387,7 @@ function onFinished() {
     m.play();
 }
 
-function start() {
+function startSession() {
     pushWord();
     played.length = 0;
     copiedText = '';
@@ -418,7 +418,7 @@ function start() {
  *  @param {string} [expected] - The expected character (if any)
  *  @param {string} [userInput] - What the user copied (if any)
 */
-function stop(expected, userInput) {
+function stopSession(expected, userInput) {
     if (!inSession) {
         return;
     }
@@ -488,7 +488,7 @@ function formatCharacter(c) {
  *  @param {string} [userInput] - What the user copied (if any)
 */
 function fail(expected, userInput) {
-    stop(expected, userInput);
+    stopSession(expected, userInput);
     replayAfterMistake(expected);
     feedbackElement.classList.remove('success');
     feedbackElement.classList.add('failure');
@@ -505,7 +505,7 @@ document.addEventListener('keydown', (event) => {
 
     // hitting space starts the keying
     if (!inSession && userInput === 'enter') {
-        start();
+        startSession();
     }
 
     // ignore other inputs when not in session
@@ -520,7 +520,7 @@ document.addEventListener('keydown', (event) => {
 
     // stop when user hits Escape key
     if (userInput === 'escape') {
-        stop();
+        stopSession();
     }
 
     // ignore non-copy user inputs (not in the charset, and not a space)
@@ -568,7 +568,7 @@ document.addEventListener('DOMContentLoaded', () => {
     feedbackElement.addEventListener('blur', () => {
         if (inSession) {
             infoElement.innerText = 'Focus lost!';
-            stop();
+            stopSession();
         }
     });
     updateStats();
