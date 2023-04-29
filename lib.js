@@ -492,6 +492,7 @@ function stopSession(expected, userInput) {
     clearInterval(sessionDurationUpdater);
     sessionDurationUpdater = 0;
     m.stop();
+    updateHistory();
 }
 
 /** Play a buzzer and then replay the correct character
