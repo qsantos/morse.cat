@@ -56,32 +56,53 @@ function saveInteger(key, value) {
     localStorage.setItem(key, JSON.stringify(value));
 }
 
+function readStats() {
+    const json = localStorage.getItem('stats');
+    if (json) {
+        const stats = JSON.parse(json);
+        if (stats) {
+            return stats;
+        }
+    }
+    return {
+        elapsed: {
+            lastSession: 0,
+            bestSession: 0,
+            currentDay: 0,
+            bestDay: 0,
+            total: 0,
+        },
+        copiedCharacters: {
+            lastSession: 0,
+            bestSession: 0,
+            currentDay: 0,
+            bestDay: 0,
+            total: 0,
+        },
+        copiedWords: {
+            lastSession: 0,
+            bestSession: 0,
+            currentDay: 0,
+            bestDay: 0,
+            total: 0,
+        },
+        score: {
+            lastSession: 0,
+            bestSession: 0,
+            currentDay: 0,
+            bestDay: 0,
+            total: 0,
+        },
+    };
+}
+
+function saveStats() {
+    localStorage.setItem('stats', JSON.stringify(stats));
+}
+
 // stats
 let statsUpdated = localStorage.getItem('statsUpdated');
-// CHARACTERS
-let totalCopiedCharacters = loadInteger('totalCopiedCharacters');
-let sessionCopiedCharacters = loadInteger('sessionCopiedCharacters');
-let dayCopiedCharacters = loadInteger('dayCopiedCharacters');
-let bestSessionCopiedCharacters = loadInteger('bestSessionCopiedCharacters');
-let bestDayCopiedCharacters = loadInteger('bestDayCopiedCharacters');
-// WORDS
-let totalCopiedWords = loadInteger('totalCopiedWords');
-let sessionCopiedWords = loadInteger('sessionCopiedWords');
-let dayCopiedWords = loadInteger('dayCopiedWords');
-let bestSessionCopiedWords = loadInteger('bestSessionCopiedWords');
-let bestDayCopiedWords = loadInteger('bestDayCopiedWords');
-// SCORE
-let totalScore = loadInteger('totalScore');
-let sessionScore = loadInteger('sessionScore');
-let dayScore = loadInteger('dayScore');
-let bestSessionScore = loadInteger('bestSessionScore');
-let bestDayScore = loadInteger('bestDayScore');
-// TIME
-let totalTime = loadInteger('totalTime');
-let sessionTime = loadInteger('sessionTime');
-let dayTime = loadInteger('dayTime');
-let bestSessionTime = loadInteger('bestSessionTime');
-let bestDayTime = loadInteger('bestDayTime');
+const stats = readStats();
 
 /** @type {Element} */
 let historyElement;
@@ -213,14 +234,11 @@ function updateStats() {
     const now = new Date();
     const today = now.toISOString().slice(0, 10); // "YYYY-MM-DD"
     if (statsUpdated < today) {
-        dayCopiedCharacters = 0;
-        saveInteger('dayCopiedCharacters', dayCopiedCharacters);
-        dayCopiedWords = 0;
-        saveInteger('dayCopiedWords', dayCopiedWords);
-        dayScore = 0;
-        saveInteger('dayScore', dayScore);
-        dayTime = 0;
-        saveInteger('dayTime', dayTime);
+        stats.elapsed.currentDay = 0;
+        stats.copiedCharacters.currentDay = 0;
+        stats.copiedWords.currentDay = 0;
+        stats.score.currentDay = 0;
+        saveStats();
     }
     statsUpdated = now;
     localStorage.setItem('statsUpdated', statsUpdated.toISOString());
@@ -239,39 +257,39 @@ function updateStats() {
         </thead>
         <tbody>
             <tr>
-                <th>Current Session</th>
-                <td>${sessionTime} s</td>
-                <td>${sessionCopiedCharacters}</td>
-                <td>${sessionCopiedWords}</td>
-                <td>${sessionScore}</td>
+                <th>Last Session</th>
+                <td>${stats.elapsed.lastSession} s</td>
+                <td>${stats.copiedCharacters.lastSession}</td>
+                <td>${stats.copiedWords.lastSession}</td>
+                <td>${stats.score.lastSession}</td>
             </tr>
             <tr>
                 <th>Best Session</th>
-                <td>${bestSessionTime} s</td>
-                <td>${bestSessionCopiedCharacters}</td>
-                <td>${bestSessionCopiedWords}</td>
-                <td>${bestSessionScore}</td>
+                <td>${stats.elapsed.bestSession} s</td>
+                <td>${stats.copiedCharacters.bestSession}</td>
+                <td>${stats.copiedWords.bestSession}</td>
+                <td>${stats.score.bestSession}</td>
             </tr>
             <tr>
                 <th>Current Day</th>
-                <td>${dayTime} s</td>
-                <td>${dayCopiedCharacters}</td>
-                <td>${dayCopiedWords}</td>
-                <td>${dayScore}</td>
+                <td>${stats.elapsed.currentDay} s</td>
+                <td>${stats.copiedCharacters.currentDay}</td>
+                <td>${stats.copiedWords.currentDay}</td>
+                <td>${stats.score.currentDay}</td>
             </tr>
             <tr>
                 <th>Best Day</th>
-                <td>${bestDayTime} s</td>
-                <td>${bestDayCopiedCharacters}</td>
-                <td>${bestDayCopiedWords}</td>
-                <td>${bestDayScore}</td>
+                <td>${stats.elapsed.bestDay} s</td>
+                <td>${stats.copiedCharacters.bestDay}</td>
+                <td>${stats.copiedWords.bestDay}</td>
+                <td>${stats.score.bestDay}</td>
             </tr>
             <tr>
                 <th>Total</th>
-                <td>${totalTime} s</td>
-                <td>${totalCopiedCharacters}</td>
-                <td>${totalCopiedWords}</td>
-                <td>${totalScore}</td>
+                <td>${stats.elapsed.total} s</td>
+                <td>${stats.copiedCharacters.total}</td>
+                <td>${stats.copiedWords.total}</td>
+                <td>${stats.score.total}</td>
             </tr>
         </tbody>
     </table>
@@ -294,98 +312,29 @@ function updateHistory() {
     historyElement.innerHTML = `<li>${copiedText}</li>${formattedEntries.reverse().join('')}`;
 }
 
+function increaseStat(stat, amount) {
+    stat.total += amount;
+    stat.lastSession += amount;
+    stat.currentDay += amount;
+    stat.bestSession = Math.max(stat.bestSession, stat.lastSession);
+    stat.bestDay = Math.max(stat.bestDay, stat.currentDay);
+}
+
 function incrementCopiedCharacters(c) {
     copiedText += c;
 
-    // CHARACTERS
-    // total
-    totalCopiedCharacters += 1;
-    saveInteger('totalCopiedCharacters', totalCopiedCharacters);
-    // session
-    sessionCopiedCharacters += 1;
-    saveInteger('sessionCopiedCharacters', sessionCopiedCharacters);
-    // day
-    dayCopiedCharacters += 1;
-    saveInteger('dayCopiedCharacters', dayCopiedCharacters);
-    // best session
-    if (sessionCopiedCharacters > bestSessionCopiedCharacters) {
-        bestSessionCopiedCharacters = sessionCopiedCharacters;
-        saveInteger('bestSessionCopiedCharacters', bestSessionCopiedCharacters);
-    }
-    // best day
-    if (dayCopiedCharacters > bestDayCopiedCharacters) {
-        bestDayCopiedCharacters = dayCopiedCharacters;
-        saveInteger('bestDayCopiedCharacters', bestDayCopiedCharacters);
-    }
-
-    // WORDS
-    if (c === ' ') {
-        // total
-        totalCopiedWords += 1;
-        saveInteger('totalCopiedWords', totalCopiedWords);
-        // session
-        sessionCopiedWords += 1;
-        saveInteger('sessionCopiedWords', sessionCopiedWords);
-        // day
-        dayCopiedWords += 1;
-        saveInteger('dayCopiedWords', dayCopiedWords);
-        // best session
-        if (sessionCopiedWords > bestSessionCopiedWords) {
-            bestSessionCopiedWords = sessionCopiedWords;
-            saveInteger('bestSessionCopiedWords', bestSessionCopiedWords);
-        }
-        // best day
-        if (dayCopiedWords > bestDayCopiedWords) {
-            bestDayCopiedWords = dayCopiedWords;
-            saveInteger('bestDayCopiedWords', bestDayCopiedWords);
-        }
-    }
-
-    // SCORE
-    const score = sessionCopiedWords + 1;
-    // total
-    totalScore += score;
-    saveInteger('totalScore', totalScore);
-    // session
-    sessionScore += score;
-    saveInteger('sessionScore', sessionScore);
-    // day
-    dayScore += score;
-    saveInteger('dayScore', dayScore);
-    // best session
-    if (sessionScore > bestSessionScore) {
-        bestSessionScore = sessionScore;
-        saveInteger('bestSessionScore', bestSessionScore);
-    }
-    // best day
-    if (dayScore > bestDayScore) {
-        bestDayScore = dayScore;
-        saveInteger('bestDayScore', bestDayScore);
-    }
-
-    // TIME
     const now = new Date();
     const elapsedSinceStart = Math.round((now.getTime() - sessionStart.getTime()) / 1000);
-    const newElapsed = elapsedSinceStart - sessionTime;
-    // total
-    totalTime += newElapsed;
-    saveInteger('totalTime', totalTime);
-    // session
-    sessionTime += newElapsed;
-    saveInteger('sessionTime', sessionTime);
-    // day
-    dayTime += newElapsed;
-    saveInteger('dayTime', dayTime);
-    // best session
-    if (sessionTime > bestSessionTime) {
-        bestSessionTime = sessionTime;
-        saveInteger('bestSessionTime', bestSessionTime);
+    const newElapsed = elapsedSinceStart - stats.elapsed.lastSession;
+
+    increaseStat(stats.elapsed, newElapsed);
+    increaseStat(stats.copiedCharacters, 1);
+    if (c === ' ') {
+        increaseStat(stats.copiedWords, 1);
     }
-    // best day
-    if (dayTime > bestDayTime) {
-        bestDayTime = dayTime;
-        saveInteger('bestDayTime', bestDayTime);
-    }
+    increaseStat(stats.score, stats.copiedWords.lastSession + 1);
+
+    saveStats();
 }
 
 function onFinished() {
@@ -400,10 +349,10 @@ function start() {
     inSession = true;
     sessionStart = new Date();
     sessionDurationUpdater = setInterval(updateStats, 100);
-    sessionCopiedCharacters = 0;
-    sessionCopiedWords = 0;
-    sessionScore = 0;
-    sessionTime = 0;
+    stats.elapsed.lastSession = 0;
+    stats.copiedCharacters.lastSession = 0;
+    stats.copiedWords.lastSession = 0;
+    stats.score.lastSession = 0;
     m.setWpm(settings.wpm);
     m.setEff(settings.wpm);
     m.setFreq(settings.tone);
@@ -435,9 +384,10 @@ function stop(expected, userInput) {
             mistakenCharacter: userInput,
         },
         settings,
-        copiedCharacters: sessionCopiedCharacters,
-        copiedWords: sessionCopiedWords,
-        score: sessionScore,
+        elapsed: stats.elapsed.lastSession,
+        copiedCharacters: stats.copiedCharacters.lastSession,
+        copiedWords: stats.copiedWords.lastSession,
+        score: stats.score.lastSession,
     };
     sessionHistory.push(session);
     // NOTE: in the following scenario, the session from tab B will be lost
@@ -519,7 +469,7 @@ document.addEventListener('keydown', (event) => {
     }
 
     // played[nextIndex] is undefined if nextIndex >= played.length
-    const expected = played[sessionCopiedCharacters]?.toLowerCase();
+    const expected = played[stats.copiedCharacters.lastSession]?.toLowerCase();
     if (userInput === expected) {
         // correct
         incrementCopiedCharacters(expected);
