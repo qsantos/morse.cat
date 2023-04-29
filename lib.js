@@ -150,6 +150,9 @@ function onSettingsChange() {
     localStorage.setItem('settings', JSON.stringify(settings));
 }
 
+/** Update the current LCWO lesson depending on the characters in the charset
+ *  @param {string} charset - The current charset
+*/
 function lcwoLessonFromCharset(charset) {
     const s = new Set(charset.toUpperCase());
     let i = 0;
@@ -190,6 +193,10 @@ function intersects(setA, setB) {
     return [...setB].some((x) => setA.has(x));
 }
 
+/** Update the status of a toggle depending on the characters included in the charset
+ *  @param {string} id - The element's id
+ *  @param {string} chars - The characters represented by the toggle
+*/
 function updateToggleFromCharset(id, chars) {
     const toggleChars = new Set(chars);
     const selectedChars = new Set(settings.charset.toUpperCase());
@@ -227,10 +234,18 @@ function onLCWOLessonInput() {
     updateTogglesFromCharset();
 }
 
+/** Update the status of a toggle depending on the characters included in the charset
+ *  @param {InputEvent} event - The event that changed the state of the toggle
+ *  @param {string} chars - The characters represented by the toggle
+*/
 function onToggleChars(event, chars) {
     const s = new Set(chars);
     const charsetWithoutChars = [...settings.charset].filter((c) => !s.has(c.toUpperCase())).join('');
-    if (event.target.checked) {
+    const { target } = event;
+    if (!target || !(target instanceof HTMLInputElement)) {
+        throw new Error('Event does not contain the expected target');
+    }
+    if (target.checked) {
         settings.charset = chars + charsetWithoutChars;
     } else {
         settings.charset = charsetWithoutChars;
@@ -313,7 +328,6 @@ function updateStats() {
             </tr>
         </tbody>
     </table>
-
     `;
 }
 
