@@ -2,6 +2,7 @@ const latin = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'; // A-Z
 const digits = '0123456789'; // 0-9
 const punct = '.,:?\'-/()"=+×@';
 const lcwoLessons = 'KMURESNAPTLWI.JZ=FOY,VG5/Q92H38B?47C1D60X';
+/** @type{import("./types").Settings} */
 const settings = (() => {
     try {
         return JSON.parse(localStorage.getItem('settings') || '');
@@ -15,6 +16,7 @@ const settings = (() => {
         };
     }
 })();
+/** @type{import("./types").History} */
 const sessionHistory = (() => {
     try {
         return JSON.parse(localStorage.getItem('history') || '');
@@ -281,6 +283,10 @@ function updateStats() {
     `;
 }
 
+/** Format an history entry
+ *  @param {import("./types").HistoryEntry} entry - The entry to format
+ *  @return {string} - The formated entry
+*/
 function formatHistoryEntry(entry) {
     let ret = `<span class="meta"><time datetime="${entry.started}">${entry.started}</time>:</span> ${entry.copiedText}`;
     if (entry.mistake) {
@@ -308,6 +314,9 @@ function increaseStat(stat, amount) {
     stat.bestDay = Math.max(stat.bestDay, stat.currentDay);
 }
 
+/** Update the stats after a character was copied
+ *  @param {string} c - The copied character
+*/
 function incrementCopiedCharacters(c) {
     copiedText += c;
 
@@ -357,6 +366,10 @@ function start() {
     updateHistory();
 }
 
+/** End the current session
+ *  @param {string} [expected] - The expected character (if any)
+ *  @param {string} [userInput] - What the user copied (if any)
+*/
 function stop(expected, userInput) {
     if (!inSession) {
         return;
@@ -393,14 +406,9 @@ function stop(expected, userInput) {
     m.stop();
 }
 
-function fail(expected, userInput) {
-    stop(expected, userInput);
-    replayAfterMistake(expected);
-    feedbackElement.classList.remove('success');
-    feedbackElement.classList.add('failure');
-    feedbacWrongCharacterElement.innerText = stringFromCharacter(userInput);
-}
-
+/** Play a buzzer and then replay the correct character
+ *  @param {string} [c] - The expected character (if any)
+*/
 function replayAfterMistake(c) {
     m.onFinished = () => {
         m.onFinished = undefined;
@@ -413,7 +421,11 @@ function replayAfterMistake(c) {
     m.play('T');
 }
 
-function stringFromCharacter(c) {
+/** Format a character for display
+ *  @param {string} c - The character to format
+ *  @return {string} - The formatted character
+*/
+function formatCharacter(c) {
     if (c === undefined) {
         return '-';
     } else if (c === ' ') {
@@ -421,6 +433,18 @@ function stringFromCharacter(c) {
     } else {
         return c;
     }
+}
+
+/** Interrupt a session due to an user error
+ *  @param {string} [expected] - The expected character (if any)
+ *  @param {string} [userInput] - What the user copied (if any)
+*/
+function fail(expected, userInput) {
+    stop(expected, userInput);
+    replayAfterMistake(expected);
+    feedbackElement.classList.remove('success');
+    feedbackElement.classList.add('failure');
+    feedbacWrongCharacterElement.innerText = formatCharacter(userInput);
 }
 
 document.addEventListener('keydown', (event) => {
@@ -467,7 +491,7 @@ document.addEventListener('keydown', (event) => {
         fail(expected, userInput);
     }
 
-    feedbackCharacterElement.innerText = stringFromCharacter(expected);
+    feedbackCharacterElement.innerText = formatCharacter(expected);
     feedbackCwElement.innerText = m.alphabet[expected] || '';
 });
 
