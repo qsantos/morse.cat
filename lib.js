@@ -142,10 +142,10 @@ function setElements() {
 
 function onSettingsChange() {
     stopSession();
-    settings.wpm = getInputElement('settings-wpm').value;
-    settings.tone = getInputElement('settings-tone').value;
-    settings.error_tone = getInputElement('settings-error-tone').value;
-    settings.word_length = getInputElement('settings-word-length').value;
+    settings.wpm = parseFloat(getInputElement('settings-wpm').value);
+    settings.tone = parseFloat(getInputElement('settings-tone').value);
+    settings.error_tone = parseFloat(getInputElement('settings-error-tone').value);
+    settings.word_length = parseInt(getInputElement('settings-word-length').value, 10);
     settings.charset = getInputElement('settings-charset').value;
     localStorage.setItem('settings', JSON.stringify(settings));
 }
