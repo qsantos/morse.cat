@@ -106,23 +106,36 @@ let statsElement;
 /** @type {HTMLElement} */
 let infoElement;
 
+/** Get an HTML element by id and throw if it does not exist
+ *  @template T
+ *  @param {string} id - The element's id
+ *  @return {HTMLElement} - The element
+*/
+function getElement(id) {
+    const element = document.getElementById('history');
+    if (!element) {
+        throw new Error(`Expected HTML element with id ${id} but none found`);
+    }
+    return element;
+}
+
 function setElements() {
-    historyElement = document.getElementById('history');
-    feedbackElement = document.getElementById('feedback');
-    feedbacWrongCharacterElement = document.getElementById('feedback_wrong_character');
-    feedbackCharacterElement = document.getElementById('feedback_character');
-    feedbackCwElement = document.getElementById('feedback_cw');
-    statsElement = document.getElementById('stats');
-    infoElement = document.getElementById('info');
+    historyElement = getElement('history');
+    feedbackElement = getElement('feedback');
+    feedbacWrongCharacterElement = getElement('feedback_wrong_character');
+    feedbackCharacterElement = getElement('feedback_character');
+    feedbackCwElement = getElement('feedback_cw');
+    statsElement = getElement('stats');
+    infoElement = getElement('info');
 }
 
 function onSettingsChange() {
     stop();
-    settings.wpm = document.getElementById('settings-wpm').value;
-    settings.tone = document.getElementById('settings-tone').value;
-    settings.error_tone = document.getElementById('settings-error-tone').value;
-    settings.word_length = document.getElementById('settings-word-length').value;
-    settings.charset = document.getElementById('settings-charset').value;
+    settings.wpm = getElement('settings-wpm').value;
+    settings.tone = getElement('settings-tone').value;
+    settings.error_tone = getElement('settings-error-tone').value;
+    settings.word_length = getElement('settings-word-length').value;
+    settings.charset = getElement('settings-charset').value;
     localStorage.setItem('settings', JSON.stringify(settings));
 }
 
@@ -143,7 +156,7 @@ function lcwoLessonFromCharset(charset) {
 
 function updateLCWOLessonFromCharset() {
     const lcwoLesson = lcwoLessonFromCharset(settings.charset);
-    document.getElementById('settings-lcwo-lesson').value = lcwoLesson;
+    getElement('settings-lcwo-lesson').value = lcwoLesson;
 }
 
 /** Returns true when the first set contains the second
@@ -169,7 +182,7 @@ function intersects(setA, setB) {
 function updateToggleFromCharset(id, chars) {
     const toggleChars = new Set(chars);
     const selectedChars = new Set(settings.charset.toUpperCase());
-    const element = document.getElementById(id);
+    const element = getElement(id);
     if (contains(selectedChars, toggleChars)) {
         element.checked = true;
         element.indeterminate = false;
@@ -194,11 +207,11 @@ function onCustomCharsetInput() {
 }
 
 function onLCWOLessonInput() {
-    const lcwoLesson = parseInt(document.getElementById('settings-lcwo-lesson').value, 10) || 0;
+    const lcwoLesson = parseInt(getElement('settings-lcwo-lesson').value, 10) || 0;
     if (lcwoLesson === 0) {
         return;
     }
-    document.getElementById('settings-charset').value = lcwoLessons.slice(0, lcwoLesson + 1);
+    getElement('settings-charset').value = lcwoLessons.slice(0, lcwoLesson + 1);
     onSettingsChange();
     updateTogglesFromCharset();
 }
@@ -211,17 +224,17 @@ function onToggleChars(event, chars) {
     } else {
         settings.charset = charsetWithoutChars;
     }
-    document.getElementById('settings-charset').value = settings.charset;
+    getElement('settings-charset').value = settings.charset;
     onSettingsChange();
     updateLCWOLessonFromCharset();
 }
 
 function restoreSettings() {
-    document.getElementById('settings-wpm').value = settings.wpm;
-    document.getElementById('settings-tone').value = settings.tone;
-    document.getElementById('settings-error-tone').value = settings.error_tone;
-    document.getElementById('settings-word-length').value = settings.word_length;
-    document.getElementById('settings-charset').value = settings.charset;
+    getElement('settings-wpm').value = settings.wpm;
+    getElement('settings-tone').value = settings.tone;
+    getElement('settings-error-tone').value = settings.error_tone;
+    getElement('settings-word-length').value = settings.word_length;
+    getElement('settings-charset').value = settings.charset;
     updateLCWOLessonFromCharset();
     updateTogglesFromCharset();
 }
