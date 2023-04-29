@@ -543,6 +543,9 @@ document.addEventListener('keydown', (event) => {
     feedbackCwElement.innerText = m.alphabet[expected] || '';
 });
 
+/** Event handler for when a character has been fully played
+ *  @param {{c: string}} c - The character played
+*/
 m.onCharacterPlay = (c) => {
     if (!inSession) {
         return;
