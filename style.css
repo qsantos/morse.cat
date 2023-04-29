@@ -55,6 +55,9 @@ nav>img {
     font-size: 15px;
     color: #444;
 }
+.active {
+    color: #b11d1d;
+}
 #feedback_cw {
     font-size: 40px;
 }

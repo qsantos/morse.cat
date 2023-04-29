@@ -357,6 +357,20 @@ function updateStats() {
     `;
 }
 
+/** Format the current session
+ *  @return {string} - The formated current session
+*/
+function formatCurrentSession() {
+    let ret;
+    if (inSession) {
+        const started = sessionStart.toISOString();
+        ret = `<span class="meta active"><time datetime="${started}">${started}</time>:</span> ${copiedText}…`;
+    } else {
+        ret = 'Press Return to start';
+    }
+    return `<li>${ret}<li>`;
+}
+
 /** Format an history entry
  *  @param {import("./types").HistoryEntry} entry - The entry to format
  *  @return {string} - The formated entry
@@ -373,7 +387,7 @@ function formatHistoryEntry(entry) {
 function updateHistory() {
     const entries = sessionHistory.slice(-10);
     const formattedEntries = [...entries.map(formatHistoryEntry)];
-    historyElement.innerHTML = `<li>${copiedText}</li>${formattedEntries.reverse().join('')}`;
+    historyElement.innerHTML = formatCurrentSession() + formattedEntries.reverse().join('');
 }
 
 /** Increase a stat by a given amount
