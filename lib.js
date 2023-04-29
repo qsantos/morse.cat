@@ -39,23 +39,6 @@ let sessionStart;
 /** @type {number} */
 let sessionDurationUpdater;
 
-/** Load an integer from the local storage
- *  @param {string} key - The key to load from the local storage
- *  @return {number} - The value loaded and parsed from the local storage
-*/
-function loadInteger(key) {
-    // parseInt may return NaN; we use 0 as the default value instead
-    return parseInt(localStorage.getItem(key) || '', 10) || 0;
-}
-
-/** Save an integer to the local storage
- *  @param {string} key - The key to use in the local storage
- *  @param {number} value - The value to save
-*/
-function saveInteger(key, value) {
-    localStorage.setItem(key, JSON.stringify(value));
-}
-
 /** Load the stats from the local storage
  *  @return { import("./types").Stats } - The stats
 */
