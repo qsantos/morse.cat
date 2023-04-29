@@ -118,6 +118,8 @@ function getElement(id) {
     return element;
 }
 
+// TODO: there must be a better way to do this
+
 /** Get an HTML input element by id and throw if it does not exist or if is not an input
  *  @param {string} id - The element's id
  *  @return {HTMLInputElement} - The element
@@ -126,6 +128,30 @@ function getInputElement(id) {
     const element = getElement(id);
     if (!(element instanceof HTMLInputElement)) {
         throw new Error(`Expected HTML input element with id ${id} but found ${element} instead`);
+    }
+    return element;
+}
+
+/** Get an HTML select element by id and throw if it does not exist or if is not an input
+ *  @param {string} id - The element's id
+ *  @return {HTMLSelectElement} - The element
+*/
+function getSelectElement(id) {
+    const element = getElement(id);
+    if (!(element instanceof HTMLSelectElement)) {
+        throw new Error(`Expected HTML select element with id ${id} but found ${element} instead`);
+    }
+    return element;
+}
+
+/** Get an HTML textarea element by id and throw if it does not exist or if is not an input
+ *  @param {string} id - The element's id
+ *  @return {HTMLTextAreaElement} - The element
+*/
+function getTextareaElement(id) {
+    const element = getElement(id);
+    if (!(element instanceof HTMLTextAreaElement)) {
+        throw new Error(`Expected HTML textarea element with id ${id} but found ${element} instead`);
     }
     return element;
 }
@@ -146,7 +172,7 @@ function onSettingsChange() {
     settings.tone = parseFloat(getInputElement('settings-tone').value);
     settings.error_tone = parseFloat(getInputElement('settings-error-tone').value);
     settings.word_length = parseInt(getInputElement('settings-word-length').value, 10);
-    settings.charset = getInputElement('settings-charset').value;
+    settings.charset = getTextareaElement('settings-charset').value;
     localStorage.setItem('settings', JSON.stringify(settings));
 }
 
@@ -170,7 +196,7 @@ function lcwoLessonFromCharset(charset) {
 
 function updateLCWOLessonFromCharset() {
     const lcwoLesson = lcwoLessonFromCharset(settings.charset);
-    getInputElement('settings-lcwo-lesson').value = lcwoLesson.toString();
+    getSelectElement('settings-lcwo-lesson').value = lcwoLesson.toString();
 }
 
 /** Returns true when the first set contains the second
@@ -225,11 +251,11 @@ function onCustomCharsetInput() {
 }
 
 function onLCWOLessonInput() {
-    const lcwoLesson = parseInt(getInputElement('settings-lcwo-lesson').value, 10) || 0;
+    const lcwoLesson = parseInt(getSelectElement('settings-lcwo-lesson').value, 10) || 0;
     if (lcwoLesson === 0) {
         return;
     }
-    getInputElement('settings-charset').value = lcwoLessons.slice(0, lcwoLesson + 1);
+    getTextareaElement('settings-charset').value = lcwoLessons.slice(0, lcwoLesson + 1);
     onSettingsChange();
     updateTogglesFromCharset();
 }
@@ -250,7 +276,7 @@ function onToggleChars(event, chars) {
     } else {
         settings.charset = charsetWithoutChars;
     }
-    getInputElement('settings-charset').value = settings.charset;
+    getTextareaElement('settings-charset').value = settings.charset;
     onSettingsChange();
     updateLCWOLessonFromCharset();
 }
@@ -260,7 +286,7 @@ function restoreSettings() {
     getInputElement('settings-tone').value = settings.tone.toString();
     getInputElement('settings-error-tone').value = settings.error_tone.toString();
     getInputElement('settings-word-length').value = settings.word_length.toString();
-    getInputElement('settings-charset').value = settings.charset;
+    getTextareaElement('settings-charset').value = settings.charset;
     updateLCWOLessonFromCharset();
     updateTogglesFromCharset();
 }

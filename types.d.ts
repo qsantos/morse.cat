@@ -41,3 +41,5 @@ export type HistoryEntry = {
 };
 
 export type History = HistoryEntry[];
+
+export type HTMLFormFieldElement = HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement;
