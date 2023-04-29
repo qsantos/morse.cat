@@ -146,12 +146,22 @@ function updateLCWOLessonFromCharset() {
     document.getElementById('settings-lcwo-lesson').value = lcwoLesson;
 }
 
-// returns true when setA contains setB
+/** Returns true when the first set contains the second
+ *  @template T
+ *  @param {Set<T>} setA - First set
+ *  @param {Set<T>} setB - Second set
+ *  @return {boolean} - Whether the first set contains the second
+*/
 function contains(setA, setB) {
     return [...setB].every((x) => setA.has(x));
 }
 
-// returns true when setA and setB intersects
+/** Returns true when the sets intersects
+ *  @template T
+ *  @param {Set<T>} setA - First set
+ *  @param {Set<T>} setB - Second set
+ *  @return {boolean} - Whether the sets intersect
+*/
 function intersects(setA, setB) {
     return [...setB].some((x) => setA.has(x));
 }
