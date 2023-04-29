@@ -47,10 +47,12 @@ function readStats() {
     if (json) {
         const stats = JSON.parse(json);
         if (stats) {
+            stats.updated = Date.parse(stats.updated);
             return stats;
         }
     }
     return {
+        updated: new Date(),
         elapsed: {
             lastSession: 0,
             bestSession: 0,
@@ -83,7 +85,6 @@ function readStats() {
 }
 
 // stats
-let statsUpdated = localStorage.getItem('statsUpdated');
 const stats = readStats();
 
 function saveStats() {
@@ -216,18 +217,17 @@ function restoreSettings() {
 }
 
 function updateStats() {
-    // reset day stats when UTC midnight passes
-    const now = new Date();
-    const today = now.toISOString().slice(0, 10); // "YYYY-MM-DD"
-    if (statsUpdated < today) {
+    // reset day stats when midnight passes
+    const today = new Date();
+    today.setHours(0, 0, 0);
+    if (stats.updated < today) {
         stats.elapsed.currentDay = 0;
         stats.copiedCharacters.currentDay = 0;
         stats.copiedWords.currentDay = 0;
         stats.score.currentDay = 0;
+        stats.updated = new Date();
         saveStats();
     }
-    statsUpdated = now;
-    localStorage.setItem('statsUpdated', statsUpdated.toISOString());
 
     statsElement.innerHTML = `
     <h3>Statistics</h3>
