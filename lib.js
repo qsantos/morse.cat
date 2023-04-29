@@ -111,7 +111,7 @@ let infoElement;
  *  @return {HTMLElement} - The element
 */
 function getElement(id) {
-    const element = document.getElementById('history');
+    const element = document.getElementById(id);
     if (!element) {
         throw new Error(`Expected HTML element with id ${id} but none found`);
     }
@@ -123,9 +123,9 @@ function getElement(id) {
  *  @return {HTMLInputElement} - The element
 */
 function getInputElement(id) {
-    const element = getElement('history');
+    const element = getElement(id);
     if (!(element instanceof HTMLInputElement)) {
-        throw new Error(`Expected HTML input element with id ${id} but found ${typeof element} instead`);
+        throw new Error(`Expected HTML input element with id ${id} but found ${element} instead`);
     }
     return element;
 }
