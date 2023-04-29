@@ -91,19 +91,19 @@ function saveStats() {
     localStorage.setItem('stats', JSON.stringify(stats));
 }
 
-/** @type {Element} */
+/** @type {HTMLElement} */
 let historyElement;
-/** @type {Element} */
+/** @type {HTMLElement} */
 let feedbackElement;
-/** @type {Element} */
+/** @type {HTMLElement} */
 let feedbacWrongCharacterElement;
-/** @type {Element} */
+/** @type {HTMLElement} */
 let feedbackCharacterElement;
-/** @type {Element} */
+/** @type {HTMLElement} */
 let feedbackCwElement;
-/** @type {Element} */
+/** @type {HTMLElement} */
 let statsElement;
-/** @type {Element} */
+/** @type {HTMLElement} */
 let infoElement;
 
 function setElements() {
