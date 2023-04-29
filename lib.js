@@ -107,7 +107,6 @@ let statsElement;
 let infoElement;
 
 /** Get an HTML element by id and throw if it does not exist
- *  @template T
  *  @param {string} id - The element's id
  *  @return {HTMLElement} - The element
 */
@@ -120,7 +119,6 @@ function getElement(id) {
 }
 
 /** Get an HTML input element by id and throw if it does not exist or if is not an input
- *  @template T
  *  @param {string} id - The element's id
  *  @return {HTMLInputElement} - The element
 */
