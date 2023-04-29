@@ -119,6 +119,19 @@ function getElement(id) {
     return element;
 }
 
+/** Get an HTML input element by id and throw if it does not exist or if is not an input
+ *  @template T
+ *  @param {string} id - The element's id
+ *  @return {HTMLInputElement} - The element
+*/
+function getInputElement(id) {
+    const element = getElement('history');
+    if (!(element instanceof HTMLInputElement)) {
+        throw new Error(`Expected HTML input element with id ${id} but found ${typeof element} instead`);
+    }
+    return element;
+}
+
 function setElements() {
     historyElement = getElement('history');
     feedbackElement = getElement('feedback');
@@ -131,11 +144,11 @@ function setElements() {
 
 function onSettingsChange() {
     stop();
-    settings.wpm = getElement('settings-wpm').value;
-    settings.tone = getElement('settings-tone').value;
-    settings.error_tone = getElement('settings-error-tone').value;
-    settings.word_length = getElement('settings-word-length').value;
-    settings.charset = getElement('settings-charset').value;
+    settings.wpm = getInputElement('settings-wpm').value;
+    settings.tone = getInputElement('settings-tone').value;
+    settings.error_tone = getInputElement('settings-error-tone').value;
+    settings.word_length = getInputElement('settings-word-length').value;
+    settings.charset = getInputElement('settings-charset').value;
     localStorage.setItem('settings', JSON.stringify(settings));
 }
 
@@ -156,7 +169,7 @@ function lcwoLessonFromCharset(charset) {
 
 function updateLCWOLessonFromCharset() {
     const lcwoLesson = lcwoLessonFromCharset(settings.charset);
-    getElement('settings-lcwo-lesson').value = lcwoLesson;
+    getInputElement('settings-lcwo-lesson').value = lcwoLesson.toString();
 }
 
 /** Returns true when the first set contains the second
@@ -182,7 +195,7 @@ function intersects(setA, setB) {
 function updateToggleFromCharset(id, chars) {
     const toggleChars = new Set(chars);
     const selectedChars = new Set(settings.charset.toUpperCase());
-    const element = getElement(id);
+    const element = getInputElement(id);
     if (contains(selectedChars, toggleChars)) {
         element.checked = true;
         element.indeterminate = false;
@@ -207,11 +220,11 @@ function onCustomCharsetInput() {
 }
 
 function onLCWOLessonInput() {
-    const lcwoLesson = parseInt(getElement('settings-lcwo-lesson').value, 10) || 0;
+    const lcwoLesson = parseInt(getInputElement('settings-lcwo-lesson').value, 10) || 0;
     if (lcwoLesson === 0) {
         return;
     }
-    getElement('settings-charset').value = lcwoLessons.slice(0, lcwoLesson + 1);
+    getInputElement('settings-charset').value = lcwoLessons.slice(0, lcwoLesson + 1);
     onSettingsChange();
     updateTogglesFromCharset();
 }
@@ -224,17 +237,17 @@ function onToggleChars(event, chars) {
     } else {
         settings.charset = charsetWithoutChars;
     }
-    getElement('settings-charset').value = settings.charset;
+    getInputElement('settings-charset').value = settings.charset;
     onSettingsChange();
     updateLCWOLessonFromCharset();
 }
 
 function restoreSettings() {
-    getElement('settings-wpm').value = settings.wpm;
-    getElement('settings-tone').value = settings.tone;
-    getElement('settings-error-tone').value = settings.error_tone;
-    getElement('settings-word-length').value = settings.word_length;
-    getElement('settings-charset').value = settings.charset;
+    getInputElement('settings-wpm').value = settings.wpm.toString();
+    getInputElement('settings-tone').value = settings.tone.toString();
+    getInputElement('settings-error-tone').value = settings.error_tone.toString();
+    getInputElement('settings-word-length').value = settings.word_length.toString();
+    getInputElement('settings-charset').value = settings.charset;
     updateLCWOLessonFromCharset();
     updateTogglesFromCharset();
 }
