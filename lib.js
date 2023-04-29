@@ -456,7 +456,7 @@ function replayAfterMistake(c) {
 }
 
 /** Format a character for display
- *  @param {string} c - The character to format
+ *  @param {string | undefined} c - The character to format
  *  @return {string} - The formatted character
 */
 function formatCharacter(c) {
