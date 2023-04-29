@@ -28,7 +28,10 @@ const sessionHistory = (() => {
 const m = new jscw();
 
 function pushWord() {
-    const word = Array.from({ length: settings.word_length }, () => settings.charset[Math.floor(Math.random() * settings.charset.length)]).join('');
+    const word = Array.from(
+        { length: settings.word_length },
+        () => settings.charset[Math.floor(Math.random() * settings.charset.length)],
+    ).join('');
     m.setText(` ${word}`);
 }
 
