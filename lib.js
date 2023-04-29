@@ -56,6 +56,9 @@ function saveInteger(key, value) {
     localStorage.setItem(key, JSON.stringify(value));
 }
 
+/** Load the stats from the local storage
+ *  @return { import("./types").Stats } - The stats
+*/
 function readStats() {
     const json = localStorage.getItem('stats');
     if (json) {
@@ -96,13 +99,13 @@ function readStats() {
     };
 }
 
-function saveStats() {
-    localStorage.setItem('stats', JSON.stringify(stats));
-}
-
 // stats
 let statsUpdated = localStorage.getItem('statsUpdated');
 const stats = readStats();
+
+function saveStats() {
+    localStorage.setItem('stats', JSON.stringify(stats));
+}
 
 /** @type {Element} */
 let historyElement;
@@ -312,6 +315,10 @@ function updateHistory() {
     historyElement.innerHTML = `<li>${copiedText}</li>${formattedEntries.reverse().join('')}`;
 }
 
+/** Increase a stat by a given amount
+ *  @param {import("./types").Stat} stat - The stat to be increased
+ *  @param {number} amount - The amount by which the stat should be increased
+*/
 function increaseStat(stat, amount) {
     stat.total += amount;
     stat.lastSession += amount;
