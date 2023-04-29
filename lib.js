@@ -39,7 +39,7 @@ let inSession = false;
 /** @type {Date} */
 let sessionStart;
 /** @type {number} */
-let sessionDurationUpdater;
+let sessionDurationUpdater = 0;
 
 /** Load the stats from the local storage
  *  @return { import("./types").Stats } - The stats
@@ -412,7 +412,7 @@ function stop(expected, userInput) {
     m.onFinished = undefined;
     updateStats();
     clearInterval(sessionDurationUpdater);
-    sessionDurationUpdater = undefined;
+    sessionDurationUpdater = 0;
     m.stop();
 }
 
