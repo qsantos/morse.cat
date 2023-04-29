@@ -16,5 +16,6 @@ module.exports = {
         ],
         'space-before-function-paren': ['error', 'never'],
         'no-else-return': ['off'],
+        'no-param-reassign': 0,
     },
 };
