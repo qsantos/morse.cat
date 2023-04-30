@@ -476,6 +476,7 @@ function refreshStats(modified) {
     if (modified) {
         stats.updated = now;
         localStorage.setItem('stats', JSON.stringify(stats));
+        renderStats();
     }
 }
 
@@ -522,7 +523,6 @@ function startSession() {
     copiedText = '';
     inSession = true;
     sessionStart = new Date();
-    sessionDurationUpdater = setInterval(renderStats, 100);
     stats.elapsed.lastSession = 0;
     stats.copiedCharacters.lastSession = 0;
     stats.copiedWords.lastSession = 0;
