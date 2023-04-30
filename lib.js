@@ -109,6 +109,8 @@ let infoElement;
 
 const translations = {
     en: {
+        pageTitle: 'Morse 😺',
+        mainHeader: 'Morse 😺',
         'stats.title': 'Statistics',
         'stats.elapsed': 'Time',
         'stats.copiedCharacters': 'Characters',
@@ -139,6 +141,8 @@ const translations = {
         'info.lostFocus': 'Focus lost!',
     },
     fr: {
+        pageTitle: 'Morse 😺',
+        mainHeader: 'Morse 😺',
         'stats.title': 'Statistiques',
         'stats.elapsed': 'Temps',
         'stats.copiedCharacters': 'Caractères',
@@ -170,12 +174,15 @@ const translations = {
     },
 };
 
+/** @type {keyof typeof translations} */
+let activeLanguage = 'en';
+
 /** Provide a translation string for the given key
  *  @param {keyof typeof translations.en} key - The translation key
  *  @return {string} - The translated string
 */
 function t(key) {
-    return translations.en[key];
+    return translations[activeLanguage][key];
 }
 
 /** Get an HTML element by id and throw if it does not exist
@@ -493,6 +500,18 @@ function renderSettings() {
     <input id="settings-charset-punct" type="checkbox" oninput="onToggleChars(event, punct)">
     <label for="settings-charset-punct"><code>.,:?'-/()"=+×@</code></label>
     `;
+}
+
+/** Set the language of the page
+ *  @param {keyof typeof translations} lang - The selected language
+*/
+function setLanguage(lang) {
+    activeLanguage = lang;
+    document.title = t('pageTitle');
+    getElement('main-header', HTMLHeadingElement).innerHTML = t('mainHeader');
+    renderHistory();
+    renderSettings();
+    renderStats();
 }
 
 /** Refresh the stats as needed
