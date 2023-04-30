@@ -861,8 +861,11 @@ document.addEventListener('DOMContentLoaded', () => {
             stopSession();
         }
     });
-    renderSettings();
-    renderStats();
-    renderHistory();
+    const preferredLanguage = localStorage.getItem('language') || navigator.language.slice(0, 2);
+    // TODO: there must be a better way to do that while keeping TypeScript happy
+    if (preferredLanguage === 'en' || preferredLanguage === 'fr' || preferredLanguage === 'ja' || preferredLanguage === 'es' || preferredLanguage === 'ja') {
+        activeLanguage = preferredLanguage;
+    }
+    setLanguage(activeLanguage);
     restoreSettings();
 });
