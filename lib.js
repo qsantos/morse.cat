@@ -107,12 +107,45 @@ let statsElement;
 /** @type {HTMLElement} */
 let infoElement;
 
+const translations = {
+    en: {
+        'stats.title': 'Statistics',
+        'stats.elapsed': 'Time',
+        'stats.copiedCharacters': 'Characters',
+        'stats.copiedWords': 'Words',
+        'stats.score': 'Score',
+        'stats.lastSession': 'Last Session',
+        'stats.bestSession': 'Best Session',
+        'stats.currentDay': 'Today',
+        'stats.bestDay': 'Best Day',
+        'stats.total': 'Total',
+        'history.startSession': 'Press Return to start',
+        'settings.title': 'Settings',
+        'settings.speed.title': 'Speed',
+        'settings.speed.unit': 'WPM',
+        'settings.speed.details': 'Words Per Minute',
+        'settings.tone.title': 'Tone',
+        'settings.tone.unit': 'Hz',
+        'settings.tone.details': 'Hertz',
+        'settings.errorTone.title': 'Error Tone',
+        'settings.errorTone.unit': 'Hz',
+        'settings.errorTone.details': 'Hertz',
+        'settings.wordLength.title': 'Size of Words',
+        'settings.wordLength.unit': 'characters',
+        'settings.wordLength.details': '',
+        'settings.lcwo.title': '<a href="https://lcwo.net/" title="Learn CW Online">LCWO</A> Lesson',
+        'settings.charset.title': 'Customize Charset',
+        'info.tooSlow': 'Too slow!',
+        'info.lostFocus': 'Focus lost!',
+    },
+};
+
 /** Provide a translation string for the given key
- *  @param {string} key - The translation key
+ *  @param {keyof typeof translations.en} key - The translation key
  *  @return {string} - The translated string
 */
 function t(key) {
-    return key;
+    return translations.en[key];
 }
 
 /** Get an HTML element by id and throw if it does not exist
@@ -270,48 +303,48 @@ function restoreSettings() {
 
 function renderStats() {
     statsElement.innerHTML = `
-    <h3>${t('Statistics')}</h3>
+    <h3>${t('stats.title')}</h3>
     <table>
         <thead>
             <tr>
                 <th></th>
-                <th>${t('Time')}</th>
-                <th>${t('Characters')}</th>
-                <th>${t('Words')}</th>
-                <th>${t('Score')}</th>
+                <th>${t('stats.elapsed')}</th>
+                <th>${t('stats.copiedCharacters')}</th>
+                <th>${t('stats.copiedWords')}</th>
+                <th>${t('stats.score')}</th>
             </tr>
         </thead>
         <tbody>
             <tr>
-                <th>${t('Last Session')}</th>
+                <th>${t('stats.lastSession')}</th>
                 <td>${stats.elapsed.lastSession} s</td>
                 <td>${stats.copiedCharacters.lastSession}</td>
                 <td>${stats.copiedWords.lastSession}</td>
                 <td>${stats.score.lastSession}</td>
             </tr>
             <tr>
-                <th>${t('Best Session')}</th>
+                <th>${t('stats.bestSession')}</th>
                 <td>${stats.elapsed.bestSession} s</td>
                 <td>${stats.copiedCharacters.bestSession}</td>
                 <td>${stats.copiedWords.bestSession}</td>
                 <td>${stats.score.bestSession}</td>
             </tr>
             <tr>
-                <th>${t('Current Day')}</th>
+                <th>${t('stats.currentDay')}</th>
                 <td>${stats.elapsed.currentDay} s</td>
                 <td>${stats.copiedCharacters.currentDay}</td>
                 <td>${stats.copiedWords.currentDay}</td>
                 <td>${stats.score.currentDay}</td>
             </tr>
             <tr>
-                <th>${t('Best Day')}</th>
+                <th>${t('stats.bestDay')}</th>
                 <td>${stats.elapsed.bestDay} s</td>
                 <td>${stats.copiedCharacters.bestDay}</td>
                 <td>${stats.copiedWords.bestDay}</td>
                 <td>${stats.score.bestDay}</td>
             </tr>
             <tr>
-                <th>${t('Total')}</th>
+                <th>${t('stats.total')}</th>
                 <td>${stats.elapsed.total} s</td>
                 <td>${stats.copiedCharacters.total}</td>
                 <td>${stats.copiedWords.total}</td>
@@ -331,7 +364,7 @@ function formatCurrentSession() {
         const started = sessionStart.toISOString();
         ret = `<span class="meta active"><time datetime="${started}">${started}</time>:</span> ${copiedText}…`;
     } else {
-        ret = t('Press Return to start');
+        ret = t('history.startSession');
     }
     return `<li>${ret}<li>`;
 }
@@ -357,24 +390,24 @@ function renderHistory() {
 
 function renderSettings() {
     settingsElement.innerHTML = `
-    <h3>${t('Settings')}</h3>
-    <label for="settings-wpm">${t('Speed')}:</label>
+    <h3>${t('settings.title')}</h3>
+    <label for="settings-wpm">${t('settings.speed.title')}:</label>
     <input id="settings-wpm" oninput="onSettingsChange()" type="number" value="20" min="1" step="0.5" />
-    <abbr title="${t('Words Per Minute')}">WPM</abbr>
+    <abbr title="${t('settings.speed.details')}">${t('settings.speed.unit')}</abbr>
     <br>
-    <label for="settings-tone">${t('Tone')}:</label>
+    <label for="settings-tone">${t('settings.tone.title')}:</label>
     <input id="settings-tone" oninput="onSettingsChange()" type="number" value="600" min="10" step="10" />
-    Hz
+    <abbr title="${t('settings.tone.details')}">${t('settings.tone.unit')}</abbr>
     <br>
-    <label for="settings-error-tone">${t('Error Tone')}:</label>
+    <label for="settings-error-tone">${t('settings.errorTone.title')}:</label>
     <input id="settings-error-tone" oninput="onSettingsChange()" type="number" value="200" min="10" step="10" />
-    Hz
+    <abbr title="${t('settings.errorTone.details')}">${t('settings.errorTone.unit')}</abbr>
     <br>
-    <label for="settings-word-length">${t('Size of words')}:</label>
+    <label for="settings-word-length">${t('settings.wordLength.title')}:</label>
     <input id="settings-word-length" oninput="onSettingsChange()" type="number" value="5" min="1" />
-    ${t('characters')})
+    <abbr title="${t('settings.wordLength.details')}">${t('settings.wordLength.unit')}</abbr>
     <br>
-    <label for="settings-lcwo-lesson">${t('<a href="https://lcwo.net/" title="Learn CW Online">LCWO</A> Lesson')}:</label>
+    <label for="settings-lcwo-lesson">${t('settings.lcwo.title')}:</label>
     <select id="settings-lcwo-lesson" oninput="onLCWOLessonInput()">
         <option value="0">-</option>
         <option value="1">1 - K, M</option>
@@ -419,7 +452,7 @@ function renderSettings() {
         <option value="40">40 - X</option>
     </select>
     <br>
-    <label for="settings-charset">${t('Customize Charset')}:</label>
+    <label for="settings-charset">${t('settings.charset.title')}:</label>
     <br>
     <textarea id="settings-charset" oninput="onCustomCharsetInput()"></textarea>
     <br>
@@ -670,7 +703,7 @@ m.onCharacterPlay = (c) => {
     // detect when user has stopped copying
     if (played.length - copiedText.length > 3) {
         fail();
-        infoElement.innerText = t('Too slow!');
+        infoElement.innerText = t('info.tooSlow');
     }
 };
 
@@ -679,7 +712,7 @@ document.addEventListener('DOMContentLoaded', () => {
     refreshStats();
     feedbackElement.addEventListener('blur', () => {
         if (inSession) {
-            infoElement.innerText = t('Focus lost!');
+            infoElement.innerText = t('info.lostFocus');
             stopSession();
         }
     });
