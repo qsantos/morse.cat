@@ -108,85 +108,40 @@ let statsElement;
 let infoElement;
 
 /** Get an HTML element by id and throw if it does not exist
+ *  @template T
  *  @param {string} id - The element's id
- *  @return {HTMLElement} - The element
+ *  @param {new() => T} type - The type of HTML ELement
+ *  @return {T} - The element
 */
-function getElement(id) {
+function getElement(id, type) {
     const element = document.getElementById(id);
     if (!element) {
         throw new Error(`Expected HTML element with id ${id} but none found`);
     }
-    return element;
-}
-
-// TODO: there must be a better way to do this
-
-/** Get an HTML dialog element by id and throw if it does not exist or if is not a dialog
- *  @param {string} id - The element's id
- *  @return {HTMLDialogElement} - The element
-*/
-function getDialogElement(id) {
-    const element = getElement(id);
-    if (!(element instanceof HTMLDialogElement)) {
-        throw new Error(`Expected HTML dialog element with id ${id} but found ${element} instead`);
-    }
-    return element;
-}
-
-/** Get an HTML input element by id and throw if it does not exist or if is not an input
- *  @param {string} id - The element's id
- *  @return {HTMLInputElement} - The element
-*/
-function getInputElement(id) {
-    const element = getElement(id);
-    if (!(element instanceof HTMLInputElement)) {
-        throw new Error(`Expected HTML input element with id ${id} but found ${element} instead`);
-    }
-    return element;
-}
-
-/** Get an HTML select element by id and throw if it does not exist or if is not a select
- *  @param {string} id - The element's id
- *  @return {HTMLSelectElement} - The element
-*/
-function getSelectElement(id) {
-    const element = getElement(id);
-    if (!(element instanceof HTMLSelectElement)) {
-        throw new Error(`Expected HTML select element with id ${id} but found ${element} instead`);
-    }
-    return element;
-}
-
-/** Get an HTML textarea element by id and throw if it does not exist or if is not a textarea
- *  @param {string} id - The element's id
- *  @return {HTMLTextAreaElement} - The element
-*/
-function getTextareaElement(id) {
-    const element = getElement(id);
-    if (!(element instanceof HTMLTextAreaElement)) {
-        throw new Error(`Expected HTML textarea element with id ${id} but found ${element} instead`);
+    if (!(element instanceof type)) {
+        throw new Error(`Expected ${type.name} with id ${id} but found ${element} instead`);
     }
     return element;
 }
 
 function setElements() {
-    settingsElement = getElement('settings');
-    historyElement = getElement('history');
-    feedbackElement = getElement('feedback');
-    feedbacWrongCharacterElement = getElement('feedback_wrong_character');
-    feedbackCharacterElement = getElement('feedback_character');
-    feedbackCwElement = getElement('feedback_cw');
-    statsElement = getDialogElement('stats');
-    infoElement = getElement('info');
+    settingsElement = getElement('settings', HTMLElement);
+    historyElement = getElement('history', HTMLElement);
+    feedbackElement = getElement('feedback', HTMLElement);
+    feedbacWrongCharacterElement = getElement('feedback_wrong_character', HTMLElement);
+    feedbackCharacterElement = getElement('feedback_character', HTMLElement);
+    feedbackCwElement = getElement('feedback_cw', HTMLElement);
+    statsElement = getElement('stats', HTMLDialogElement);
+    infoElement = getElement('info', HTMLElement);
 }
 
 function onSettingsChange() {
     stopSession();
-    settings.wpm = parseFloat(getInputElement('settings-wpm').value);
-    settings.tone = parseFloat(getInputElement('settings-tone').value);
-    settings.error_tone = parseFloat(getInputElement('settings-error-tone').value);
-    settings.word_length = parseInt(getInputElement('settings-word-length').value, 10);
-    settings.charset = getTextareaElement('settings-charset').value;
+    settings.wpm = parseFloat(getElement('settings-wpm', HTMLInputElement).value);
+    settings.tone = parseFloat(getElement('settings-tone', HTMLInputElement).value);
+    settings.error_tone = parseFloat(getElement('settings-error-tone', HTMLInputElement).value);
+    settings.word_length = parseInt(getElement('settings-word-length', HTMLInputElement).value, 10);
+    settings.charset = getElement('settings-charset', HTMLTextAreaElement).value;
     localStorage.setItem('settings', JSON.stringify(settings));
 }
 
@@ -210,7 +165,7 @@ function lcwoLessonFromCharset(charset) {
 
 function updateLCWOLessonFromCharset() {
     const lcwoLesson = lcwoLessonFromCharset(settings.charset);
-    getSelectElement('settings-lcwo-lesson').value = lcwoLesson.toString();
+    getElement('settings-lcwo-lesson', HTMLSelectElement).value = lcwoLesson.toString();
 }
 
 /** Returns true when the first set contains the second
@@ -240,7 +195,7 @@ function intersects(setA, setB) {
 function updateToggleFromCharset(id, chars) {
     const toggleChars = new Set(chars);
     const selectedChars = new Set(settings.charset.toUpperCase());
-    const element = getInputElement(id);
+    const element = getElement(id, HTMLInputElement);
     if (contains(selectedChars, toggleChars)) {
         element.checked = true;
         element.indeterminate = false;
@@ -265,11 +220,11 @@ function onCustomCharsetInput() {
 }
 
 function onLCWOLessonInput() {
-    const lcwoLesson = parseInt(getSelectElement('settings-lcwo-lesson').value, 10) || 0;
+    const lcwoLesson = parseInt(getElement('settings-lcwo-lesson', HTMLSelectElement).value, 10) || 0;
     if (lcwoLesson === 0) {
         return;
     }
-    getTextareaElement('settings-charset').value = lcwoLessons.slice(0, lcwoLesson + 1);
+    getElement('settings-charset', HTMLTextAreaElement).value = lcwoLessons.slice(0, lcwoLesson + 1);
     onSettingsChange();
     updateTogglesFromCharset();
 }
@@ -290,17 +245,17 @@ function onToggleChars(event, chars) {
     } else {
         settings.charset = charsetWithoutChars;
     }
-    getTextareaElement('settings-charset').value = settings.charset;
+    getElement('settings-charset', HTMLTextAreaElement).value = settings.charset;
     onSettingsChange();
     updateLCWOLessonFromCharset();
 }
 
 function restoreSettings() {
-    getInputElement('settings-wpm').value = settings.wpm.toString();
-    getInputElement('settings-tone').value = settings.tone.toString();
-    getInputElement('settings-error-tone').value = settings.error_tone.toString();
-    getInputElement('settings-word-length').value = settings.word_length.toString();
-    getTextareaElement('settings-charset').value = settings.charset;
+    getElement('settings-wpm', HTMLInputElement).value = settings.wpm.toString();
+    getElement('settings-tone', HTMLInputElement).value = settings.tone.toString();
+    getElement('settings-error-tone', HTMLInputElement).value = settings.error_tone.toString();
+    getElement('settings-word-length', HTMLInputElement).value = settings.word_length.toString();
+    getElement('settings-charset', HTMLTextAreaElement).value = settings.charset;
     updateLCWOLessonFromCharset();
     updateTogglesFromCharset();
 }
