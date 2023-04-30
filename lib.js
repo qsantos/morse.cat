@@ -102,7 +102,7 @@ let feedbacWrongCharacterElement;
 let feedbackCharacterElement;
 /** @type {HTMLElement} */
 let feedbackCwElement;
-/** @type {HTMLElement} */
+/** @type {HTMLDialogElement} */
 let statsElement;
 /** @type {HTMLElement} */
 let infoElement;
@@ -121,6 +121,18 @@ function getElement(id) {
 
 // TODO: there must be a better way to do this
 
+/** Get an HTML dialog element by id and throw if it does not exist or if is not a dialog
+ *  @param {string} id - The element's id
+ *  @return {HTMLDialogElement} - The element
+*/
+function getDialogElement(id) {
+    const element = getElement(id);
+    if (!(element instanceof HTMLDialogElement)) {
+        throw new Error(`Expected HTML dialog element with id ${id} but found ${element} instead`);
+    }
+    return element;
+}
+
 /** Get an HTML input element by id and throw if it does not exist or if is not an input
  *  @param {string} id - The element's id
  *  @return {HTMLInputElement} - The element
@@ -133,7 +145,7 @@ function getInputElement(id) {
     return element;
 }
 
-/** Get an HTML select element by id and throw if it does not exist or if is not an input
+/** Get an HTML select element by id and throw if it does not exist or if is not a select
  *  @param {string} id - The element's id
  *  @return {HTMLSelectElement} - The element
 */
@@ -145,7 +157,7 @@ function getSelectElement(id) {
     return element;
 }
 
-/** Get an HTML textarea element by id and throw if it does not exist or if is not an input
+/** Get an HTML textarea element by id and throw if it does not exist or if is not a textarea
  *  @param {string} id - The element's id
  *  @return {HTMLTextAreaElement} - The element
 */
@@ -164,7 +176,7 @@ function setElements() {
     feedbacWrongCharacterElement = getElement('feedback_wrong_character');
     feedbackCharacterElement = getElement('feedback_character');
     feedbackCwElement = getElement('feedback_cw');
-    statsElement = getElement('stats');
+    statsElement = getDialogElement('stats');
     infoElement = getElement('info');
 }
 
