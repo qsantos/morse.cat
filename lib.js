@@ -107,6 +107,14 @@ let statsElement;
 /** @type {HTMLElement} */
 let infoElement;
 
+/** Provide a translation string for the given key
+ *  @param {string} key - The translation key
+ *  @return {string} - The translated string
+*/
+function t(key) {
+    return key;
+}
+
 /** Get an HTML element by id and throw if it does not exist
  *  @template T
  *  @param {string} id - The element's id
@@ -262,48 +270,48 @@ function restoreSettings() {
 
 function renderStats() {
     statsElement.innerHTML = `
-    <h3>Statistics</h3>
+    <h3>${t('Statistics')}</h3>
     <table>
         <thead>
             <tr>
                 <th></th>
-                <th>Time</th>
-                <th>Characters</th>
-                <th>Words</th>
-                <th>Score</th>
+                <th>${t('Time')}</th>
+                <th>${t('Characters')}</th>
+                <th>${t('Words')}</th>
+                <th>${t('Score')}</th>
             </tr>
         </thead>
         <tbody>
             <tr>
-                <th>Last Session</th>
+                <th>${t('Last Session')}</th>
                 <td>${stats.elapsed.lastSession} s</td>
                 <td>${stats.copiedCharacters.lastSession}</td>
                 <td>${stats.copiedWords.lastSession}</td>
                 <td>${stats.score.lastSession}</td>
             </tr>
             <tr>
-                <th>Best Session</th>
+                <th>${t('Best Session')}</th>
                 <td>${stats.elapsed.bestSession} s</td>
                 <td>${stats.copiedCharacters.bestSession}</td>
                 <td>${stats.copiedWords.bestSession}</td>
                 <td>${stats.score.bestSession}</td>
             </tr>
             <tr>
-                <th>Current Day</th>
+                <th>${t('Current Day')}</th>
                 <td>${stats.elapsed.currentDay} s</td>
                 <td>${stats.copiedCharacters.currentDay}</td>
                 <td>${stats.copiedWords.currentDay}</td>
                 <td>${stats.score.currentDay}</td>
             </tr>
             <tr>
-                <th>Best Day</th>
+                <th>${t('Best Day')}</th>
                 <td>${stats.elapsed.bestDay} s</td>
                 <td>${stats.copiedCharacters.bestDay}</td>
                 <td>${stats.copiedWords.bestDay}</td>
                 <td>${stats.score.bestDay}</td>
             </tr>
             <tr>
-                <th>Total</th>
+                <th>${t('Total')}</th>
                 <td>${stats.elapsed.total} s</td>
                 <td>${stats.copiedCharacters.total}</td>
                 <td>${stats.copiedWords.total}</td>
@@ -323,7 +331,7 @@ function formatCurrentSession() {
         const started = sessionStart.toISOString();
         ret = `<span class="meta active"><time datetime="${started}">${started}</time>:</span> ${copiedText}…`;
     } else {
-        ret = 'Press Return to start';
+        ret = t('Press Return to start');
     }
     return `<li>${ret}<li>`;
 }
@@ -349,24 +357,24 @@ function renderHistory() {
 
 function renderSettings() {
     settingsElement.innerHTML = `
-    <h3>Settings</h3>
-    <label for="settings-wpm">Speed:</label>
+    <h3>${t('Settings')}</h3>
+    <label for="settings-wpm">${t('Speed')}:</label>
     <input id="settings-wpm" oninput="onSettingsChange()" type="number" value="20" min="1" step="0.5" />
-    <abbr title="Words Per Minute">WPM</abbr>
+    <abbr title="${t('Words Per Minute')}">WPM</abbr>
     <br>
-    <label for="settings-tone">Tone:</label>
+    <label for="settings-tone">${t('Tone')}:</label>
     <input id="settings-tone" oninput="onSettingsChange()" type="number" value="600" min="10" step="10" />
     Hz
     <br>
-    <label for="settings-error-tone">Error Tone:</label>
+    <label for="settings-error-tone">${t('Error Tone')}:</label>
     <input id="settings-error-tone" oninput="onSettingsChange()" type="number" value="200" min="10" step="10" />
     Hz
     <br>
-    <label for="settings-word-length">Size of words:</label>
+    <label for="settings-word-length">${t('Size of words')}:</label>
     <input id="settings-word-length" oninput="onSettingsChange()" type="number" value="5" min="1" />
-    characters
+    ${t('characters')})
     <br>
-    <label for="settings-lcwo-lesson"><a href="https://lcwo.net/" title="Learn CW Online">LCWO</A> Lesson:</label>
+    <label for="settings-lcwo-lesson">${t('<a href="https://lcwo.net/" title="Learn CW Online">LCWO</A> Lesson')}:</label>
     <select id="settings-lcwo-lesson" oninput="onLCWOLessonInput()">
         <option value="0">-</option>
         <option value="1">1 - K, M</option>
@@ -411,7 +419,7 @@ function renderSettings() {
         <option value="40">40 - X</option>
     </select>
     <br>
-    <label for="settings-charset">Customize Charset:</label>
+    <label for="settings-charset">${t('Customize Charset')}:</label>
     <br>
     <textarea id="settings-charset" oninput="onCustomCharsetInput()"></textarea>
     <br>
@@ -662,7 +670,7 @@ m.onCharacterPlay = (c) => {
     // detect when user has stopped copying
     if (played.length - copiedText.length > 3) {
         fail();
-        infoElement.innerText = 'Too slow!';
+        infoElement.innerText = t('Too slow!');
     }
 };
 
@@ -671,7 +679,7 @@ document.addEventListener('DOMContentLoaded', () => {
     refreshStats();
     feedbackElement.addEventListener('blur', () => {
         if (inSession) {
-            infoElement.innerText = 'Focus lost!';
+            infoElement.innerText = t('Focus lost!');
             stopSession();
         }
     });
