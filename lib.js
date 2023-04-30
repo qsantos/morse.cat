@@ -51,7 +51,7 @@ function readStats() {
     const json = localStorage.getItem('stats');
     if (json) {
         const stats = JSON.parse(json);
-        stats.updated = Date.parse(stats.updated);
+        stats.updated = new Date(stats.updated);
         return stats;
     }
     return {
