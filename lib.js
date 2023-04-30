@@ -90,10 +90,6 @@ function readStats() {
 // stats
 const stats = readStats();
 
-function saveStats() {
-    localStorage.setItem('stats', JSON.stringify(stats));
-}
-
 /** @type {HTMLElement} */
 let settingsElement;
 /** @type {HTMLElement} */
@@ -298,18 +294,6 @@ function restoreSettings() {
 }
 
 function renderStats() {
-    // reset day stats when midnight passes
-    const today = new Date();
-    today.setHours(0, 0, 0);
-    if (stats.updated < today) {
-        stats.elapsed.currentDay = 0;
-        stats.copiedCharacters.currentDay = 0;
-        stats.copiedWords.currentDay = 0;
-        stats.score.currentDay = 0;
-        stats.updated = new Date();
-        saveStats();
-    }
-
     statsElement.innerHTML = `
     <h3>Statistics</h3>
     <table>
@@ -473,6 +457,28 @@ function renderSettings() {
     `;
 }
 
+/** Refresh the stats as needed
+ *  @param {boolean} [modified] - Where the stats recently modified?
+*/
+function refreshStats(modified) {
+    // update day stats
+    const now = new Date();
+    const today = new Date(now);
+    today.setHours(0, 0, 0);
+    if (stats.updated < today) {
+        // reset on new day
+        stats.elapsed.currentDay = 0;
+        stats.copiedCharacters.currentDay = 0;
+        stats.copiedWords.currentDay = 0;
+        stats.score.currentDay = 0;
+        modified = true;
+    }
+    if (modified) {
+        stats.updated = now;
+        localStorage.setItem('stats', JSON.stringify(stats));
+    }
+}
+
 /** Increase a stat by a given amount
  *  @param {import("./types").Stat} stat - The stat to be increased
  *  @param {number} amount - The amount by which the stat should be increased
@@ -502,7 +508,7 @@ function incrementCopiedCharacters(c) {
     }
     increaseStat(stats.score, stats.copiedWords.lastSession + 1);
 
-    saveStats();
+    refreshStats(true);
 }
 
 function onFinished() {
@@ -692,6 +698,7 @@ m.onCharacterPlay = (c) => {
 
 document.addEventListener('DOMContentLoaded', () => {
     setElements();
+    refreshStats();
     feedbackElement.addEventListener('blur', () => {
         if (inSession) {
             infoElement.innerText = 'Focus lost!';
