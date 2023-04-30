@@ -525,6 +525,7 @@ function startSession() {
     copiedText = '';
     inSession = true;
     sessionStart = new Date();
+    sessionDurationUpdater = setInterval(refreshStats, 1000);
     stats.elapsed.lastSession = 0;
     stats.copiedCharacters.lastSession = 0;
     stats.copiedWords.lastSession = 0;
