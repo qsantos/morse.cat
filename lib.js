@@ -297,7 +297,7 @@ function restoreSettings() {
     updateTogglesFromCharset();
 }
 
-function updateStats() {
+function renderStats() {
     // reset day stats when midnight passes
     const today = new Date();
     today.setHours(0, 0, 0);
@@ -390,13 +390,13 @@ function formatHistoryEntry(entry) {
     return `<li>${ret}<li>`;
 }
 
-function updateHistory() {
+function renderHistory() {
     const entries = sessionHistory.slice(-10);
     const formattedEntries = [...entries.map(formatHistoryEntry)];
     historyElement.innerHTML = formatCurrentSession() + formattedEntries.reverse().join('');
 }
 
-function updateSettings() {
+function renderSettings() {
     settingsElement.innerHTML = `
     <h3>Settings</h3>
     <label for="settings-wpm">Speed:</label>
@@ -516,7 +516,7 @@ function startSession() {
     copiedText = '';
     inSession = true;
     sessionStart = new Date();
-    sessionDurationUpdater = setInterval(updateStats, 100);
+    sessionDurationUpdater = setInterval(renderStats, 100);
     stats.elapsed.lastSession = 0;
     stats.copiedCharacters.lastSession = 0;
     stats.copiedWords.lastSession = 0;
@@ -533,8 +533,8 @@ function startSession() {
     feedbackCwElement.innerText = '';
     infoElement.innerText = '';
     feedbackElement.focus();
-    updateStats();
-    updateHistory();
+    renderStats();
+    renderHistory();
 }
 
 /** End the current session
@@ -571,11 +571,11 @@ function stopSession(expected, userInput) {
 
     inSession = false;
     m.onFinished = undefined;
-    updateStats();
+    renderStats();
     clearInterval(sessionDurationUpdater);
     sessionDurationUpdater = 0;
     m.stop();
-    updateHistory();
+    renderHistory();
 }
 
 /** Play a buzzer and then replay the correct character
@@ -657,7 +657,7 @@ document.addEventListener('keydown', (event) => {
     if (userInput === expected) {
         // correct
         incrementCopiedCharacters(expected);
-        updateHistory();
+        renderHistory();
     } else {
         // incorrect
         fail(expected, userInput);
@@ -698,8 +698,8 @@ document.addEventListener('DOMContentLoaded', () => {
             stopSession();
         }
     });
-    updateSettings();
-    updateStats();
-    updateHistory();
+    renderSettings();
+    renderStats();
+    renderHistory();
     restoreSettings();
 });
