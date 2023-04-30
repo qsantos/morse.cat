@@ -95,6 +95,8 @@ function saveStats() {
 }
 
 /** @type {HTMLElement} */
+let settingsElement;
+/** @type {HTMLElement} */
 let historyElement;
 /** @type {HTMLElement} */
 let feedbackElement;
@@ -160,6 +162,7 @@ function getTextareaElement(id) {
 }
 
 function setElements() {
+    settingsElement = getElement('settings');
     historyElement = getElement('history');
     feedbackElement = getElement('feedback');
     feedbacWrongCharacterElement = getElement('feedback_wrong_character');
@@ -393,6 +396,83 @@ function updateHistory() {
     historyElement.innerHTML = formatCurrentSession() + formattedEntries.reverse().join('');
 }
 
+function updateSettings() {
+    settingsElement.innerHTML = `
+    <h3>Settings</h3>
+    <label for="settings-wpm">Speed:</label>
+    <input id="settings-wpm" oninput="onSettingsChange()" type="number" value="20" min="1" step="0.5" />
+    <abbr title="Words Per Minute">WPM</abbr>
+    <br>
+    <label for="settings-tone">Tone:</label>
+    <input id="settings-tone" oninput="onSettingsChange()" type="number" value="600" min="10" step="10" />
+    Hz
+    <br>
+    <label for="settings-error-tone">Error Tone:</label>
+    <input id="settings-error-tone" oninput="onSettingsChange()" type="number" value="200" min="10" step="10" />
+    Hz
+    <br>
+    <label for="settings-word-length">Size of words:</label>
+    <input id="settings-word-length" oninput="onSettingsChange()" type="number" value="5" min="1" />
+    characters
+    <br>
+    <label for="settings-lcwo-lesson"><a href="https://lcwo.net/" title="Learn CW Online">LCWO</A> Lesson:</label>
+    <select id="settings-lcwo-lesson" oninput="onLCWOLessonInput()">
+        <option value="0">-</option>
+        <option value="1">1 - K, M</option>
+        <option value="2">2 - U</option>
+        <option value="3">3 - R</option>
+        <option value="4">4 - E</option>
+        <option value="5">5 - S</option>
+        <option value="6">6 - N</option>
+        <option value="7">7 - A</option>
+        <option value="8">8 - P</option>
+        <option value="9">9 - T</option>
+        <option value="10">10 - L</option>
+        <option value="11">11 - W</option>
+        <option value="12">12 - I</option>
+        <option value="13">13 - .</option>
+        <option value="14">14 - J</option>
+        <option value="15">15 - Z</option>
+        <option value="16">16 - =</option>
+        <option value="17">17 - F</option>
+        <option value="18">18 - O</option>
+        <option value="19">19 - Y</option>
+        <option value="20">20 - ,</option>
+        <option value="21">21 - V</option>
+        <option value="22">22 - G</option>
+        <option value="23">23 - 5</option>
+        <option value="24">24 - /</option>
+        <option value="25">25 - Q</option>
+        <option value="26">26 - 9</option>
+        <option value="27">27 - 2</option>
+        <option value="28">28 - H</option>
+        <option value="29">29 - 3</option>
+        <option value="30">30 - 8</option>
+        <option value="31">31 - B</option>
+        <option value="32">32 - ?</option>
+        <option value="33">33 - 4</option>
+        <option value="34">34 - 7</option>
+        <option value="35">35 - C</option>
+        <option value="36">36 - 1</option>
+        <option value="37">37 - D</option>
+        <option value="38">38 - 6</option>
+        <option value="39">39 - 0</option>
+        <option value="40">40 - X</option>
+    </select>
+    <br>
+    <label for="settings-charset">Customize Charset:</label>
+    <br>
+    <textarea id="settings-charset" oninput="onCustomCharsetInput()"></textarea>
+    <br>
+    <input id="settings-charset-latin" type="checkbox" oninput="onToggleChars(event, latin)">
+    <label for="settings-charset-latin"><code>A-Z</code></label>
+    <input id="settings-charset-digits" type="checkbox" oninput="onToggleChars(event, digits)">
+    <label for="settings-charset-digits"><code>0-9</Code></label>
+    <input id="settings-charset-punct" type="checkbox" oninput="onToggleChars(event, punct)">
+    <label for="settings-charset-punct"><code>.,:?'-/()"=+×@</code></label>
+    `;
+}
+
 /** Increase a stat by a given amount
  *  @param {import("./types").Stat} stat - The stat to be increased
  *  @param {number} amount - The amount by which the stat should be increased
@@ -618,6 +698,7 @@ document.addEventListener('DOMContentLoaded', () => {
             stopSession();
         }
     });
+    updateSettings();
     updateStats();
     updateHistory();
     restoreSettings();
