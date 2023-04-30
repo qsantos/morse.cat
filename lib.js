@@ -476,7 +476,9 @@ function refreshStats(modified) {
     if (modified) {
         stats.updated = now;
         localStorage.setItem('stats', JSON.stringify(stats));
-        renderStats();
+        if (statsElement.open) {
+            renderStats();
+        }
     }
 }
 
