@@ -109,6 +109,7 @@ let infoElement;
 
 const translations = {
     en: {
+        languageName: 'English',
         pageTitle: 'Morse 😺',
         mainHeader: 'Morse 😺',
         'stats.title': 'Statistics',
@@ -141,6 +142,7 @@ const translations = {
         'info.lostFocus': 'Focus lost!',
     },
     fr: {
+        languageName: 'French',
         pageTitle: 'Morse 😺',
         mainHeader: 'Morse 😺',
         'stats.title': 'Statistiques',
@@ -173,6 +175,7 @@ const translations = {
         'info.lostFocus': 'Focus perdu !',
     },
     ja: {
+        languageName: '日本語',
         pageTitle: 'モールス 😺',
         mainHeader: 'モールス <ruby>😺<rp>(</rp><rt>カト</rt><rp>)</rp></ruby>',
         'stats.title': '統計',
@@ -205,6 +208,7 @@ const translations = {
         'info.lostFocus': 'フォーカスを失った！',
     },
     es: {
+        languageName: 'Español',
         pageTitle: 'Morse 😺',
         mainHeader: 'Morse 😺',
         'stats.title': 'Estadísticas',
@@ -237,6 +241,7 @@ const translations = {
         'info.lostFocus': '¡Se perdió el foco!',
     },
     ca: {
+        languageName: 'Català',
         pageTitle: 'Morse 😺',
         mainHeader: 'Morse 😺',
         'stats.title': 'Estadístiques',
@@ -602,8 +607,10 @@ function renderSettings() {
  *  @param {keyof typeof translations} lang - The selected language
 */
 function setLanguage(lang) {
+    getElement('language-select', HTMLSelectElement).value = lang;
     activeLanguage = lang;
     document.title = t('pageTitle');
+    localStorage.setItem('language', lang);
     getElement('main-header', HTMLHeadingElement).innerHTML = t('mainHeader');
     renderHistory();
     renderSettings();
