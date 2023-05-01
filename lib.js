@@ -853,7 +853,7 @@ m.onCharacterPlay = (c) => {
     played.push(c.c);
 
     // detect when user has stopped copying
-    if (played.length - copiedText.length > 3) {
+    if (played.length - copiedText.length > 5) {
         fail();
         infoElement.innerText = t('info.tooSlow');
     }
