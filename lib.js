@@ -315,6 +315,7 @@ function setElements() {
 }
 
 function onSettingsChange() {
+    // eslint-disable-next-line no-use-before-define
     stopSession();
     settings.wpm = parseFloat(getElement('settings-wpm', HTMLInputElement).value);
     settings.tone = parseFloat(getElement('settings-tone', HTMLInputElement).value);
