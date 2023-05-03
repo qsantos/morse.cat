@@ -856,6 +856,9 @@ m.onCharacterPlay = (c) => {
     // detect when user has stopped copying
     if (played.length - copiedText.length > 5) {
         fail();
+        feedbackCwElement.innerText = '';
+        feedbackCharacterElement.innerText = '';
+        feedbacWrongCharacterElement.innerText = '';
         infoElement.innerText = t('info.tooSlow');
     }
 };
@@ -866,6 +869,9 @@ document.addEventListener('DOMContentLoaded', () => {
     feedbackElement.addEventListener('blur', () => {
         if (inSession) {
             infoElement.innerText = t('info.lostFocus');
+            feedbackCwElement.innerText = '';
+            feedbackCharacterElement.innerText = '';
+            feedbacWrongCharacterElement.innerText = '';
             stopSession();
         }
     });
