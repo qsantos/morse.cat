@@ -681,7 +681,7 @@ function onFinished() {
 }
 
 function startSession() {
-    if (Array.from(settings.charset).filter(c => c.trim() != '').length == 0) {
+    if (Array.from(settings.charset).filter((c) => c.trim() !== '').length === 0) {
         infoElement.innerText = 'Empty charset!';
         return;
     }
