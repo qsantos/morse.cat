@@ -441,6 +441,7 @@ function restoreSettings() {
 }
 
 function renderStats() {
+    const lang = activeLanguage;
     statsElement.innerHTML = `
     <h3>${t('stats.title')}</h3>
     <table>
@@ -456,38 +457,38 @@ function renderStats() {
         <tbody>
             <tr>
                 <th>${t('stats.lastSession')}</th>
-                <td>${stats.elapsed.lastSession} s</td>
-                <td>${stats.copiedCharacters.lastSession}</td>
-                <td>${stats.copiedWords.lastSession}</td>
-                <td>${stats.score.lastSession}</td>
+                <td>${stats.elapsed.lastSession.toLocaleString(lang)} s</td>
+                <td>${stats.copiedCharacters.lastSession.toLocaleString(lang)}</td>
+                <td>${stats.copiedWords.lastSession.toLocaleString(lang)}</td>
+                <td>${stats.score.lastSession.toLocaleString(lang)}</td>
             </tr>
             <tr>
                 <th>${t('stats.bestSession')}</th>
-                <td>${stats.elapsed.bestSession} s</td>
-                <td>${stats.copiedCharacters.bestSession}</td>
-                <td>${stats.copiedWords.bestSession}</td>
-                <td>${stats.score.bestSession}</td>
+                <td>${stats.elapsed.bestSession.toLocaleString(lang)} s</td>
+                <td>${stats.copiedCharacters.bestSession.toLocaleString(lang)}</td>
+                <td>${stats.copiedWords.bestSession.toLocaleString(lang)}</td>
+                <td>${stats.score.bestSession.toLocaleString(lang)}</td>
             </tr>
             <tr>
                 <th>${t('stats.currentDay')}</th>
-                <td>${stats.elapsed.currentDay} s</td>
-                <td>${stats.copiedCharacters.currentDay}</td>
-                <td>${stats.copiedWords.currentDay}</td>
-                <td>${stats.score.currentDay}</td>
+                <td>${stats.elapsed.currentDay.toLocaleString(lang)} s</td>
+                <td>${stats.copiedCharacters.currentDay.toLocaleString(lang)}</td>
+                <td>${stats.copiedWords.currentDay.toLocaleString(lang)}</td>
+                <td>${stats.score.currentDay.toLocaleString(lang)}</td>
             </tr>
             <tr>
                 <th>${t('stats.bestDay')}</th>
-                <td>${stats.elapsed.bestDay} s</td>
-                <td>${stats.copiedCharacters.bestDay}</td>
-                <td>${stats.copiedWords.bestDay}</td>
-                <td>${stats.score.bestDay}</td>
+                <td>${stats.elapsed.bestDay.toLocaleString(lang)} s</td>
+                <td>${stats.copiedCharacters.bestDay.toLocaleString(lang)}</td>
+                <td>${stats.copiedWords.bestDay.toLocaleString(lang)}</td>
+                <td>${stats.score.bestDay.toLocaleString(lang)}</td>
             </tr>
             <tr>
                 <th>${t('stats.total')}</th>
-                <td>${stats.elapsed.total} s</td>
-                <td>${stats.copiedCharacters.total}</td>
-                <td>${stats.copiedWords.total}</td>
-                <td>${stats.score.total}</td>
+                <td>${stats.elapsed.total.toLocaleString(lang)} s</td>
+                <td>${stats.copiedCharacters.total.toLocaleString(lang)}</td>
+                <td>${stats.copiedWords.total.toLocaleString(lang)}</td>
+                <td>${stats.score.total.toLocaleString(lang)}</td>
             </tr>
         </tbody>
     </table>
