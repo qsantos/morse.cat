@@ -608,6 +608,7 @@ function renderSettings() {
  *  @param {keyof typeof translations} lang - The selected language
 */
 function setLanguage(lang) {
+    document.documentElement.lang = lang;
     getElement('language-select', HTMLSelectElement).value = lang;
     activeLanguage = lang;
     document.title = t('pageTitle');
