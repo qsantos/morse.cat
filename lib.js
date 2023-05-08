@@ -834,6 +834,11 @@ document.addEventListener('keydown', (event) => {
         return;
     }
 
+    // ignore modified keys, except Shift and AltGraph, that can be used to compose characters
+    if (event.altKey || event.ctrlKey || event.metaKey) {
+        return;
+    }
+
     // stop space from scrolling the page while in session
     if (userInput === ' ') {
         event.preventDefault();
