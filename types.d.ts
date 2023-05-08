@@ -29,8 +29,8 @@ export type Mistake = {
 
 export type HistoryEntry = {
     id: string,
-    started: Date,
-    finished: Date,
+    started: string,
+    finished: string,
     copiedText: string,
     mistake: Mistake | null,
     settings: Settings,

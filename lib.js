@@ -727,7 +727,7 @@ function stopSession(expected, userInput) {
         started: sessionStart.toISOString(),
         finished: new Date().toISOString(),
         copiedText,
-        mistake: !expected ? null : {
+        mistake: !expected || !userInput ? null : {
             expectedCharacter: expected,
             mistakenCharacter: userInput,
         },
