@@ -112,6 +112,7 @@ const translations = {
         languageName: 'English',
         pageTitle: 'Morse 😺',
         mainHeader: 'Morse 😺',
+        'key.space': 'Space',
         'stats.title': 'Statistics',
         'stats.elapsed': 'Time',
         'stats.copiedCharacters': 'Characters',
@@ -145,6 +146,7 @@ const translations = {
         languageName: 'French',
         pageTitle: 'Morse 😺',
         mainHeader: 'Morse 😺',
+        'key.space': 'Espace',
         'stats.title': 'Statistiques',
         'stats.elapsed': 'Temps',
         'stats.copiedCharacters': 'Caractères',
@@ -178,6 +180,7 @@ const translations = {
         languageName: '日本語',
         pageTitle: 'モールス 😺',
         mainHeader: 'モールス <ruby>😺<rp>(</rp><rt>カト</rt><rp>)</rp></ruby>',
+        'key.space': '空白',
         'stats.title': '統計',
         'stats.elapsed': '時間',
         'stats.copiedCharacters': '文字数',
@@ -211,6 +214,7 @@ const translations = {
         languageName: 'Español',
         pageTitle: 'Morse 😺',
         mainHeader: 'Morse 😺',
+        'key.space': 'Espacio',
         'stats.title': 'Estadísticas',
         'stats.elapsed': 'Tiempo',
         'stats.copiedCharacters': 'Caracteres',
@@ -244,6 +248,7 @@ const translations = {
         languageName: 'Català',
         pageTitle: 'Morse 😺',
         mainHeader: 'Morse 😺',
+        'key.space': 'Espai',
         'stats.title': 'Estadístiques',
         'stats.elapsed': 'Temps',
         'stats.copiedCharacters': 'Caràcters',
@@ -783,7 +788,7 @@ function formatCharacter(c) {
     if (c === undefined) {
         return '-';
     } else if (c === ' ') {
-        return 'Space';
+        return t('key.space');
     } else {
         return c;
     }
