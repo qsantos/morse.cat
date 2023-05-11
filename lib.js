@@ -920,7 +920,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     const preferredLanguage = new URL(document.location.href).searchParams.get('lang') || localStorage.getItem('language') || navigator.language.slice(0, 2);
     // TODO: there must be a better way to do that while keeping TypeScript happy
-    if (preferredLanguage === 'en' || preferredLanguage === 'fr' || preferredLanguage === 'ja' || preferredLanguage === 'es' || preferredLanguage === 'ja') {
+    if (preferredLanguage === 'en' || preferredLanguage === 'fr' || preferredLanguage === 'ja' || preferredLanguage === 'es' || preferredLanguage === 'ca') {
         activeLanguage = preferredLanguage;
     }
     setLanguage(activeLanguage);
