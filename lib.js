@@ -616,6 +616,30 @@ function renderSettings() {
     `;
 }
 
+/** Type assertion that lang is a language key
+ *  @param {any} lang - The candidate language key
+ *  @return {keyof typeof translations | null} lang - The language key or null
+*/
+function asLanguage(lang) {
+    if (lang && translations.hasOwnProperty(lang)) {
+        return lang;
+    } else {
+        return null;
+    }
+}
+
+/** Detect the preferred language of the user
+ *  @return {keyof typeof translations} lang - The preferred language
+*/
+function getPreferredLanguage() {
+    let lang = null;
+    lang ||= asLanguage(new URL(document.location.href).searchParams.get('lang'));
+    lang ||= asLanguage(localStorage.getItem('language'));
+    lang ||= asLanguage(navigator.language.slice(0, 2));
+    lang ||= 'en';
+    return lang;
+}
+
 /** Set the language of the page
  *  @param {keyof typeof translations} lang - The selected language
 */
@@ -918,11 +942,6 @@ document.addEventListener('DOMContentLoaded', () => {
             stopSession();
         }
     });
-    const preferredLanguage = new URL(document.location.href).searchParams.get('lang') || localStorage.getItem('language') || navigator.language.slice(0, 2);
-    // TODO: there must be a better way to do that while keeping TypeScript happy
-    if (preferredLanguage === 'en' || preferredLanguage === 'fr' || preferredLanguage === 'ja' || preferredLanguage === 'es' || preferredLanguage === 'ca') {
-        activeLanguage = preferredLanguage;
-    }
-    setLanguage(activeLanguage);
+    setLanguage(getPreferredLanguage());
     restoreSettings();
 });
