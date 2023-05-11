@@ -283,7 +283,13 @@ let activeLanguage = 'en';
  *  @return {string} - The translated string
 */
 function t(key) {
-    return translations[activeLanguage][key];
+    const translated = translations[activeLanguage][key];
+    if (translated) {
+        return translated;
+    } else {
+        console.warn(`Missing translation for ${key}`);
+        return key;
+    }
 }
 
 /** Get an HTML element by id and throw if it does not exist
