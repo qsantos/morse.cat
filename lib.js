@@ -891,12 +891,19 @@ document.addEventListener('keydown', (event) => {
 
     // played[nextIndex] is undefined if nextIndex >= played.length
     const expected = played[stats.copiedCharacters.lastSession]?.toLowerCase();
+    const correctSound = document.querySelector("#correct-sound");
     if (userInput === expected) {
         // correct
+        if (expected != ' ') {
+            correctSound.volume = 0.03;
+            correctSound.currentTime = 0;
+            correctSound.play();
+        }
         incrementCopiedCharacters(expected);
         renderHistory();
     } else {
         // incorrect
+        correctSound.pause();
         fail(expected, userInput);
     }
 
