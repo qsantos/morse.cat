@@ -91,7 +91,7 @@ function readStats() {
 const stats = readStats();
 
 /** @type {HTMLElement} */
-let settingsElement;
+let settingsModalElement;
 /** @type {HTMLElement} */
 let historyElement;
 /** @type {HTMLElement} */
@@ -103,7 +103,7 @@ let feedbackCharacterElement;
 /** @type {HTMLElement} */
 let feedbackCwElement;
 /** @type {HTMLDialogElement} */
-let statsElement;
+let statsModalElement;
 /** @type {HTMLElement} */
 let infoElement;
 
@@ -315,13 +315,13 @@ function getElement(id, type) {
 }
 
 function setElements() {
-    settingsElement = getElement('settings', HTMLElement);
+    settingsModalElement = getElement('settings-modal', HTMLElement);
     historyElement = getElement('history', HTMLElement);
     feedbackElement = getElement('feedback', HTMLElement);
     feedbacWrongCharacterElement = getElement('feedback_wrong_character', HTMLElement);
     feedbackCharacterElement = getElement('feedback_character', HTMLElement);
     feedbackCwElement = getElement('feedback_cw', HTMLElement);
-    statsElement = getElement('stats', HTMLDialogElement);
+    statsModalElement = getElement('stats-modal', HTMLDialogElement);
     infoElement = getElement('info', HTMLElement);
 }
 
@@ -451,9 +451,9 @@ function restoreSettings() {
     updateTogglesFromCharset();
 }
 
-function renderStats() {
+function renderStatsModal() {
     const lang = activeLanguage;
-    statsElement.innerHTML = `
+    statsModalElement.innerHTML = `
     <h3>${t('stats.title')}</h3>
     <table>
         <thead>
@@ -539,8 +539,8 @@ function renderHistory() {
     historyElement.innerHTML = formatCurrentSession() + formattedEntries.reverse().join('');
 }
 
-function renderSettings() {
-    settingsElement.innerHTML = `
+function renderSettingsModal() {
+    settingsModalElement.innerHTML = `
     <h3>${t('settings.title')}</h3>
     <label for="settings-wpm">${t('settings.speed.title')}:</label>
     <input id="settings-wpm" oninput="onSettingsChange()" type="number" value="20" min="1" step="0.5" />
@@ -651,8 +651,8 @@ function setLanguage(lang) {
     localStorage.setItem('language', lang);
     getElement('main-header', HTMLHeadingElement).innerHTML = t('mainHeader');
     renderHistory();
-    renderSettings();
-    renderStats();
+    renderSettingsModal();
+    renderStatsModal();
 }
 
 /** Refresh the stats as needed
@@ -674,8 +674,8 @@ function refreshStats(modified) {
     if (modified) {
         stats.updated = now;
         localStorage.setItem('stats', JSON.stringify(stats));
-        if (statsElement.open) {
-            renderStats();
+        if (statsModalElement.open) {
+            renderStatsModal();
         }
     }
 }
@@ -744,7 +744,7 @@ function startSession() {
     feedbackCwElement.innerText = '';
     infoElement.innerText = '';
     feedbackElement.focus();
-    renderStats();
+    renderStatsModal();
     renderHistory();
 }
 
@@ -782,7 +782,7 @@ function stopSession(expected, userInput) {
 
     inSession = false;
     m.onFinished = undefined;
-    renderStats();
+    renderStatsModal();
     clearInterval(sessionDurationUpdater);
     sessionDurationUpdater = 0;
     m.stop();

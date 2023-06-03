@@ -17,8 +17,8 @@
                 <option value="ja">日本語</option>
                 <option value="es">Español</option>
             </select>
-            <img src="stats.svg" id="button stats-button" onclick="document.getElementById('stats').showModal()">
-            <img src="settings.svg" id="button settings-button" onclick="document.getElementById('settings').showModal()">
+            <img src="stats.svg" class="button" onclick="document.getElementById('stats-modal').showModal()">
+            <img src="settings.svg" class="button" onclick="document.getElementById('settings-modal').showModal()">
         </nav>
         <div id="info"></div>
         <div id="feedback" tabindex="1">
@@ -27,8 +27,8 @@
             <div id="feedback_cw">&nbsp;</div>
         </div>
         <ul id="history"></ul>
-        <dialog id="stats" onclick="closeIfOutsideDialog(event)"></dialog>
-        <dialog id="settings" onclick="closeIfOutsideDialog(event)"></dialog>
+        <dialog id="stats-modal" onclick="closeIfOutsideDialog(event)"></dialog>
+        <dialog id="settings-modal" onclick="closeIfOutsideDialog(event)"></dialog>
         <audio src="correct.mp3" id="correct-sound"></audio>
     </body>
 </html>
