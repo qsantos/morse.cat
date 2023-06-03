@@ -12,8 +12,11 @@ nav {
     top: 0;
     right: 0;
 }
-nav>img {
+.button {
     width:50px;
+}
+.inline-button {
+    height:1em;
 }
 #stats>table {
     text-align: right;

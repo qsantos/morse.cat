@@ -17,6 +17,7 @@
                 <option value="ja">日本語</option>
                 <option value="es">Español</option>
             </select>
+            <img src="info.svg" class="button" onclick="document.getElementById('info-modal').showModal()">
             <img src="stats.svg" class="button" onclick="document.getElementById('stats-modal').showModal()">
             <img src="settings.svg" class="button" onclick="document.getElementById('settings-modal').showModal()">
         </nav>
@@ -27,6 +28,42 @@
             <div id="feedback_cw">&nbsp;</div>
         </div>
         <ul id="history"></ul>
+        <dialog id="info-modal" onclick="closeIfOutsideDialog(event)">
+            Attributions:
+            <ul>
+                <li>
+                    <img src="info.svg" class="inline-button">
+                    Info icon:
+                    <a href="https://www.svgrepo.com/svg/474873/info">
+                        from SVG Repo
+                    </a>
+                    CC0 License
+                </li>
+                <li>
+                    <img src="stats.svg" class="inline-button">
+                    Statistics icon:
+                    <a href="https://www.svgrepo.com/svg/474780/combo-chart">
+                        from SVG Repo
+                    </a>
+                    CC0 License
+                </li>
+                <li>
+                    <img src="settings.svg" class="inline-button">
+                    Settings icon:
+                    <a href="https://www.svgrepo.com/svg/474982/settings">
+                        from SVG Repo
+                    </a>
+                    CC0 License
+                </li>
+                <li>
+                    <a href="correct.mp3">“Ding” sound</a> for correct copy:
+                    <a href="https://freesound.org/people/InspectorJ/sounds/411089/">
+                    by InspectorJ at Freesound
+                    </a>
+                    under Creative Commons 4.0 License
+                </li>
+            </ul>
+        </dialog>
         <dialog id="stats-modal" onclick="closeIfOutsideDialog(event)"></dialog>
         <dialog id="settings-modal" onclick="closeIfOutsideDialog(event)"></dialog>
         <audio src="correct.mp3" id="correct-sound"></audio>
