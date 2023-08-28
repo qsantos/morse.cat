@@ -13,6 +13,9 @@ nav {
     right: 0;
 }
 .button {
+    text-decoration: none;
+}
+.button>img {
     width:50px;
 }
 .inline-button {

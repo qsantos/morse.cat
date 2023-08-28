@@ -4,7 +4,6 @@
 
 # Copy Trainer
 
-- enable keyboard navigation
 - have both correct and wrong sound be played by sound API to avoid delays in loading files
 - make script loading async
 - reinforcement
