@@ -757,6 +757,12 @@ function stopSession(expected, userInput) {
         return;
     }
 
+    m.stop();
+    inSession = false;
+    m.onFinished = undefined;
+    clearInterval(sessionDurationUpdater);
+    sessionDurationUpdater = 0;
+
     const session = {
         id: crypto.randomUUID(),
         started: sessionStart.toISOString(),
@@ -780,12 +786,7 @@ function stopSession(expected, userInput) {
     // - play session in tab A
     localStorage.setItem('history', JSON.stringify(sessionHistory));
 
-    inSession = false;
-    m.onFinished = undefined;
     renderStatsModal();
-    clearInterval(sessionDurationUpdater);
-    sessionDurationUpdater = 0;
-    m.stop();
     renderHistory();
 }
 
