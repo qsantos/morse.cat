@@ -4,6 +4,7 @@
 
 # Copy Trainer
 
+- give 1 “free miss” every 20 correctly copied character
 - make script loading async
 - reinforcement
     - nice ding when copying X characters in a row without any error
