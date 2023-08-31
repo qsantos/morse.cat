@@ -4,6 +4,7 @@
 
 # Copy Trainer
 
+- translate attributions
 - give 1 “free miss” every 20 correctly copied character
 - make script loading async
 - reinforcement
