@@ -616,6 +616,38 @@ function renderSettingsModal() {
     `;
 }
 
+function renderInfoModal() {
+    infoModalElement.innerHTML = `
+    Attributions:
+    <ul>
+        <li>
+            <img src="info.svg" class="inline-button">
+            Info icon:
+            <a href="https://www.svgrepo.com/svg/474873/info">
+                from SVG Repo
+            </a>
+            CC0 License
+        </li>
+        <li>
+            <img src="stats.svg" class="inline-button">
+            Statistics icon:
+            <a href="https://www.svgrepo.com/svg/474780/combo-chart">
+                from SVG Repo
+            </a>
+            CC0 License
+        </li>
+        <li>
+            <img src="settings.svg" class="inline-button">
+            Settings icon:
+            <a href="https://www.svgrepo.com/svg/474982/settings">
+                from SVG Repo
+            </a>
+            CC0 License
+        </li>
+    </ul>
+    `;
+}
+
 /** Type assertion that lang is a language key
  *  @param {any} lang - The candidate language key
  *  @return {keyof typeof translations | null} lang - The language key or null
@@ -653,6 +685,7 @@ function setLanguage(lang) {
     renderHistory();
     renderSettingsModal();
     renderStatsModal();
+    renderInfoModal();
 }
 
 /** Refresh the stats as needed
