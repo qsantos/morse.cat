@@ -93,6 +93,8 @@ const stats = readStats();
 /** @type {HTMLElement} */
 let settingsModalElement;
 /** @type {HTMLElement} */
+let infoModalElement;
+/** @type {HTMLElement} */
 let historyElement;
 /** @type {HTMLElement} */
 let feedbackElement;
@@ -139,6 +141,11 @@ const translations = {
         'settings.wordLength.details': '',
         'settings.lcwo.title': '<a href="https://lcwo.net/" title="Learn CW Online">LCWO</A> Lesson',
         'settings.charset.title': 'Customize Charset',
+        'info.attributions.title': 'Attributions',
+        'info.attributions.cc0-license': 'CC0 License',
+        'info.attributions.info-icon': 'Info icon',
+        'info.attributions.statistics-icon': 'Statistics icon',
+        'info.attributions.settings-icon': 'Settings icon',
         'info.tooSlow': 'Too slow!',
         'info.lostFocus': 'Focus lost!',
     },
@@ -316,6 +323,7 @@ function getElement(id, type) {
 
 function setElements() {
     settingsModalElement = getElement('settings-modal', HTMLElement);
+    infoModalElement = getElement('info-modal', HTMLElement);
     historyElement = getElement('history', HTMLElement);
     feedbackElement = getElement('feedback', HTMLElement);
     feedbacWrongCharacterElement = getElement('feedback_wrong_character', HTMLElement);
@@ -618,31 +626,25 @@ function renderSettingsModal() {
 
 function renderInfoModal() {
     infoModalElement.innerHTML = `
-    Attributions:
+    <h3>${t('info.attributions.title')}</h3>
     <ul>
         <li>
             <img src="info.svg" class="inline-button">
-            Info icon:
-            <a href="https://www.svgrepo.com/svg/474873/info">
-                from SVG Repo
-            </a>
-            CC0 License
+            ${t('info.attributions.info-icon')}:
+            <a href="https://www.svgrepo.com/svg/474780/combo-chart">SVG Repo</a>
+            (${t('info.attributions.cc0-license')})
         </li>
         <li>
             <img src="stats.svg" class="inline-button">
-            Statistics icon:
-            <a href="https://www.svgrepo.com/svg/474780/combo-chart">
-                from SVG Repo
-            </a>
-            CC0 License
+            ${t('info.attributions.statistics-icon')}:
+            <a href="https://www.svgrepo.com/svg/474780/combo-chart">SVG Repo</a>
+            (${t('info.attributions.cc0-license')})
         </li>
         <li>
             <img src="settings.svg" class="inline-button">
-            Settings icon:
-            <a href="https://www.svgrepo.com/svg/474982/settings">
-                from SVG Repo
-            </a>
-            CC0 License
+            ${t('info.attributions.settings-icon')}:
+            <a href="https://www.svgrepo.com/svg/474780/combo-chart">SVG Repo</a>
+            (${t('info.attributions.cc0-license')})
         </li>
     </ul>
     `;
