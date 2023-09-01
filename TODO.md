@@ -11,7 +11,7 @@
 - reinforcement
     - nice ding when copying X characters in a row without any error
     - the buzzer sound is negative reinforcement; this causes the brain to become risk averse; so, it opts for strategies that are perceived as less risky; this means that the brain will favor typing “less risky” keys over “more correct” keys, resulting in more mistakes
-    - have the user type the correct key
+    - have the user type the correct key after a mistake
 - current session might not be saved in history, but stats are still counted
 - style
     - '+ X points' pop-up messages
@@ -34,7 +34,7 @@
 ## Adaptative Training
 
 - focus on hard characters
-- adapt speed automatically
+- adapt speed automatically (target e.g. 5 % error rate)
 - add alphabet progressively (learner)
 - copy N at a time (“N blind”):
     - block input
