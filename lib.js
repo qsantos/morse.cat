@@ -26,6 +26,7 @@ const sessionHistory = (() => {
 })();
 
 const cwPlayer = new jscw();
+cwPlayer.q = 13;
 
 function pushWord() {
     const word = Array.from(
