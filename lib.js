@@ -25,14 +25,14 @@ const sessionHistory = (() => {
     }
 })();
 
-const m = new jscw();
+const cwPlayer = new jscw();
 
 function pushWord() {
     const word = Array.from(
         { length: settings.word_length },
         () => settings.charset[Math.floor(Math.random() * settings.charset.length)],
     ).join('');
-    m.setText(` ${word}`);
+    cwPlayer.setText(` ${word}`);
 }
 
 /** @type {string[]} */
@@ -769,7 +769,7 @@ function incrementCopiedCharacters(c) {
 
 function onFinished() {
     pushWord();
-    m.play();
+    cwPlayer.play();
 }
 
 function startSession() {
@@ -787,11 +787,11 @@ function startSession() {
     stats.copiedCharacters.lastSession = 0;
     stats.copiedWords.lastSession = 0;
     stats.score.lastSession = 0;
-    m.setWpm(settings.wpm);
-    m.setEff(settings.wpm);
-    m.setFreq(settings.tone);
-    m.onFinished = onFinished;
-    m.play();
+    cwPlayer.setWpm(settings.wpm);
+    cwPlayer.setEff(settings.wpm);
+    cwPlayer.setFreq(settings.tone);
+    cwPlayer.onFinished = onFinished;
+    cwPlayer.play();
     feedbackElement.classList.add('success');
     feedbackElement.classList.remove('failure');
     feedbacWrongCharacterElement.innerText = '';
@@ -812,9 +812,9 @@ function stopSession(expected, userInput) {
         return;
     }
 
-    m.stop();
+    cwPlayer.stop();
     inSession = false;
-    m.onFinished = undefined;
+    cwPlayer.onFinished = undefined;
     clearInterval(sessionDurationUpdater);
     sessionDurationUpdater = 0;
 
@@ -849,15 +849,15 @@ function stopSession(expected, userInput) {
  *  @param {string} [c] - The expected character (if any)
 */
 function replayAfterMistake(c) {
-    m.onFinished = () => {
-        m.onFinished = undefined;
-        m.setFreq(settings.tone);
+    cwPlayer.onFinished = () => {
+        cwPlayer.onFinished = undefined;
+        cwPlayer.setFreq(settings.tone);
         if (c !== undefined) {
-            m.play(` ${c}`);
+            cwPlayer.play(` ${c}`);
         }
     };
-    m.setFreq(settings.error_tone);
-    m.play('T');
+    cwPlayer.setFreq(settings.error_tone);
+    cwPlayer.play('T');
 }
 
 /** Format a character for display
@@ -957,13 +957,13 @@ document.addEventListener('keydown', (event) => {
     }
 
     feedbackCharacterElement.innerText = formatCharacter(expected);
-    feedbackCwElement.innerText = m.alphabet[expected] || '';
+    feedbackCwElement.innerText = cwPlayer.alphabet[expected] || '';
 });
 
 /** Event handler for when a character has been fully played
  *  @param {{c: string}} c - The character played
 */
-m.onCharacterPlay = (c) => {
+cwPlayer.onCharacterPlay = (c) => {
     if (!inSession) {
         return;
     }
