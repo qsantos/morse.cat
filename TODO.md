@@ -98,7 +98,10 @@
 
 # Keying Trainer
 
-- TODO
+- https://fr.aliexpress.com/item/1005005606806315.html
+- https://morsecode.me/#/help/about
+- https://vail.woozle.org/
+- https://hamradio.solutions/vband/
 
 # Tutorial
 
