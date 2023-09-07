@@ -320,7 +320,6 @@ function t(key) {
     if (translated) {
         return translated;
     } else {
-        console.warn(`Missing translation for ${key}`);
         return key;
     }
 }
