@@ -686,6 +686,7 @@ function asLanguage(lang) {
  *  @return {keyof typeof translations} lang - The preferred language
 */
 function getPreferredLanguage() {
+    /** @type {keyof typeof translations | null} */
     let lang = null;
     lang ||= asLanguage(new URL(document.location.href).searchParams.get('lang'));
     lang ||= asLanguage(localStorage.getItem('language'));
