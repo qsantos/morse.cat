@@ -25,6 +25,7 @@ const sessionHistory = (() => {
     }
 })();
 
+// @ts-ignore
 const cwPlayer = new jscw();
 cwPlayer.q = 13;
 
