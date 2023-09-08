@@ -5,12 +5,12 @@
         "target": "ES2015",
         "lib": [
             "dom",
-            "ES2015",
+            "ES2015"
         ],
         "noEmit": true,
-        "strict": true,
+        "strict": true
     },
     "files": [
         "src/lib.js"
-    ],
+    ]
 }
