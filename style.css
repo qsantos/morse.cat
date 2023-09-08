@@ -1,11 +1,29 @@
 body {
     position: relative;
-    margin: 5px 20px;
+    margin: 5px auto;
+    max-width: 62.5rem;
 }
 h1 {
+    color: #5a5a5b;
+    margin: 0;
     font-size: 50px;
-    font-family: sans-serif;
-    text-align: center;
+    font-family: 'Noto Sans Mono', 'DejaVu Sans Mono', monospace;
+}
+h1 ruby {
+    ruby-position: under;
+    ruby-align: center;
+}
+/* h1 ruby::first-letter does not work */
+h1 ruby .first-letter, h1 rt {
+    color: red;
+}
+h1 rt~rt {
+    color: inherit;
+}
+h1 rt {
+    font-size: 12px;
+    position:relative;
+    top:-10px;
 }
 nav {
     position: absolute;

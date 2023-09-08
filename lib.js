@@ -114,8 +114,7 @@ let infoElement;
 const translations = {
     en: {
         languageName: 'English',
-        pageTitle: 'Morse 😺',
-        mainHeader: 'Morse 😺',
+        pageTitle: 'Morse Cat 😺',
         'key.space': 'Space',
         'stats.title': 'Statistics',
         'stats.elapsed': 'Time',
@@ -153,8 +152,7 @@ const translations = {
     },
     fr: {
         languageName: 'French',
-        pageTitle: 'Morse 😺',
-        mainHeader: 'Morse 😺',
+        pageTitle: 'Morse Cat 😺',
         'key.space': 'Espace',
         'stats.title': 'Statistiques',
         'stats.elapsed': 'Temps',
@@ -192,8 +190,7 @@ const translations = {
     },
     ja: {
         languageName: '日本語',
-        pageTitle: 'モールス 😺',
-        mainHeader: 'モールス <ruby>😺<rp>(</rp><rt>カト</rt><rp>)</rp></ruby>',
+        pageTitle: 'Morse Cat 😺',
         'key.space': '空白',
         'stats.title': '統計',
         'stats.elapsed': '時間',
@@ -231,8 +228,7 @@ const translations = {
     },
     es: {
         languageName: 'Español',
-        pageTitle: 'Morse 😺',
-        mainHeader: 'Morse 😺',
+        pageTitle: 'Morse Cat 😺',
         'key.space': 'Espacio',
         'stats.title': 'Estadísticas',
         'stats.elapsed': 'Tiempo',
@@ -270,8 +266,7 @@ const translations = {
     },
     ca: {
         languageName: 'Català',
-        pageTitle: 'Morse 😺',
-        mainHeader: 'Morse 😺',
+        pageTitle: 'Morse Cat 😺',
         'key.space': 'Espai',
         'stats.title': 'Estadístiques',
         'stats.elapsed': 'Temps',
@@ -705,7 +700,6 @@ function setLanguage(lang) {
     activeLanguage = lang;
     document.title = t('pageTitle');
     localStorage.setItem('language', lang);
-    getElement('main-header', HTMLHeadingElement).innerHTML = t('mainHeader');
     renderHistory();
     renderSettingsModal();
     renderStatsModal();
