@@ -1,0 +1,19 @@
+name: Morse 😺
+
+on:
+  push:
+    branches: master
+  pull_request:
+    branches: master
+
+jobs:
+  front:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install dependencies
+        run: npm ci
+      - name: Verify TypeScript code
+        run: npx tsc --noEmit --lib dom,es2015 --target es2015 --allowJs --checkJs lib.js
+      # - name: Lint TypeScript code
+      #   run: npx eslint lib.js
