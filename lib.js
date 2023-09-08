@@ -114,7 +114,7 @@ let infoElement;
 const translations = {
     en: {
         languageName: 'English',
-        pageTitle: 'Morse Cat 😺',
+        pageTitle: 'Sharpen your claws and learn Morse code!',
         'key.space': 'Space',
         'stats.title': 'Statistics',
         'stats.elapsed': 'Time',
@@ -152,7 +152,7 @@ const translations = {
     },
     fr: {
         languageName: 'French',
-        pageTitle: 'Morse Cat 😺',
+        pageTitle: 'Aiguisez vos griffes et apprenez le code Morse !',
         'key.space': 'Espace',
         'stats.title': 'Statistiques',
         'stats.elapsed': 'Temps',
@@ -190,7 +190,7 @@ const translations = {
     },
     ja: {
         languageName: '日本語',
-        pageTitle: 'Morse Cat 😺',
+        pageTitle: '爪とぎしてモールス信号を学びましょう！',
         'key.space': '空白',
         'stats.title': '統計',
         'stats.elapsed': '時間',
@@ -228,7 +228,7 @@ const translations = {
     },
     es: {
         languageName: 'Español',
-        pageTitle: 'Morse Cat 😺',
+        pageTitle: '¡Afilen sus garras y aprendan el código Morse!',
         'key.space': 'Espacio',
         'stats.title': 'Estadísticas',
         'stats.elapsed': 'Tiempo',
@@ -266,7 +266,7 @@ const translations = {
     },
     ca: {
         languageName: 'Català',
-        pageTitle: 'Morse Cat 😺',
+        pageTitle: 'Esmola les urpes i aprèn codi Morse!',
         'key.space': 'Espai',
         'stats.title': 'Estadístiques',
         'stats.elapsed': 'Temps',
@@ -698,7 +698,7 @@ function setLanguage(lang) {
     document.documentElement.lang = lang;
     getElement('language-select', HTMLSelectElement).value = lang;
     activeLanguage = lang;
-    document.title = t('pageTitle');
+    document.title = 'Morse Cat 😺 - ' + t('pageTitle');
     localStorage.setItem('language', lang);
     renderHistory();
     renderSettingsModal();
