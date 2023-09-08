@@ -144,6 +144,8 @@ const translations = {
         'settings.charset.title': 'Customize Charset',
         'info.attributions.title': 'Attributions',
         'info.attributions.cc0-license': 'CC0 License',
+        'info.attributions.cc-by-license': 'CC-BY License',
+        'info.attributions.cat-icon': 'Cat icon',
         'info.attributions.info-icon': 'Info icon',
         'info.attributions.statistics-icon': 'Statistics icon',
         'info.attributions.settings-icon': 'Settings icon',
@@ -182,6 +184,8 @@ const translations = {
         'settings.charset.title': 'Choisir les caractères',
         'info.attributions.title': 'Attributions',
         'info.attributions.cc0-license': 'Licence CC0',
+        'info.attributions.cc-by-license': 'Licence CC-BY',
+        'info.attributions.cat-icon': 'Icône de chat',
         'info.attributions.info-icon': 'Icône d\'information',
         'info.attributions.statistics-icon': 'Icône des statistiques',
         'info.attributions.settings-icon': 'Icône des paramètres',
@@ -220,6 +224,8 @@ const translations = {
         'settings.charset.title': '文字セット',
         'info.attributions.title': '帰属',
         'info.attributions.cc0-license': 'CC0 ライセンス',
+        'info.attributions.cc-by-license': 'CC-BY ライセンス',
+        'info.attributions.cat-icon': '猫アイコン',
         'info.attributions.info-icon': '情報アイコン',
         'info.attributions.statistics-icon': '統計アイコン',
         'info.attributions.settings-icon': '設定アイコン',
@@ -258,6 +264,8 @@ const translations = {
         'settings.charset.title': 'Seleccionar los caracteres',
         'info.attributions.title': 'Atribuciones',
         'info.attributions.cc0-license': 'Licencia CC0',
+        'info.attributions.cc-by-license': 'Licencia CC-BY',
+        'info.attributions.cat-icon': 'Ícono de gato',
         'info.attributions.info-icon': 'Ícono de información',
         'info.attributions.statistics-icon': 'Ícono de estadísticas',
         'info.attributions.settings-icon': 'Ícono de ajustes',
@@ -296,6 +304,8 @@ const translations = {
         'settings.charset.title': 'Seleccionar els caràcters',
         'info.attributions.title': 'Atribucions',
         'info.attributions.cc0-license': 'Llicència CC0',
+        'info.attributions.cc-by-license': 'Llicència CC-BY',
+        'info.attributions.cat-icon': 'Icona de gat',
         'info.attributions.info-icon': 'Icona d\'informació',
         'info.attributions.statistics-icon': 'Icona d\'estadístiques',
         'info.attributions.settings-icon': 'Icona de configuració',
@@ -644,6 +654,12 @@ function renderInfoModal() {
     infoModalElement.innerHTML = `
     <h3>${t('info.attributions.title')}</h3>
     <ul>
+        <li>
+            <img src="cat.svg" class="inline-button">
+            ${t('info.attributions.cat-icon')}:
+            <a href="https://github.com/twitter/twemoji">Twemoji</a>
+            (${t('info.attributions.cc-by-license')})
+        </li>
         <li>
             <img src="info.svg" class="inline-button">
             ${t('info.attributions.info-icon')}:

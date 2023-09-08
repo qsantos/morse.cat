@@ -25,6 +25,9 @@ h1 rt {
     position:relative;
     top:-10px;
 }
+h1 img {
+    vertical-align: middle;
+}
 nav {
     position: absolute;
     top: 0;
