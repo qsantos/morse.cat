@@ -999,6 +999,9 @@ cwPlayer.onCharacterPlay = (c) => {
 };
 
 document.addEventListener('DOMContentLoaded', () => {
+    const catNose = getElement('nose', SVGElement);
+    cwPlayer.onLampOff = () => catNose.style.fill = '#E75A70';
+    cwPlayer.onLampOn = () => catNose.style.fill = 'yellow';
     setElements();
     refreshStats();
     feedbackElement.addEventListener('blur', () => {
