@@ -11,6 +11,6 @@ Morse 😺 is based on [jscwlib](https://fkurz.net/ham/jscwlib.html), the JavaSc
 # Lint
 
 ```
-$ npx eslint lib.js
-$ npx tsc --noEmit --lib dom,es2015 --target es2015 --allowJs --checkJs lib.js
+$ npx eslint src/lib.js
+$ npx tsc --noEmit --lib dom,es2015 --target es2015 --allowJs --checkJs src/lib.js
 ```

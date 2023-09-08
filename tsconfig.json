@@ -11,6 +11,6 @@
         "strict": true,
     },
     "files": [
-        "lib.js"
+        "src/lib.js"
     ],
 }
