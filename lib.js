@@ -714,7 +714,7 @@ function setLanguage(lang) {
     document.documentElement.lang = lang;
     getElement('language-select', HTMLSelectElement).value = lang;
     activeLanguage = lang;
-    document.title = 'Morse Cat 😺 - ' + t('pageTitle');
+    document.title = 'Morse Cat - ' + t('pageTitle');
     localStorage.setItem('language', lang);
     renderHistory();
     renderSettingsModal();
