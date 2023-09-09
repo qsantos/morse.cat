@@ -1,3 +1,6 @@
+* {
+    box-sizing: border-box;
+}
 body {
     position: relative;
     margin: 5px auto;
@@ -101,4 +104,35 @@ nav {
     list-style: none;
     color: linear-gradient(#f69d3c, #3f87a6);;
     overflow: hidden;
+}
+#current-session {
+    display: flex;
+    border: 4px solid #ddd;
+    border-radius: 4px;
+    padding: 4px;
+}
+#current-session input {
+    flex: 1;
+    border: none;
+    outline: none;
+    padding: 3px 0px 3px 10px;
+    font-size: 22px;
+    height: 34px;
+    color: rgba(0,0,0,0.75);
+}
+#current-session a {
+    padding: 11px;
+    margin: 0 5px;
+    cursor: pointer;
+    height: 36px;
+    width: 36px;
+}
+#current-session button {
+    border: none;
+    border-radius: 0 1px 1px 0;
+    padding: 7px 9px 7px 9px;
+    cursor: pointer;
+    background-color: #eeeeee;
+    height: 36px;
+    width: 36px;
 }
