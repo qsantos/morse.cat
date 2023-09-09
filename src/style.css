@@ -126,6 +126,13 @@ nav {
     cursor: pointer;
     height: 36px;
     width: 36px;
+    position: relative;
+}
+#current-session a>svg {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 #current-session button {
     border: none;
