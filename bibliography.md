@@ -1,3 +1,39 @@
+1937 Koch Dissertation (Arbeitspsychologische Untersuchung der Tätigkeit bei der Aufnahme von Morsezeichen, zugleich ein neues Anlernverfahren für Funker)
+- (page 27) the analytical method: transcribing heard Morse to paper as dots and dashes, then translating this to letters
+    - breaks connection between sound and meaning
+    - lots of back-and-forth between different modes (listening, writing, reading)
+- (page 30) the sound method: first learn the optical representation, then learn to recognize sound
+    - encourages the student to fallback to the optical representation
+    - there is a plateau when student switch from optical mental model to sound mental model, w.r.t. increasing speed
+    - Farnsworth?
+    - the plateau is around 50 characters per minute, i.e. 10 WPM
+    - (page 33) 1. Errors that prevent the formation of acoustic wholeness (shape, sound pattern)
+        - Errors:
+            - a) Detour via the optical symbol
+            - b) Decomposition of the acoustic shape of the sign
+            - c) Switching from listening to the decomposed sign to listening to the sound image.
+        - Improvement:
+            - a) Switching off the optical symbols.
+            - b) Giving the sign in the form of the sound image
+            - c) To give the sound image immediately at the beginning of the learning.
+    - (page 33) 2. Errors that interfere with the formation of the unit of meaning between the acoustic impression and the letters
+        - Errors:
+            - a) Guessing which sign could come
+            - b) Thinking about the sign during the lukewarm pause
+            - c) Change from thinking and translating to the unity of meaning between the acoustic sign and the letters
+            - d) Change in the overall rhythm
+        - Improvement:
+            - a) Giving the sign as a sound image.
+            - b) Giving in a higher tempo.
+            - c) High tempo already at the beginning of learning.
+            - d) Begin with a fast tempo and maintain it.
+- (page 34) Koch's approach
+    - no optical representation
+    - start at 60 characters per minute (12 WPM?)
+    - different tones for dits and dahs, which are progressively brought together in the middle of the training
+    - start with only two letters, than add more progressively
+- (page 38) starting at 20 WPM seems harder on the students
+
 1943 The Learning of Radiotelegraphic Code https://www.jstor.org/stable/1417382
 - copy
     - no difference between starting with slow or fast characters
