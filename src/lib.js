@@ -942,10 +942,8 @@ document.addEventListener('keydown', (event) => {
         return;
     }
 
-    // stop space from scrolling the page while in session
-    if (userInput === ' ') {
-        event.preventDefault();
-    }
+    // stop space from scrolling the page while in session, tab for losing the focus, etc.
+    event.preventDefault();
 
     // stop when user hits Escape key
     if (userInput === 'escape') {
