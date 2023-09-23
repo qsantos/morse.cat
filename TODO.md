@@ -4,6 +4,7 @@
 
 # Copy Trainer
 
+- show characters as they are played
 - translate explanation text
 - translate attributions
 - give 1 “free miss” every 20 correctly copied character
