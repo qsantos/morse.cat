@@ -917,6 +917,7 @@ function closeIfOutsideDialog(event) {
     }
     // close it!
     target.close();
+    return false;
 }
 
 document.addEventListener('keydown', (event) => {
