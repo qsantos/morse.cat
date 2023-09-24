@@ -378,7 +378,7 @@ function lcwoLessonFromCharset(charset) {
     let i = 0;
     while (i < lcwoLessons.length) {
         const c = lcwoLessons[i];
-        if (s.has(c)) {
+        if (c !== undefined && s.has(c)) {
             s.delete(c);
         } else {
             break;
