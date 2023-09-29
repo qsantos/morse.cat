@@ -1,4 +1,5 @@
 1937 Koch Dissertation (Arbeitspsychologische Untersuchung der Tätigkeit bei der Aufnahme von Morsezeichen, zugleich ein neues Anlernverfahren für Funker)
+- see https://qsantos.fr/2023/09/22/koch-dissertation-on-learning-morse-code/
 - (page 27) the analytical method: transcribing heard Morse to paper as dots and dashes, then translating this to letters
     - breaks connection between sound and meaning
     - lots of back-and-forth between different modes (listening, writing, reading)
