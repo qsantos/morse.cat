@@ -15,7 +15,6 @@
 - style
     - '+ X points' pop-up messages
     - buttons to close modal windows
-    - favicon
 - cache busting
 - take WPM into account in score
 
