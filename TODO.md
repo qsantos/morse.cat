@@ -49,9 +49,3 @@
 - https://morsecode.me/#/help/about
 - https://vail.woozle.org/
 - https://hamradio.solutions/vband/
-
-# Tutorial
-
-- stop your brain from trying to predict the next characters
-- starting a session should never risk diminishing a metric
-- prolonging a session by not making a mistake should never diminish a metric
