@@ -143,8 +143,10 @@ const translations = {
         'settings.lcwo.title': '<a href="https://lcwo.net/" title="Learn CW Online">LCWO</A> Lesson',
         'settings.charset.title': 'Customize Charset',
         'info.attributions.title': 'Attributions',
+        'info.attributions.mit-license': 'MIT License',
         'info.attributions.cc0-license': 'CC0 License',
         'info.attributions.cc-by-license': 'CC-BY License',
+        'info.attributions.jscwlib': 'JavaScript library for Morse Code',
         'info.attributions.cat-icon': 'Cat icon',
         'info.attributions.info-icon': 'Info icon',
         'info.attributions.statistics-icon': 'Statistics icon',
@@ -183,8 +185,10 @@ const translations = {
         'settings.lcwo.title': 'Leçon <a href="https://lcwo.net/" title="Learn CW Online">LCWO</A>',
         'settings.charset.title': 'Choisir les caractères',
         'info.attributions.title': 'Attributions',
+        'info.attributions.mit-license': 'Licence MIT',
         'info.attributions.cc0-license': 'Licence CC0',
         'info.attributions.cc-by-license': 'Licence CC-BY',
+        'info.attributions.jscwlib': 'Bibliothèque JavaScript pour le code Morse',
         'info.attributions.cat-icon': 'Icône de chat',
         'info.attributions.info-icon': 'Icône d\'information',
         'info.attributions.statistics-icon': 'Icône des statistiques',
@@ -223,8 +227,10 @@ const translations = {
         'settings.lcwo.title': '<a href="https://lcwo.net/" title="Learn CW Online">LCWO</A> レッスン',
         'settings.charset.title': '文字セット',
         'info.attributions.title': '帰属',
+        'info.attributions.mit-license': 'MIT ライセンス',
         'info.attributions.cc0-license': 'CC0 ライセンス',
         'info.attributions.cc-by-license': 'CC-BY ライセンス',
+        'info.attributions.jscwlib': 'モールス信号用JavaScriptライブラリ',
         'info.attributions.cat-icon': '猫アイコン',
         'info.attributions.info-icon': '情報アイコン',
         'info.attributions.statistics-icon': '統計アイコン',
@@ -263,8 +269,10 @@ const translations = {
         'settings.lcwo.title': 'Leccíon <a href="https://lcwo.net/" title="Learn CW Online">LCWO</A>',
         'settings.charset.title': 'Seleccionar los caracteres',
         'info.attributions.title': 'Atribuciones',
+        'info.attributions.mit-license': 'Licencia MIT',
         'info.attributions.cc0-license': 'Licencia CC0',
         'info.attributions.cc-by-license': 'Licencia CC-BY',
+        'info.attributions.jscwlib': 'Biblioteca JavaScript para código Morse',
         'info.attributions.cat-icon': 'Ícono de gato',
         'info.attributions.info-icon': 'Ícono de información',
         'info.attributions.statistics-icon': 'Ícono de estadísticas',
@@ -303,8 +311,10 @@ const translations = {
         'settings.lcwo.title': 'Lliçó <a href="https://lcwo.net/" title="Learn CW Online">LCWO</A>',
         'settings.charset.title': 'Seleccionar els caràcters',
         'info.attributions.title': 'Atribucions',
+        'info.attributions.mit-license': 'Llicència MIT',
         'info.attributions.cc0-license': 'Llicència CC0',
         'info.attributions.cc-by-license': 'Llicència CC-BY',
+        'info.attributions.jscwlib': 'Biblioteca JavaScript per al codi Morse',
         'info.attributions.cat-icon': 'Icona de gat',
         'info.attributions.info-icon': 'Icona d\'informació',
         'info.attributions.statistics-icon': 'Icona d\'estadístiques',
@@ -654,6 +664,11 @@ function renderInfoModal() {
     infoModalElement.innerHTML = `
     <h3>${t('info.attributions.title')}</h3>
     <ul>
+        <li>
+            ${t('info.attributions.jscwlib')}:
+            <a href="https://fkurz.net/ham/jscwlib.html">jscwlib</a>
+            (${t('info.attributions.mit-license')})
+        </li>
         <li>
             <img src="cat.svg" class="inline-button">
             ${t('info.attributions.cat-icon')}:
