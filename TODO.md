@@ -10,7 +10,6 @@
 - make script loading async
 - reinforcement
     - nice ding when copying X characters in a row without any error
-    - the buzzer sound is negative reinforcement; this causes the brain to become risk averse; so, it opts for strategies that are perceived as less risky; this means that the brain will favor typing “less risky” keys over “more correct” keys, resulting in more mistakes
     - have the user type the correct key after a mistake
 - current session might not be saved in history, but stats are still counted
 - style
