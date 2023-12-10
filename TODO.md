@@ -1,3 +1,16 @@
+- normalized adjusted score (take into account lucky vs unlucky draws)
+- per-letter success rate
+- stats about how much copy ahead
+- morse machine-like, but play ahead to keep closer to real speed
+- practice several time on the same text
+- types of errors:
+    - recognition
+    - mapping to character
+    - mapping to keyboard
+    - hitting key
+- do not stop nor notify on error, just make the character more frequent
+- when mistake, start next session with correct character of mistake
+
 # Copy Trainer
 
 - modes: displayed/interaction/feedback
@@ -6,6 +19,7 @@
     - head-copy                 → nothing    / text field+return / sent text
     - spot the word             → nothing    / return            / last X+Y characters
     - delayed feedback          → nothing    / text field+return / diff
+        - detect whether correcting oneself during the session causes one to make more mistakes
 - translate explanation text
 - make script loading async
 - reinforcement

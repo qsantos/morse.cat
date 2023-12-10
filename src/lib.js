@@ -551,7 +551,7 @@ function renderStatsModal() {
 }
 
 /** Format the current session
- *  @return {string} - The formated current session
+ *  @return {string} - The formatted current session
 */
 function formatCurrentSession() {
     let ret;
@@ -566,7 +566,7 @@ function formatCurrentSession() {
 
 /** Format an history entry
  *  @param {import("./types").HistoryEntry} entry - The entry to format
- *  @return {string} - The formated entry
+ *  @return {string} - The formatted entry
 */
 function formatHistoryEntry(entry) {
     let ret = `<span class="meta"><time datetime="${entry.started}">${entry.started}</time>:</span> ${entry.copiedText}`;
@@ -919,7 +919,7 @@ function fail(expected, userInput) {
 function closeIfOutsideDialog(event) {
     const { target } = event;
     if (target.tagName !== 'DIALOG') {
-        // the target is a DOM elemnt within the dialog
+        // the target is a DOM element within the dialog
         return false;
     }
     // check that the click is within the dialog
