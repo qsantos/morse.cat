@@ -1033,7 +1033,7 @@ document.addEventListener('keydown', (event) => {
     // played[nextIndex] is undefined if nextIndex >= played.length
     const sent = played[stats.copiedCharacters.lastSession];
     const expected = sent?.character.toLowerCase();
-    if (userInput === expected) {
+    if (sent && userInput === expected) {
         // correct
         incrementCopiedCharacters(sent);
         renderHistory();
