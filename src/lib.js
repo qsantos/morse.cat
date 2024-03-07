@@ -25,6 +25,15 @@ const sessionHistory = (() => {
     }
 })();
 
+/** @type{import("./types").TransmittedCharacter[]} */
+const characters = (() => {
+    try {
+        return JSON.parse(localStorage.getItem('characters') || '');
+    } catch (e) {
+        return [];
+    }
+})();
+
 // @ts-ignore
 const cwPlayer = new jscw();
 cwPlayer.q = 13;
@@ -37,7 +46,7 @@ function pushWord() {
     cwPlayer.setText(` ${word}`);
 }
 
-/** @type {string[]} */
+/** @type {import("./types").SentCharacter[]} */
 const played = [];
 let copiedText = '';
 let inSession = false;
@@ -775,18 +784,26 @@ function increaseStat(stat, amount) {
 }
 
 /** Update the stats after a character was copied
- *  @param {string} c - The copied character
+ *  @param {import("./types").SentCharacter} sent - The copied character
 */
-function incrementCopiedCharacters(c) {
-    copiedText += c;
+function incrementCopiedCharacters(sent) {
+    copiedText += sent.character;
 
     const now = new Date();
     const elapsedSinceStart = Math.round((now.getTime() - sessionStart.getTime()) / 1000);
     const newElapsed = elapsedSinceStart - stats.elapsed.lastSession;
 
+    const received = {
+        time: now.toISOString(),
+        character: sent.character,
+    };
+
+    characters.push({ sent, received });
+    localStorage.setItem('characters', JSON.stringify(characters));
+
     increaseStat(stats.elapsed, newElapsed);
     increaseStat(stats.copiedCharacters, 1);
-    if (c === ' ') {
+    if (sent.character === ' ') {
         increaseStat(stats.copiedWords, 1);
     }
     increaseStat(stats.score, stats.copiedWords.lastSession + 1);
@@ -831,13 +848,29 @@ function startSession() {
 }
 
 /** End the current session
- *  @param {string} [expected] - The expected character (if any)
+ *  @param {import("./types").SentCharacter} [sent] - The character initially sent (if any)
  *  @param {string} [userInput] - What the user copied (if any)
 */
-function stopSession(expected, userInput) {
+function stopSession(sent, userInput) {
     if (!inSession) {
         return;
     }
+
+    let lastReceivedIndex = stats.copiedCharacters.lastSession;
+    if (userInput) {
+        // save incorrectly received character
+        const received = {
+            time: new Date().toISOString(),
+            character: userInput,
+        };
+        characters.push({ sent, received });
+        lastReceivedIndex += 1;
+    }
+    // save characters that were sent but not received at all
+    for (const sent of played.slice(lastReceivedIndex)) {
+        characters.push({ sent })
+    }
+    localStorage.setItem('characters', JSON.stringify(characters));
 
     cwPlayer.stop();
     inSession = false;
@@ -850,8 +883,8 @@ function stopSession(expected, userInput) {
         started: sessionStart.toISOString(),
         finished: new Date().toISOString(),
         copiedText,
-        mistake: !expected || !userInput ? null : {
-            expectedCharacter: expected,
+        mistake: !sent || !userInput ? null : {
+            expectedCharacter: sent.character,
             mistakenCharacter: userInput,
         },
         settings,
@@ -902,12 +935,12 @@ function formatCharacter(c) {
 }
 
 /** Interrupt a session due to an user error
- *  @param {string} [expected] - The expected character (if any)
+ *  @param {import("./types").SentCharacter} [sent] - The expected character (if any)
  *  @param {string} [userInput] - What the user copied (if any)
 */
-function fail(expected, userInput) {
-    stopSession(expected, userInput);
-    replayAfterMistake(expected);
+function fail(sent, userInput) {
+    stopSession(sent, userInput);
+    replayAfterMistake(sent.character);
     feedbackElement.classList.remove('success');
     feedbackElement.classList.add('failure');
     feedbacWrongCharacterElement.innerText = formatCharacter(userInput);
@@ -972,14 +1005,16 @@ document.addEventListener('keydown', (event) => {
     }
 
     // played[nextIndex] is undefined if nextIndex >= played.length
-    const expected = played[stats.copiedCharacters.lastSession]?.toLowerCase();
+    const sent = played[stats.copiedCharacters.lastSession];
+    const expected = sent?.character.toLowerCase();
     if (userInput === expected) {
         // correct
-        incrementCopiedCharacters(expected);
+        incrementCopiedCharacters(sent);
         renderHistory();
     } else {
         // incorrect
-        fail(expected, userInput);
+        // play sound, replay character, and end session
+        fail(sent, userInput);
     }
 
     feedbackCharacterElement.innerText = formatCharacter(expected);
@@ -1000,7 +1035,10 @@ cwPlayer.onCharacterPlay = (c) => {
     }
 
     // add character
-    played.push(c.c);
+    played.push({
+        time: new Date().toISOString(),
+        character: c.c,
+    });
 
     // detect when user has stopped copying
     if (played.length - copiedText.length > 5) {

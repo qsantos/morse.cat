@@ -22,6 +22,21 @@ export type Settings = {
     charset: string,
 };
 
+export type SentCharacter = {
+    time: string,
+    character: string,
+};
+
+export type ReceivedCharacter = {
+    time: string,
+    character: string,
+};
+
+export type TransmittedCharacter = {
+    sent?: SentCharacter,
+    received?: ReceivedCharacter,
+};
+
 export type Mistake = {
     expectedCharacter: string,
     mistakenCharacter: string,
