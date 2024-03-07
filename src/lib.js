@@ -817,7 +817,7 @@ function incrementCopiedCharacters(sent) {
         character: sent.character,
     };
 
-    characters.push({ sessionId, sent, received });
+    characters.push({ sessionId, result: "Correct", sent, received });
     localStorage.setItem('characters', JSON.stringify(characters));
 
     increaseStat(stats.elapsed, newElapsed);
@@ -884,15 +884,17 @@ function stopSession(sent, userInput) {
             character: userInput,
         };
         if (sent) {
-            characters.push({ sessionId, sent, received });
+            // should always be "Incorrect", but just in case
+            const result = sent.character === received.character ? "Correct" : "Incorrect";
+            characters.push({ sessionId, result, sent, received });
         } else {
-            characters.push({ sessionId, received });
+            characters.push({ sessionId, result: "Extraneous", received });
         }
         lastReceivedIndex += 1;
     }
     // save characters that were sent but not received at all
     for (const sent of played.slice(lastReceivedIndex)) {
-        characters.push({ sessionId, sent })
+        characters.push({ sessionId, result: "Pending", sent })
     }
     localStorage.setItem('characters', JSON.stringify(characters));
 

@@ -33,8 +33,16 @@ export type ReceivedCharacter = {
     character: string,
 };
 
+export enum TransmissionResult {
+    Correct    = "Correct",    // character A sent, character A received
+    Incorrect  = "Incorrect",  // character A sent, character B received
+    Pending    = "Pending",    // character sent, but never received (too slow, out of focus, earlier error)
+    Extraneous = "Extraneous", // no character sent, but one received
+}
+
 export type TransmittedCharacter = {
     sessionId: string,
+    result: TransmissionResult,
     sent?: SentCharacter,
     received?: ReceivedCharacter,
 };
