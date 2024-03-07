@@ -53,7 +53,6 @@ nav {
     width:200px;
     height:200px;
     margin: 0 auto;
-    font-weight: bold;
     color: white;
     background-color: #3677b3;
     text-align: center;
@@ -68,11 +67,15 @@ nav {
     min-height: 1.25em;
     line-height: 1.25;
     font-variant-caps: small-caps;
-    font-size: 50px;
     font-family: sans-serif;
+}
+#feedback_character {
+    font-weight: bold;
+    font-size: 50px;
 }
 #feedback_wrong_character {
     text-decoration: line-through;
+    font-size: 20px;
 }
 .strike {
     text-decoration: line-through;
@@ -86,7 +89,7 @@ nav {
     color: #b11d1d;
 }
 #feedback_cw {
-    font-size: 40px;
+    font-size: 30px;
 }
 #history {
     position: relative;
