@@ -863,7 +863,11 @@ function stopSession(sent, userInput) {
             time: new Date().toISOString(),
             character: userInput,
         };
-        characters.push({ sent, received });
+        if (sent) {
+            characters.push({ sent, received });
+        } else {
+            characters.push({ received });
+        }
         lastReceivedIndex += 1;
     }
     // save characters that were sent but not received at all
@@ -940,7 +944,7 @@ function formatCharacter(c) {
 */
 function fail(sent, userInput) {
     stopSession(sent, userInput);
-    replayAfterMistake(sent.character);
+    replayAfterMistake(sent?.character);
     feedbackElement.classList.remove('success');
     feedbackElement.classList.add('failure');
     feedbacWrongCharacterElement.innerText = formatCharacter(userInput);
