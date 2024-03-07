@@ -34,6 +34,7 @@ export type ReceivedCharacter = {
 };
 
 export type TransmittedCharacter = {
+    sessionId: string,
     sent?: SentCharacter,
     received?: ReceivedCharacter,
 };

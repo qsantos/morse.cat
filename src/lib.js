@@ -50,6 +50,7 @@ function pushWord() {
 const played = [];
 let copiedText = '';
 let inSession = false;
+let sessionId = '';
 /** @type {Date} */
 let sessionStart;
 /** @type {number} */
@@ -816,7 +817,7 @@ function incrementCopiedCharacters(sent) {
         character: sent.character,
     };
 
-    characters.push({ sent, received });
+    characters.push({ sessionId, sent, received });
     localStorage.setItem('characters', JSON.stringify(characters));
 
     increaseStat(stats.elapsed, newElapsed);
@@ -843,6 +844,7 @@ function startSession() {
     played.length = 0;
     copiedText = '';
     inSession = true;
+    sessionId = crypto.randomUUID(),
     sessionStart = new Date();
     sessionDurationUpdater = setInterval(refreshStats, 1000);
     stats.elapsed.lastSession = 0;
@@ -882,15 +884,15 @@ function stopSession(sent, userInput) {
             character: userInput,
         };
         if (sent) {
-            characters.push({ sent, received });
+            characters.push({ sessionId, sent, received });
         } else {
-            characters.push({ received });
+            characters.push({ sessionId, received });
         }
         lastReceivedIndex += 1;
     }
     // save characters that were sent but not received at all
     for (const sent of played.slice(lastReceivedIndex)) {
-        characters.push({ sent })
+        characters.push({ sessionId, sent })
     }
     localStorage.setItem('characters', JSON.stringify(characters));
 
@@ -901,7 +903,7 @@ function stopSession(sent, userInput) {
     sessionDurationUpdater = 0;
 
     const session = {
-        id: crypto.randomUUID(),
+        id: sessionId,
         started: sessionStart.toISOString(),
         finished: new Date().toISOString(),
         copiedText,
