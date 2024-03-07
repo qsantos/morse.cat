@@ -783,6 +783,24 @@ function increaseStat(stat, amount) {
     stat.bestDay = Math.max(stat.bestDay, stat.currentDay);
 }
 
+/** Compute the duration of a character with the current settings
+ *  @param {string} c - The character
+ *  @return {number} - Duration of the character, in seconds
+*/
+function characterDuration(c) {
+    const dotlen = cwPlayer.dotlen;
+    if (dotlen === undefined) {
+        throw new Error('characterDuration called before JSCWlib initialized');
+    }
+    let time = 0;
+    for (const el of cwPlayer.alphabet[c] || " ") {
+        const dits = el == "-" ? 3 : 1;
+        // + 1 for symbol space
+        time += dotlen * (dits + 1);
+    }
+    return time;
+}
+
 /** Update the stats after a character was copied
  *  @param {import("./types").SentCharacter} sent - The copied character
 */
@@ -1042,6 +1060,7 @@ cwPlayer.onCharacterPlay = (c) => {
     played.push({
         time: new Date().toISOString(),
         character: c.c,
+        duration: characterDuration(c.c),
     });
 
     // detect when user has stopped copying

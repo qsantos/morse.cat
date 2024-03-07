@@ -25,6 +25,7 @@ export type Settings = {
 export type SentCharacter = {
     time: string,
     character: string,
+    duration: number,
 };
 
 export type ReceivedCharacter = {
