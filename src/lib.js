@@ -5,7 +5,7 @@ const lcwoLessons = 'KMURESNAPTLWI.JZ=FOY,VG5/Q92H38B?47C1D60X';
 
 /** @type {IDBDatabase | null} */
 let db = null;
-/* @param {() => void} callback */
+/** @param {() => void} callback */
 function prepareDB(callback) {
     // indexedDB.deleteDatabase('morse.cat') // TODO
     const request = indexedDB.open("morse.cat", 1);
