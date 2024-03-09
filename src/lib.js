@@ -3,10 +3,30 @@ const digits = '0123456789'; // 0-9
 const punct = '.,:?\'-/()"=+×@';
 const lcwoLessons = 'KMURESNAPTLWI.JZ=FOY,VG5/Q92H38B?47C1D60X';
 
-/* prepare IndexedDB */
-const request = indexedDB.open("morse.cat", 1);
-request.onerror = () => {
-    alert("Failed to open IndexedDB; histroy won't be saved");
+/** @type {IDBDatabase | null} */
+let db = null;
+/* @param {() => void} callback */
+function prepareDB(callback) {
+    // indexedDB.deleteDatabase('morse.cat') // TODO
+    const request = indexedDB.open("morse.cat", 1);
+    request.onerror = () => {
+        alert("Failed to open IndexedDB; histroy won't be saved");
+    }
+    request.onupgradeneeded = () => {
+        const db = request.result;
+        const sessionsStore = db.createObjectStore('sessions', { keyPath: 'id' });
+        sessionsStore.createIndex('started', 'started');
+        const charactersStore = db.createObjectStore('characters', { keyPath: 'id' });
+        charactersStore.transaction.oncomplete = () => {
+            // import existing data
+            importLegacyData(db, 'history', 'sessions');
+            importLegacyData(db, 'characters', 'characters');
+        };
+    };
+    request.onsuccess = () => {
+        db = request.result;
+        callback();
+    }
 }
 
 /**
@@ -28,24 +48,6 @@ function importLegacyData(db, key, store) {
     } catch (e) {
         return;
     }
-}
-
-request.onupgradeneeded = () => {
-    const db = request.result;
-    const sessionsStore = db.createObjectStore('sessions', { keyPath: 'id' });
-    sessionsStore.createIndex('started', 'started');
-    const charactersStore = db.createObjectStore('characters', { keyPath: 'id' });
-    charactersStore.transaction.oncomplete = () => {
-        // import existing data
-        importLegacyData(db, 'history', 'sessions');
-        importLegacyData(db, 'characters', 'characters');
-    };
-};
-
-/** @type {IDBDatabase | null} */
-let db = null;
-request.onsuccess = () => {
-    db = request.result;
 }
 
 /**
@@ -1159,7 +1161,7 @@ cwPlayer.onCharacterPlay = (c) => {
     }
 };
 
-document.addEventListener('DOMContentLoaded', () => {
+function main() {
     const catNose = getElement('nose', SVGElement);
     cwPlayer.onLampOff = () => catNose.style.fill = '#E75A70';
     cwPlayer.onLampOn = () => catNose.style.fill = 'yellow';
@@ -1176,4 +1178,21 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     setLanguage(getPreferredLanguage());
     restoreSettings();
+}
+
+let domReady = false;
+let dbReady = false;
+document.addEventListener('DOMContentLoaded', () => {
+    if (dbReady) {
+        main();
+    } else {
+        domReady = true;
+    }
+});
+prepareDB(() => {
+    if (domReady) {
+        main();
+    } else {
+        dbReady = true;
+    }
 });
