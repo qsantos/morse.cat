@@ -2,6 +2,108 @@ const latin = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'; // A-Z
 const digits = '0123456789'; // 0-9
 const punct = '.,:?\'-/()"=+×@';
 const lcwoLessons = 'KMURESNAPTLWI.JZ=FOY,VG5/Q92H38B?47C1D60X';
+
+/* prepare IndexedDB */
+const request = indexedDB.open("morse.cat", 1);
+request.onerror = () => {
+    alert("Failed to open IndexedDB; histroy won't be saved");
+}
+
+/**
+ *  @param {IDBDatabase} db - The indexedDB database
+ *  @param {string} key - Name of the legacy localStorage entry
+ *  @param {string} store - Name of the indexedDB storeObject
+*/
+function importLegacyData(db, key, store) {
+    try {
+        const entries = JSON.parse(localStorage.getItem(key) || '');
+        const transaction = db.transaction([store], 'readwrite');
+        const sessionStore = transaction.objectStore(store);
+        for (const entry of entries) {
+            entry.id = crypto.randomUUID();
+            sessionStore.add(entry);
+        }
+        transaction.commit();
+        console.info('Imported "' + key + '" from local storage into IndexedDB');
+    } catch (e) {
+        return;
+    }
+}
+
+request.onupgradeneeded = () => {
+    const db = request.result;
+    const sessionsStore = db.createObjectStore('sessions', { keyPath: 'id' });
+    sessionsStore.createIndex('started', 'started');
+    const charactersStore = db.createObjectStore('characters', { keyPath: 'id' });
+    charactersStore.transaction.oncomplete = () => {
+        // import existing data
+        importLegacyData(db, 'history', 'sessions');
+        importLegacyData(db, 'characters', 'characters');
+    };
+};
+
+/** @type {IDBDatabase | null} */
+let db = null;
+request.onsuccess = () => {
+    db = request.result;
+}
+
+/**
+ * @param {import("./types").HistoryEntry} session
+*/
+function saveSession(session) {
+    if (!db) {
+        return;
+    }
+    const transaction = db.transaction(['sessions'], 'readwrite');
+    const objectStore = transaction.objectStore('sessions');
+    objectStore.add(session);
+}
+
+/**
+ * @param {import("./types").TransmittedCharacter} character
+*/
+function saveCharacter(character) {
+    if (!db) {
+        return;
+    }
+    const transaction = db.transaction(['characters'], 'readwrite');
+    const objectStore = transaction.objectStore('characters');
+    if (!character.id) {
+        character.id = crypto.randomUUID();
+    }
+    objectStore.add(character);
+}
+
+/**
+ * @param {number} count
+ * @param {(sessions: import("./types").HistoryEntry[]) => void} callback
+*/
+function getLastSessions(count, callback) {
+    if (!db) {
+        return;
+    }
+    // IndexedBD must be a joke
+    const transaction = db.transaction('sessions');
+    const objectStore = transaction.objectStore('sessions');
+    const index = objectStore.index('started');
+    const request = index.openCursor(null, 'prev');
+    /** @type{import("./types").HistoryEntry[]} */
+    const sessions = [];
+    request.onsuccess = () => {
+        const result = request.result;
+        if (result) {
+            sessions.push(result.value);
+        }
+        if (result && sessions.length < count) {
+            result.continue();
+        } else {
+            sessions.reverse();
+            callback(sessions);
+        }
+    }
+}
+
 /** @type{import("./types").Settings} */
 const settings = (() => {
     try {
@@ -14,23 +116,6 @@ const settings = (() => {
             word_length: 5,
             charset: lcwoLessons,
         };
-    }
-})();
-/** @type{import("./types").History} */
-const sessionHistory = (() => {
-    try {
-        return JSON.parse(localStorage.getItem('history') || '');
-    } catch (e) {
-        return [];
-    }
-})();
-
-/** @type{import("./types").TransmittedCharacter[]} */
-const characters = (() => {
-    try {
-        return JSON.parse(localStorage.getItem('characters') || '');
-    } catch (e) {
-        return [];
     }
 })();
 
@@ -588,9 +673,10 @@ function formatHistoryEntry(entry) {
 }
 
 function renderHistory() {
-    const entries = sessionHistory.slice(-10);
-    const formattedEntries = [...entries.map(formatHistoryEntry)];
-    historyElement.innerHTML = formatCurrentSession() + formattedEntries.reverse().join('');
+    getLastSessions(10, (sessions) => {
+        const formattedEntries = [...sessions.map(formatHistoryEntry)];
+        historyElement.innerHTML = formatCurrentSession() + formattedEntries.reverse().join('');
+    });
 }
 
 function renderSettingsModal() {
@@ -817,8 +903,12 @@ function incrementCopiedCharacters(sent) {
         character: sent.character,
     };
 
-    characters.push({ sessionId, result: "Correct", sent, received });
-    localStorage.setItem('characters', JSON.stringify(characters));
+    saveCharacter({
+        sessionId,
+        result: "Correct",
+        sent,
+        received,
+    });
 
     increaseStat(stats.elapsed, newElapsed);
     increaseStat(stats.copiedCharacters, 1);
@@ -886,17 +976,16 @@ function stopSession(sent, userInput) {
         if (sent) {
             // should always be "Incorrect", but just in case
             const result = sent.character === received.character ? "Correct" : "Incorrect";
-            characters.push({ sessionId, result, sent, received });
+            saveCharacter({ sessionId, result, sent, received });
         } else {
-            characters.push({ sessionId, result: "Extraneous", received });
+            saveCharacter({ sessionId, result: "Extraneous", received });
         }
         lastReceivedIndex += 1;
     }
     // save characters that were sent but not received at all
     for (const sent of played.slice(lastReceivedIndex)) {
-        characters.push({ sessionId, result: "Pending", sent })
+        saveCharacter({ sessionId, result: "Pending", sent })
     }
-    localStorage.setItem('characters', JSON.stringify(characters));
 
     cwPlayer.stop();
     inSession = false;
@@ -904,7 +993,7 @@ function stopSession(sent, userInput) {
     clearInterval(sessionDurationUpdater);
     sessionDurationUpdater = 0;
 
-    const session = {
+    saveSession({
         id: sessionId,
         started: sessionStart.toISOString(),
         finished: new Date().toISOString(),
@@ -918,14 +1007,7 @@ function stopSession(sent, userInput) {
         copiedCharacters: stats.copiedCharacters.lastSession,
         copiedWords: stats.copiedWords.lastSession,
         score: stats.score.lastSession,
-    };
-    sessionHistory.push(session);
-    // NOTE: in the following scenario, the session from tab B will be lost
-    // - open in tab A
-    // - open in tab B
-    // - play session in tab B
-    // - play session in tab A
-    localStorage.setItem('history', JSON.stringify(sessionHistory));
+    });
 
     renderStatsModal();
     renderHistory();

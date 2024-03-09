@@ -41,6 +41,7 @@ export enum TransmissionResult {
 }
 
 export type TransmittedCharacter = {
+    id?: string,
     sessionId: string,
     result: "Correct" | "Incorrect" | "Pending" | "Extraneous",
     sent?: SentCharacter,
