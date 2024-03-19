@@ -1161,6 +1161,60 @@ cwPlayer.onCharacterPlay = (c) => {
     }
 };
 
+// inspired from https://stackoverflow.com/a/48968694/4457767
+/** Let the user save some data as a file
+ *  @param {Blob} data
+ *  @param {string} filename
+*/
+function saveFile(data, filename) {
+    // @ts-ignore
+    if (window.navigator.msSaveOrOpenBlob) {
+        // Chrome-only
+        // @ts-ignore
+        window.navigator.msSaveOrOpenBlob(data, filename);
+        return;
+    }
+    // generic
+    const a = document.createElement('a');
+    document.body.appendChild(a);
+    const url = window.URL.createObjectURL(data);
+    a.href = url;
+    a.download = filename;
+    a.click();
+    setTimeout(() => {
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+    }, 0)
+}
+
+function exportData() {
+    if (!db) {
+        return;
+    }
+    const transaction = db.transaction(['sessions', 'characters']);
+    /** @type {import("./types").HistoryEntry[] | null} */
+    let sessions = null;
+    /** @type {import("./types").TransmittedCharacter[] | null} */
+    let characters = null;
+    function bla() {
+        if (!sessions || !characters) {
+            return;
+        }
+        const data = JSON.stringify({sessions, characters});
+        saveFile(new Blob([data]), "morse-cat-data.json");
+    }
+    {
+        const objectStore = transaction.objectStore('sessions');
+        const request = objectStore.getAll();
+        request.onsuccess = () => { sessions = request.result; bla(); };
+    }
+    {
+        const objectStore = transaction.objectStore('characters');
+        const request = objectStore.getAll();
+        request.onsuccess = () => { characters = request.result; bla(); };
+    }
+}
+
 function main() {
     const catNose = getElement('nose', SVGElement);
     cwPlayer.onLampOff = () => catNose.style.fill = '#E75A70';
