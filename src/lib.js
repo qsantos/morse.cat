@@ -882,11 +882,18 @@ function characterDuration(c) {
         throw new Error('characterDuration called before JSCWlib initialized');
     }
     let time = 0;
-    for (const el of cwPlayer.alphabet[c] || " ") {
-        const dits = el == "-" ? 3 : 1;
-        // + 1 for symbol space
-        time += dotlen * (dits + 1);
+    const elements = cwPlayer.alphabet[c] || " ";
+    for (const element of elements) {
+        // add duration of dots or dits
+        // NOTE: to make things slightly more regular in some cases, a space
+        // will count as a regular character of length 1 dit; when adding the
+        // previous and next inter-character gap, this totals a gap of 7 dits,
+        // which is the actual duration of the inter-word gap
+        const dits = element == "-" ? 3 : 1;
+        time += dotlen * dits;
     }
+    // add duration of inter-element gaps
+    time += dotlen * (elements.length - 1);
     return time;
 }
 
