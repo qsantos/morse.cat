@@ -1203,7 +1203,7 @@ function exportData() {
     let sessions = null;
     /** @type {import("./types").TransmittedCharacter[] | null} */
     let characters = null;
-    function bla() {
+    function exportAsJsonWhenReady() {
         if (!sessions || !characters) {
             return;
         }
@@ -1213,12 +1213,12 @@ function exportData() {
     {
         const objectStore = transaction.objectStore('sessions');
         const request = objectStore.getAll();
-        request.onsuccess = () => { sessions = request.result; bla(); };
+        request.onsuccess = () => { sessions = request.result; exportAsJsonWhenReady(); };
     }
     {
         const objectStore = transaction.objectStore('characters');
         const request = objectStore.getAll();
-        request.onsuccess = () => { characters = request.result; bla(); };
+        request.onsuccess = () => { characters = request.result; exportAsJsonWhenReady(); };
     }
 }
 
