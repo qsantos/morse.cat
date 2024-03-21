@@ -874,13 +874,14 @@ function increaseStat(stat, amount) {
 
 /** Compute the duration of a character with the current settings
  *  @param {string} c - The character
+ *  @param {number} [wpm] - Length of a dot in seconds
  *  @return {number} - Duration of the character, in seconds
 */
-function characterDuration(c) {
-    const dotlen = cwPlayer.dotlen;
-    if (dotlen === undefined) {
+function characterDuration(c, wpm) {
+    if (cwPlayer.alphabet === undefined) {
         throw new Error('characterDuration called before JSCWlib initialized');
     }
+    const dotlen = wpm ? 60 / (wpm * 50) : cwPlayer.dotlen;
     let time = 0;
     const elements = cwPlayer.alphabet[c] || " ";
     for (const element of elements) {
@@ -1219,6 +1220,58 @@ function exportData() {
         const objectStore = transaction.objectStore('characters');
         const request = objectStore.getAll();
         request.onsuccess = () => { characters = request.result; exportAsJsonWhenReady(); };
+    }
+}
+
+function recalculateCharacterDurations() {
+    if (!db) {
+        return;
+    }
+    const transaction = db.transaction(['sessions', 'characters']);
+    /** @type {import("./types").HistoryEntry[] | null} */
+    let sessions = null;
+    /** @type {import("./types").TransmittedCharacter[] | null} */
+    let characters = null;
+    function fixCharacterDurations() {
+        if (!db || !sessions || !characters) {
+            return;
+        }
+        const transaction = db.transaction(['characters'], 'readwrite');
+        const objectStore = transaction.objectStore('characters');
+        /** @type { { [id: string]: import("./types").HistoryEntry } | null} */
+        const sessionById = {};
+        for (const session of sessions) {
+            sessionById[session.id] = session;
+        }
+        for (const character of characters) {
+            if (!character.sent) {
+                continue;
+            }
+            const session = sessionById[character.sessionId];
+            if (!session) {
+                console.warn(`Could not find session for characer ${character.id}`);
+                continue;
+            }
+            const wpm = session.settings.wpm;
+            const newDuration = characterDuration(character.sent.character, wpm);
+            if (newDuration == character.sent.duration) {
+                continue;
+            }
+            console.info(`Updated characer ${character.id}: ${character.sent.duration} -> ${newDuration}`);
+            character.sent.duration = newDuration;
+            objectStore.put(character);
+        }
+        transaction.commit();
+    }
+    {
+        const objectStore = transaction.objectStore('sessions');
+        const request = objectStore.getAll();
+        request.onsuccess = () => { sessions = request.result; fixCharacterDurations(); };
+    }
+    {
+        const objectStore = transaction.objectStore('characters');
+        const request = objectStore.getAll();
+        request.onsuccess = () => { characters = request.result; fixCharacterDurations(); };
     }
 }
 
