@@ -1096,6 +1096,9 @@ document.addEventListener('keydown', (event) => {
 
     // hitting Return starts the keying
     if (!inSession && userInput === 'enter') {
+        if (settingsModalElement.open) { settingsModalElement.close(); event.preventDefault(); return; }
+        if (infoModalElement.open) { infoModalElement.close(); event.preventDefault(); return; }
+        if (statsModalElement.open) { statsModalElement.close(); event.preventDefault(); return; }
         startSession();
     }
 
