@@ -189,9 +189,9 @@ function readStats() {
 // stats
 const stats = readStats();
 
-/** @type {HTMLElement} */
+/** @type {HTMLDialogElement} */
 let settingsModalElement;
-/** @type {HTMLElement} */
+/** @type {HTMLDialogElement} */
 let infoModalElement;
 /** @type {HTMLElement} */
 let historyElement;
@@ -455,8 +455,8 @@ function getElement(id, type) {
 }
 
 function setElements() {
-    settingsModalElement = getElement('settings-modal', HTMLElement);
-    infoModalElement = getElement('info-modal', HTMLElement);
+    settingsModalElement = getElement('settings-modal', HTMLDialogElement);
+    infoModalElement = getElement('info-modal', HTMLDialogElement);
     historyElement = getElement('history', HTMLElement);
     feedbackElement = getElement('feedback', HTMLElement);
     feedbacWrongCharacterElement = getElement('feedback_wrong_character', HTMLElement);
