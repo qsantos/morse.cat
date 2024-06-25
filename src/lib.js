@@ -1094,7 +1094,7 @@ document.addEventListener('keydown', (event) => {
         event.preventDefault();
     }
 
-    // hitting space starts the keying
+    // hitting Return starts the keying
     if (!inSession && userInput === 'enter') {
         startSession();
     }
