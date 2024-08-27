@@ -39,7 +39,7 @@
             <a href="#" class="button" onclick="document.getElementById('stats-modal').showModal()">
                 <img src="stats.svg">
             </a>
-            <a href="#" class="button" onclick="document.getElementById('settings-modal').showModal()">
+            <a href="#" class="button" data-bs-toggle="modal" data-bs-target="#settings-modal">
                 <img src="settings.svg">
             </a>
         </nav>
@@ -52,6 +52,6 @@
         <ul id="history"></ul>
         <dialog id="info-modal" onclick="closeIfOutsideDialog(event)"></dialog>
         <dialog id="stats-modal" onclick="closeIfOutsideDialog(event)"></dialog>
-        <dialog id="settings-modal" onclick="closeIfOutsideDialog(event)"></dialog>
+        <div class="modal fade" id="settings-modal" tabindex="-1" aria-hidden="true"></div>
     </body>
 </html>
