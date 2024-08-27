@@ -456,7 +456,7 @@ function getElement(id, type) {
 
 function setElements() {
     settingsModalElement = getElement('settings-modal', HTMLDivElement);
-    infoModalElement = getElement('info-modal', HTMLDialogElement);
+    infoModalElement = getElement('info-modal', HTMLDivElement);
     historyElement = getElement('history', HTMLElement);
     feedbackElement = getElement('feedback', HTMLElement);
     feedbacWrongCharacterElement = getElement('feedback_wrong_character', HTMLElement);
@@ -806,38 +806,47 @@ function renderSettingsModal() {
 
 function renderInfoModal() {
     infoModalElement.innerHTML = `
-    <h3>${t('info.attributions.title')}</h3>
-    <ul>
-        <li>
-            ${t('info.attributions.jscwlib')}:
-            <a href="https://fkurz.net/ham/jscwlib.html">jscwlib</a>
-            (${t('info.attributions.mit-license')})
-        </li>
-        <li>
-            <img src="cat.svg" class="inline-button">
-            ${t('info.attributions.cat-icon')}:
-            <a href="https://github.com/twitter/twemoji">Twemoji</a>
-            (${t('info.attributions.cc-by-license')})
-        </li>
-        <li>
-            <img src="info.svg" class="inline-button">
-            ${t('info.attributions.info-icon')}:
-            <a href="https://www.svgrepo.com/svg/474780/combo-chart">SVG Repo</a>
-            (${t('info.attributions.cc0-license')})
-        </li>
-        <li>
-            <img src="stats.svg" class="inline-button">
-            ${t('info.attributions.statistics-icon')}:
-            <a href="https://www.svgrepo.com/svg/474780/combo-chart">SVG Repo</a>
-            (${t('info.attributions.cc0-license')})
-        </li>
-        <li>
-            <img src="settings.svg" class="inline-button">
-            ${t('info.attributions.settings-icon')}:
-            <a href="https://www.svgrepo.com/svg/474780/combo-chart">SVG Repo</a>
-            (${t('info.attributions.cc0-license')})
-        </li>
-    </ul>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">${t('info.attributions.title')}</h3>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+        <div class="modal-body">
+                <ul>
+                    <li>
+                        ${t('info.attributions.jscwlib')}:
+                        <a href="https://fkurz.net/ham/jscwlib.html">jscwlib</a>
+                        (${t('info.attributions.mit-license')})
+                    </li>
+                    <li>
+                        <img src="cat.svg" class="inline-button">
+                        ${t('info.attributions.cat-icon')}:
+                        <a href="https://github.com/twitter/twemoji">Twemoji</a>
+                        (${t('info.attributions.cc-by-license')})
+                    </li>
+                    <li>
+                        <img src="info.svg" class="inline-button">
+                        ${t('info.attributions.info-icon')}:
+                        <a href="https://www.svgrepo.com/svg/474780/combo-chart">SVG Repo</a>
+                        (${t('info.attributions.cc0-license')})
+                    </li>
+                    <li>
+                        <img src="stats.svg" class="inline-button">
+                        ${t('info.attributions.statistics-icon')}:
+                        <a href="https://www.svgrepo.com/svg/474780/combo-chart">SVG Repo</a>
+                        (${t('info.attributions.cc0-license')})
+                    </li>
+                    <li>
+                        <img src="settings.svg" class="inline-button">
+                        ${t('info.attributions.settings-icon')}:
+                        <a href="https://www.svgrepo.com/svg/474780/combo-chart">SVG Repo</a>
+                        (${t('info.attributions.cc0-license')})
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
     `;
 }
 

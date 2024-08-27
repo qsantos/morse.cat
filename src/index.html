@@ -33,7 +33,7 @@
                 <option value="ja">日本語</option>
                 <option value="es">Español</option>
             </select>
-            <a href="#" class="button" onclick="document.getElementById('info-modal').showModal()">
+            <a href="#" class="button" data-bs-toggle="modal" data-bs-target="#info-modal">
                 <img src="info.svg">
             </a>
             <a href="#" class="button" data-bs-toggle="modal" data-bs-target="#stats-modal">
@@ -50,7 +50,7 @@
             <div id="feedback_cw">&nbsp;</div>
         </div>
         <ul id="history"></ul>
-        <dialog id="info-modal" onclick="closeIfOutsideDialog(event)"></dialog>
+        <div class="modal fade" id="info-modal" tabindex="-1" aria-hidden="true"></div>
         <div class="modal modal-lg fade" id="stats-modal" tabindex="-1" aria-hidden="true"></div>
         <div class="modal fade" id="settings-modal" tabindex="-1" aria-hidden="true"></div>
     </body>
