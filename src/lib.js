@@ -730,7 +730,7 @@ function renderSettingsModal() {
                 <div class="row mb-3">
                     <label class="col-form-label col-sm-5" for="settings-lcwo-lesson">${t('settings.lcwo.title')}:</label>
                     <div class="col-sm-5">
-                        <select class="form-control" id="settings-lcwo-lesson" oninput="onLCWOLessonInput()">
+                        <select class="form-select" id="settings-lcwo-lesson" oninput="onLCWOLessonInput()">
                             <option value="0">-</option>
                             <option value="1">1 - K, M</option>
                             <option value="2">2 - U</option>
