@@ -42,10 +42,10 @@ nav {
 .inline-button {
     height:1em;
 }
-#stats-modal>table {
+#stats-modal table {
     text-align: right;
 }
-#stats-modal>table th {
+#stats-modal table th {
     width: 140px;
     height: 40px;
 }

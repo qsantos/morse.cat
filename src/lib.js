@@ -462,7 +462,7 @@ function setElements() {
     feedbacWrongCharacterElement = getElement('feedback_wrong_character', HTMLElement);
     feedbackCharacterElement = getElement('feedback_character', HTMLElement);
     feedbackCwElement = getElement('feedback_cw', HTMLElement);
-    statsModalElement = getElement('stats-modal', HTMLDialogElement);
+    statsModalElement = getElement('stats-modal', HTMLDivElement);
     infoElement = getElement('info', HTMLElement);
 }
 
@@ -595,55 +595,64 @@ function restoreSettings() {
 function renderStatsModal() {
     const lang = activeLanguage;
     statsModalElement.innerHTML = `
-    <h3>${t('stats.title')}</h3>
-    <table>
-        <thead>
-            <tr>
-                <th></th>
-                <th>${t('stats.elapsed')}</th>
-                <th>${t('stats.copiedCharacters')}</th>
-                <th>${t('stats.copiedWords')}</th>
-                <th>${t('stats.score')}</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <th>${t('stats.lastSession')}</th>
-                <td>${stats.elapsed.lastSession.toLocaleString(lang)} s</td>
-                <td>${stats.copiedCharacters.lastSession.toLocaleString(lang)}</td>
-                <td>${stats.copiedWords.lastSession.toLocaleString(lang)}</td>
-                <td>${stats.score.lastSession.toLocaleString(lang)}</td>
-            </tr>
-            <tr>
-                <th>${t('stats.bestSession')}</th>
-                <td>${stats.elapsed.bestSession.toLocaleString(lang)} s</td>
-                <td>${stats.copiedCharacters.bestSession.toLocaleString(lang)}</td>
-                <td>${stats.copiedWords.bestSession.toLocaleString(lang)}</td>
-                <td>${stats.score.bestSession.toLocaleString(lang)}</td>
-            </tr>
-            <tr>
-                <th>${t('stats.currentDay')}</th>
-                <td>${stats.elapsed.currentDay.toLocaleString(lang)} s</td>
-                <td>${stats.copiedCharacters.currentDay.toLocaleString(lang)}</td>
-                <td>${stats.copiedWords.currentDay.toLocaleString(lang)}</td>
-                <td>${stats.score.currentDay.toLocaleString(lang)}</td>
-            </tr>
-            <tr>
-                <th>${t('stats.bestDay')}</th>
-                <td>${stats.elapsed.bestDay.toLocaleString(lang)} s</td>
-                <td>${stats.copiedCharacters.bestDay.toLocaleString(lang)}</td>
-                <td>${stats.copiedWords.bestDay.toLocaleString(lang)}</td>
-                <td>${stats.score.bestDay.toLocaleString(lang)}</td>
-            </tr>
-            <tr>
-                <th>${t('stats.total')}</th>
-                <td>${stats.elapsed.total.toLocaleString(lang)} s</td>
-                <td>${stats.copiedCharacters.total.toLocaleString(lang)}</td>
-                <td>${stats.copiedWords.total.toLocaleString(lang)}</td>
-                <td>${stats.score.total.toLocaleString(lang)}</td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">${t('stats.title')}</h3>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th scope="col">${t('stats.elapsed')}</th>
+                            <th scope="col">${t('stats.copiedCharacters')}</th>
+                            <th scope="col">${t('stats.copiedWords')}</th>
+                            <th scope="col">${t('stats.score')}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th scope="row">${t('stats.lastSession')}</th>
+                            <td>${stats.elapsed.lastSession.toLocaleString(lang)} s</td>
+                            <td>${stats.copiedCharacters.lastSession.toLocaleString(lang)}</td>
+                            <td>${stats.copiedWords.lastSession.toLocaleString(lang)}</td>
+                            <td>${stats.score.lastSession.toLocaleString(lang)}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">${t('stats.bestSession')}</th>
+                            <td>${stats.elapsed.bestSession.toLocaleString(lang)} s</td>
+                            <td>${stats.copiedCharacters.bestSession.toLocaleString(lang)}</td>
+                            <td>${stats.copiedWords.bestSession.toLocaleString(lang)}</td>
+                            <td>${stats.score.bestSession.toLocaleString(lang)}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">${t('stats.currentDay')}</th>
+                            <td>${stats.elapsed.currentDay.toLocaleString(lang)} s</td>
+                            <td>${stats.copiedCharacters.currentDay.toLocaleString(lang)}</td>
+                            <td>${stats.copiedWords.currentDay.toLocaleString(lang)}</td>
+                            <td>${stats.score.currentDay.toLocaleString(lang)}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">${t('stats.bestDay')}</th>
+                            <td>${stats.elapsed.bestDay.toLocaleString(lang)} s</td>
+                            <td>${stats.copiedCharacters.bestDay.toLocaleString(lang)}</td>
+                            <td>${stats.copiedWords.bestDay.toLocaleString(lang)}</td>
+                            <td>${stats.score.bestDay.toLocaleString(lang)}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">${t('stats.total')}</th>
+                            <td>${stats.elapsed.total.toLocaleString(lang)} s</td>
+                            <td>${stats.copiedCharacters.total.toLocaleString(lang)}</td>
+                            <td>${stats.copiedWords.total.toLocaleString(lang)}</td>
+                            <td>${stats.score.total.toLocaleString(lang)}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
     `;
 }
 
