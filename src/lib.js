@@ -16,7 +16,7 @@ function prepareDB(callback) {
         const db = request.result;
         const sessionsStore = db.createObjectStore('sessions', { keyPath: 'id' });
         sessionsStore.createIndex('started', 'started');
-        const charactersStore = db.createObjectStore('characters', { keyPath: 'id' });
+        db.createObjectStore('characters', { keyPath: 'id' });
     };
     request.onsuccess = () => {
         db = request.result;
