@@ -1099,28 +1099,6 @@ function fail(sent, userInput) {
     replayAfterMistake(sent?.character);
 }
 
-/** Close an open dialog if the user has clicked outside of it
- *  @param {MouseEvent & { target: HTMLDialogElement }} event - The click event
-*/
-function closeIfOutsideDialog(event) {
-    const { target } = event;
-    if (target.tagName !== 'DIALOG') {
-        // the target is a DOM element within the dialog
-        return false;
-    }
-    // check that the click is within the dialog
-    const x = event.clientX;
-    const y = event.clientY;
-    const rect = target.getBoundingClientRect();
-    if ((rect.left <= x && x <= rect.right) && (rect.top <= y && y <= rect.bottom)) {
-        // it is!
-        return false;
-    }
-    // close it!
-    target.close();
-    return false;
-}
-
 document.addEventListener('keydown', (event) => {
     const userInput = event.key.toLowerCase();
 
