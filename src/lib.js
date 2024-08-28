@@ -17,36 +17,10 @@ function prepareDB(callback) {
         const sessionsStore = db.createObjectStore('sessions', { keyPath: 'id' });
         sessionsStore.createIndex('started', 'started');
         const charactersStore = db.createObjectStore('characters', { keyPath: 'id' });
-        charactersStore.transaction.oncomplete = () => {
-            // import existing data
-            importLegacyData(db, 'history', 'sessions');
-            importLegacyData(db, 'characters', 'characters');
-        };
     };
     request.onsuccess = () => {
         db = request.result;
         callback();
-    }
-}
-
-/**
- *  @param {IDBDatabase} db - The indexedDB database
- *  @param {string} key - Name of the legacy localStorage entry
- *  @param {string} store - Name of the indexedDB storeObject
-*/
-function importLegacyData(db, key, store) {
-    try {
-        const entries = JSON.parse(localStorage.getItem(key) || '');
-        const transaction = db.transaction([store], 'readwrite');
-        const sessionStore = transaction.objectStore(store);
-        for (const entry of entries) {
-            entry.id = crypto.randomUUID();
-            sessionStore.add(entry);
-        }
-        transaction.commit();
-        console.info('Imported "' + key + '" from local storage into IndexedDB');
-    } catch (e) {
-        return;
     }
 }
 
