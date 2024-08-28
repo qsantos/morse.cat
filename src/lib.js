@@ -284,7 +284,7 @@ const translations = {
         'settings.errorTone.title': 'エラートーン',
         'settings.errorTone.unit': 'Hz',
         'settings.errorTone.details': 'ヘルツ',
-        'settings.wordLength.title': '語調',
+        'settings.wordLength.title': '語長',
         'settings.wordLength.unit': '字',
         'settings.wordLength.details': '言葉ずつの文字数',
         'settings.lcwo.title': '<a href="https://lcwo.net/" title="Learn CW Online">LCWO</A> レッスン',
