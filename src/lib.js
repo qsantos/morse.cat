@@ -163,13 +163,13 @@ function readStats() {
 // stats
 const stats = readStats();
 
-/** @type {HTMLDialogElement} */
+/** @type {HTMLDivElement} */
 let settingsModalElement;
-/** @type {HTMLDialogElement} */
+/** @type {HTMLDivElement} */
 let infoModalElement;
 /** @type {HTMLElement} */
 let historyElement;
-/** @type {HTMLDialogElement} */
+/** @type {HTMLDivElement} */
 let statsModalElement;
 /** @type {HTMLElement} */
 let infoElement;
