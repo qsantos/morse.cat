@@ -195,14 +195,6 @@ let settingsModalElement;
 let infoModalElement;
 /** @type {HTMLElement} */
 let historyElement;
-/** @type {HTMLElement} */
-let feedbackElement;
-/** @type {HTMLElement} */
-let feedbacWrongCharacterElement;
-/** @type {HTMLElement} */
-let feedbackCharacterElement;
-/** @type {HTMLElement} */
-let feedbackCwElement;
 /** @type {HTMLDialogElement} */
 let statsModalElement;
 /** @type {HTMLElement} */
@@ -458,10 +450,6 @@ function setElements() {
     settingsModalElement = getElement('settings-modal', HTMLDivElement);
     infoModalElement = getElement('info-modal', HTMLDivElement);
     historyElement = getElement('history', HTMLElement);
-    feedbackElement = getElement('feedback', HTMLElement);
-    feedbacWrongCharacterElement = getElement('feedback_wrong_character', HTMLElement);
-    feedbackCharacterElement = getElement('feedback_character', HTMLElement);
-    feedbackCwElement = getElement('feedback_cw', HTMLElement);
     statsModalElement = getElement('stats-modal', HTMLDivElement);
     infoElement = getElement('info', HTMLElement);
 }
@@ -1011,13 +999,8 @@ function startSession() {
     cwPlayer.setFreq(settings.tone);
     cwPlayer.onFinished = onFinished;
     cwPlayer.play();
-    feedbackElement.classList.add('success');
-    feedbackElement.classList.remove('failure');
-    feedbacWrongCharacterElement.innerText = '';
-    feedbackCharacterElement.innerText = '';
-    feedbackCwElement.innerText = '';
     infoElement.innerText = '';
-    feedbackElement.focus();
+    historyElement.focus();
     renderStatsModal();
     renderHistory();
 }
@@ -1114,9 +1097,6 @@ function formatCharacter(c) {
 function fail(sent, userInput) {
     stopSession(sent, userInput);
     replayAfterMistake(sent?.character);
-    feedbackElement.classList.remove('success');
-    feedbackElement.classList.add('failure');
-    feedbacWrongCharacterElement.innerText = formatCharacter(userInput);
 }
 
 /** Close an open dialog if the user has clicked outside of it
@@ -1193,8 +1173,6 @@ document.addEventListener('keydown', (event) => {
         fail(sent, userInput);
     }
 
-    feedbackCharacterElement.innerText = formatCharacter(expected);
-    feedbackCwElement.innerText = cwPlayer.alphabet[expected] || '';
 });
 
 /** Event handler for when a character has been fully played
@@ -1220,9 +1198,6 @@ cwPlayer.onCharacterPlay = (c) => {
     // detect when user has stopped copying
     if (played.length - copiedText.length > 5) {
         fail();
-        feedbackCwElement.innerText = '';
-        feedbackCharacterElement.innerText = '';
-        feedbacWrongCharacterElement.innerText = '';
         infoElement.innerText = t('info.tooSlow');
     }
 };
@@ -1339,12 +1314,9 @@ function main() {
     cwPlayer.onLampOn = () => catNose.style.fill = 'yellow';
     setElements();
     refreshStats();
-    feedbackElement.addEventListener('blur', () => {
+    historyElement.addEventListener('blur', () => {
         if (inSession) {
             infoElement.innerText = t('info.lostFocus');
-            feedbackCwElement.innerText = '';
-            feedbackCharacterElement.innerText = '';
-            feedbacWrongCharacterElement.innerText = '';
             stopSession();
         }
     });

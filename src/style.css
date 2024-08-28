@@ -49,34 +49,6 @@ nav {
     width: 140px;
     height: 40px;
 }
-#feedback {
-    width:200px;
-    height:200px;
-    margin: 0 auto;
-    color: white;
-    background-color: #3677b3;
-    text-align: center;
-}
-#feedback.success {
-    background-color: #36B37E;
-}
-#feedback.failure {
-    background-color: #FF5630;
-}
-#feedback_wrong_character, #feedback_character {
-    min-height: 1.25em;
-    line-height: 1.25;
-    font-variant-caps: small-caps;
-    font-family: sans-serif;
-}
-#feedback_character {
-    font-weight: bold;
-    font-size: 50px;
-}
-#feedback_wrong_character {
-    text-decoration: line-through;
-    font-size: 20px;
-}
 .strike {
     text-decoration: line-through;
     color: red;
@@ -87,9 +59,6 @@ nav {
 }
 .active {
     color: #b11d1d;
-}
-#feedback_cw {
-    font-size: 30px;
 }
 #history {
     position: relative;
