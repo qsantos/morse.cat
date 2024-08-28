@@ -669,28 +669,28 @@ function renderSettingsModal() {
                     <abbr class="col-sm-2" title="${t('settings.speed.details')}">${t('settings.speed.unit')}</abbr>
                 </div>
                 <div class="row mb-3">
-                    <label class="col-form-label col-sm-5" for="settings-tone">${t('settings.tone.title')}:</label>
+                    <label class="col-form-label col-sm-5" for="settings-tone">${t('settings.tone.title')}</label>
                     <div class="col-sm-5">
                         <input class="form-control" id="settings-tone" oninput="onSettingsChange()" type="number" value="600" min="10" step="10" />
                     </div>
                     <abbr class="col-sm-2" title="${t('settings.tone.details')}">${t('settings.tone.unit')}</abbr>
                 </div>
                 <div class="row mb-3">
-                    <label class="col-form-label col-sm-5" for="settings-error-tone">${t('settings.errorTone.title')}:</label>
+                    <label class="col-form-label col-sm-5" for="settings-error-tone">${t('settings.errorTone.title')}</label>
                     <div class="col-sm-5">
                         <input class="form-control" id="settings-error-tone" oninput="onSettingsChange()" type="number" value="200" min="10" step="10" />
                     </div>
                     <abbr class="col-sm-2" title="${t('settings.errorTone.details')}">${t('settings.errorTone.unit')}</abbr>
                 </div>
                 <div class="row mb-3">
-                    <label class="col-form-label col-sm-5" for="settings-word-length">${t('settings.wordLength.title')}:</label>
+                    <label class="col-form-label col-sm-5" for="settings-word-length">${t('settings.wordLength.title')}</label>
                     <div class="col-sm-5">
                         <input class="form-control" id="settings-word-length" oninput="onSettingsChange()" type="number" value="5" min="1" />
                     </div>
                     <abbr class="col-sm-2" title="${t('settings.wordLength.details')}">${t('settings.wordLength.unit')}</abbr>
                 </div>
                 <div class="row mb-3">
-                    <label class="col-form-label col-sm-5" for="settings-lcwo-lesson">${t('settings.lcwo.title')}:</label>
+                    <label class="col-form-label col-sm-5" for="settings-lcwo-lesson">${t('settings.lcwo.title')}</label>
                     <div class="col-sm-5">
                         <select class="form-select" id="settings-lcwo-lesson" oninput="onLCWOLessonInput()">
                             <option value="0">-</option>
@@ -738,7 +738,7 @@ function renderSettingsModal() {
                     </div>
                 </div>
                 <div class="row mb-3">
-                    <label class="col-form-label col-sm-5" for="settings-charset">${t('settings.charset.title')}:</label>
+                    <label class="col-form-label col-sm-5" for="settings-charset">${t('settings.charset.title')}</label>
                     <div class="col-sm-5">
                         <textarea class="form-control" style="word-break:break-all" rows="3" id="settings-charset" oninput="onCustomCharsetInput()"></textarea>
                     </div>
