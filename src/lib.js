@@ -83,13 +83,20 @@ function getLastSessions(count, callback) {
 /** @type{import("./types").Settings} */
 const settings = (() => {
     try {
-        return JSON.parse(localStorage.getItem('settings') || '');
+        const settings = JSON.parse(localStorage.getItem('settings') || '');
+        if (settings.hasOwnProperty("word_length")) {
+            settings.min_word_length = settings.word_length;
+            settings.max_word_length = settings.word_length;
+            delete settings["word_length"];
+        }
+        return settings;
     } catch (e) {
         return {
             wpm: 20,
             tone: 600,
             error_tone: 200,
-            word_length: 5,
+            min_word_length: 5,
+            max_word_length: 5,
             charset: lcwoLessons,
         };
     }
@@ -100,8 +107,9 @@ const cwPlayer = new jscw();
 cwPlayer.q = 13;
 
 function pushWord() {
+    const word_length = randint(settings.min_word_length, settings.max_word_length);
     const word = Array.from(
-        { length: settings.word_length },
+        { length: word_length },
         () => settings.charset[Math.floor(Math.random() * settings.charset.length)],
     ).join('');
     cwPlayer.setText(` ${word}`);
@@ -200,7 +208,8 @@ const translations = {
         'settings.errorTone.title': 'Error Tone',
         'settings.errorTone.unit': 'Hz',
         'settings.errorTone.details': 'Hertz',
-        'settings.wordLength.title': 'World Length',
+        'settings.minWordLength.title': 'Min. Word Length',
+        'settings.maxWordLength.title': 'Max. Word Length',
         'settings.wordLength.unit': 'chars.',
         'settings.wordLength.details': 'characters',
         'settings.lcwo.title': '<a href="https://lcwo.net/" title="Learn CW Online">LCWO</A> Lesson',
@@ -242,7 +251,8 @@ const translations = {
         'settings.errorTone.title': "Ton d'erreur",
         'settings.errorTone.unit': 'Hz',
         'settings.errorTone.details': 'Hertz',
-        'settings.wordLength.title': 'Longueur des mots',
+        'settings.minWordLength.title': 'Longueur min. des mots',
+        'settings.maxWordLength.title': 'Longueur max. des mots',
         'settings.wordLength.unit': 'car.',
         'settings.wordLength.details': 'caractères',
         'settings.lcwo.title': 'Leçon <a href="https://lcwo.net/" title="Learn CW Online">LCWO</A>',
@@ -284,7 +294,8 @@ const translations = {
         'settings.errorTone.title': 'エラートーン',
         'settings.errorTone.unit': 'Hz',
         'settings.errorTone.details': 'ヘルツ',
-        'settings.wordLength.title': '語長',
+        'settings.minWordLength.title': '最小語長',
+        'settings.maxWordLength.title': '最大語長',
         'settings.wordLength.unit': '字',
         'settings.wordLength.details': '言葉ずつの文字数',
         'settings.lcwo.title': '<a href="https://lcwo.net/" title="Learn CW Online">LCWO</A> レッスン',
@@ -326,7 +337,8 @@ const translations = {
         'settings.errorTone.title': 'Tono de error',
         'settings.errorTone.unit': 'Hz',
         'settings.errorTone.details': 'Hertz',
-        'settings.wordLength.title': 'Longitud de las palabras',
+        'settings.minWordLength.title': 'Longitud mín. de las palabras',
+        'settings.maxWordLength.title': 'Longitud máx. de las palabras',
         'settings.wordLength.unit': 'car.',
         'settings.wordLength.details': 'caracteres',
         'settings.lcwo.title': 'Leccíon <a href="https://lcwo.net/" title="Learn CW Online">LCWO</A>',
@@ -368,7 +380,8 @@ const translations = {
         'settings.errorTone.title': "To d'error",
         'settings.errorTone.unit': 'Hz',
         'settings.errorTone.details': 'Hertz',
-        'settings.wordLength.title': 'Longitud de les paraules',
+        'settings.minWordLength.title': 'Mida mín. de les paraules',
+        'settings.maxWordLength.title': 'Mida màx. de les paraules',
         'settings.wordLength.unit': 'car.',
         'settings.wordLength.details': 'caràcters',
         'settings.lcwo.title': 'Lliçó <a href="https://lcwo.net/" title="Learn CW Online">LCWO</A>',
@@ -389,6 +402,24 @@ const translations = {
 
 /** @type {keyof typeof translations} */
 let activeLanguage = 'en';
+
+/**
+ * @param {number} min
+ * @param {number} max
+ * @return {number}
+*/
+function randrange(min, max) {
+    return Math.floor(Math.random() * (max - min)) + min;
+}
+
+/**
+ * @param {number} min
+ * @param {number} max
+ * @return {number}
+*/
+function randint(min, max) {
+    return randrange(min, max + 1);
+}
 
 /** Provide a translation string for the given key
  *  @param {keyof typeof translations.en} key - The translation key
@@ -434,7 +465,8 @@ function onSettingsChange() {
     settings.wpm = parseFloat(getElement('settings-wpm', HTMLInputElement).value);
     settings.tone = parseFloat(getElement('settings-tone', HTMLInputElement).value);
     settings.error_tone = parseFloat(getElement('settings-error-tone', HTMLInputElement).value);
-    settings.word_length = parseInt(getElement('settings-word-length', HTMLInputElement).value, 10);
+    settings.min_word_length = parseInt(getElement('settings-word-length-min', HTMLInputElement).value, 10);
+    settings.max_word_length = parseInt(getElement('settings-word-length-max', HTMLInputElement).value, 10);
     settings.charset = getElement('settings-charset', HTMLTextAreaElement).value;
     localStorage.setItem('settings', JSON.stringify(settings));
 }
@@ -548,7 +580,8 @@ function restoreSettings() {
     getElement('settings-wpm', HTMLInputElement).value = settings.wpm.toString();
     getElement('settings-tone', HTMLInputElement).value = settings.tone.toString();
     getElement('settings-error-tone', HTMLInputElement).value = settings.error_tone.toString();
-    getElement('settings-word-length', HTMLInputElement).value = settings.word_length.toString();
+    getElement('settings-word-length-min', HTMLInputElement).value = settings.min_word_length.toString();
+    getElement('settings-word-length-max', HTMLInputElement).value = settings.max_word_length.toString();
     getElement('settings-charset', HTMLTextAreaElement).value = settings.charset;
     updateLCWOLessonFromCharset();
     updateTogglesFromCharset();
@@ -683,9 +716,16 @@ function renderSettingsModal() {
                     <abbr class="col-sm-2" title="${t('settings.errorTone.details')}">${t('settings.errorTone.unit')}</abbr>
                 </div>
                 <div class="row mb-3">
-                    <label class="col-form-label col-sm-5" for="settings-word-length">${t('settings.wordLength.title')}</label>
+                    <label class="col-form-label col-sm-5" for="settings-word-length-min">${t('settings.minWordLength.title')}</label>
                     <div class="col-sm-5">
-                        <input class="form-control" id="settings-word-length" oninput="onSettingsChange()" type="number" value="5" min="1" />
+                        <input class="form-control" id="settings-word-length-min" oninput="onSettingsChange()" type="number" value="5" min="1" />
+                    </div>
+                    <abbr class="col-sm-2" title="${t('settings.wordLength.details')}">${t('settings.wordLength.unit')}</abbr>
+                </div>
+                <div class="row mb-3">
+                    <label class="col-form-label col-sm-5" for="settings-word-length-max">${t('settings.maxWordLength.title')}</label>
+                    <div class="col-sm-5">
+                        <input class="form-control" id="settings-word-length-max" oninput="onSettingsChange()" type="number" value="5" min="1" />
                     </div>
                     <abbr class="col-sm-2" title="${t('settings.wordLength.details')}">${t('settings.wordLength.unit')}</abbr>
                 </div>
