@@ -28,11 +28,6 @@ h1 rt {
 h1 svg {
     vertical-align: middle;
 }
-nav {
-    position: absolute;
-    top: 0;
-    right: 0;
-}
 .button {
     text-decoration: none;
 }
