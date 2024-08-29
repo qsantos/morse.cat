@@ -4,12 +4,11 @@ body {
     max-width: 62.5rem;
 }
 h1 {
-    color: #5a5a5b;
-    margin: 0;
-    font-size: 50px;
+    font-size: 50px !important;
     font-family: 'Noto Sans Mono', 'DejaVu Sans Mono', monospace;
 }
 h1 ruby {
+    color: #5a5a5b;
     ruby-position: under;
     ruby-align: center;
 }
