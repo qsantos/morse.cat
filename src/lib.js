@@ -174,7 +174,7 @@ const stats = readStats();
 /** @type {HTMLDivElement} */
 let settingsModalElement;
 /** @type {HTMLElement} */
-let attributionsElement;
+let acknowledgementsElement;
 /** @type {HTMLElement} */
 let historyElement;
 /** @type {HTMLElement} */
@@ -214,13 +214,13 @@ const translations = {
         'settings.wordLength.details': 'characters',
         'settings.lcwo.title': '<a href="https://lcwo.net/" title="Learn CW Online">LCWO</A> Lesson',
         'settings.charset.title': 'Customize Charset',
-        'info.attributions.title': 'Attributions',
-        'info.attributions.mit-license': 'MIT License',
-        'info.attributions.cc0-license': 'CC0 License',
-        'info.attributions.cc-by-license': 'CC-BY License',
-        'info.attributions.jscwlib': 'JavaScript library for Morse Code',
-        'info.attributions.cat-icon': 'Cat icon',
-        'info.attributions.settings-icon': 'Settings icon',
+        'info.acknowledgements.title': 'Acknowledgements',
+        'info.acknowledgements.mit-license': 'MIT License',
+        'info.acknowledgements.cc0-license': 'CC0 License',
+        'info.acknowledgements.cc-by-license': 'CC-BY License',
+        'info.acknowledgements.jscwlib': 'JavaScript library for Morse Code',
+        'info.acknowledgements.cat-icon': 'Cat icon',
+        'info.acknowledgements.settings-icon': 'Settings icon',
         'info.tooSlow': 'Too slow!',
         'info.lostFocus': 'Focus lost!',
     },
@@ -255,13 +255,13 @@ const translations = {
         'settings.wordLength.details': 'caractères',
         'settings.lcwo.title': 'Leçon <a href="https://lcwo.net/" title="Learn CW Online">LCWO</A>',
         'settings.charset.title': 'Choisir les caractères',
-        'info.attributions.title': 'Attributions',
-        'info.attributions.mit-license': 'Licence MIT',
-        'info.attributions.cc0-license': 'Licence CC0',
-        'info.attributions.cc-by-license': 'Licence CC-BY',
-        'info.attributions.jscwlib': 'Bibliothèque JavaScript pour le code Morse',
-        'info.attributions.cat-icon': 'Icône de chat',
-        'info.attributions.settings-icon': 'Icône des paramètres',
+        'info.acknowledgements.title': 'Remerciements',
+        'info.acknowledgements.mit-license': 'Licence MIT',
+        'info.acknowledgements.cc0-license': 'Licence CC0',
+        'info.acknowledgements.cc-by-license': 'Licence CC-BY',
+        'info.acknowledgements.jscwlib': 'Bibliothèque JavaScript pour le code Morse',
+        'info.acknowledgements.cat-icon': 'Icône de chat',
+        'info.acknowledgements.settings-icon': 'Icône des paramètres',
         'info.tooSlow': 'Trop lent !',
         'info.lostFocus': 'Focus perdu !',
     },
@@ -296,13 +296,13 @@ const translations = {
         'settings.wordLength.details': '言葉ずつの文字数',
         'settings.lcwo.title': '<a href="https://lcwo.net/" title="Learn CW Online">LCWO</A> レッスン',
         'settings.charset.title': '文字セット',
-        'info.attributions.title': '帰属',
-        'info.attributions.mit-license': 'MIT ライセンス',
-        'info.attributions.cc0-license': 'CC0 ライセンス',
-        'info.attributions.cc-by-license': 'CC-BY ライセンス',
-        'info.attributions.jscwlib': 'モールス信号用JavaScriptライブラリ',
-        'info.attributions.cat-icon': '猫アイコン',
-        'info.attributions.settings-icon': '設定アイコン',
+        'info.acknowledgements.title': '謝辞',
+        'info.acknowledgements.mit-license': 'MIT ライセンス',
+        'info.acknowledgements.cc0-license': 'CC0 ライセンス',
+        'info.acknowledgements.cc-by-license': 'CC-BY ライセンス',
+        'info.acknowledgements.jscwlib': 'モールス信号用JavaScriptライブラリ',
+        'info.acknowledgements.cat-icon': '猫アイコン',
+        'info.acknowledgements.settings-icon': '設定アイコン',
         'info.tooSlow': '遅すぎます！',
         'info.lostFocus': 'フォーカスが外れました！',
     },
@@ -337,13 +337,13 @@ const translations = {
         'settings.wordLength.details': 'caracteres',
         'settings.lcwo.title': 'Leccíon <a href="https://lcwo.net/" title="Learn CW Online">LCWO</A>',
         'settings.charset.title': 'Seleccionar los caracteres',
-        'info.attributions.title': 'Atribuciones',
-        'info.attributions.mit-license': 'Licencia MIT',
-        'info.attributions.cc0-license': 'Licencia CC0',
-        'info.attributions.cc-by-license': 'Licencia CC-BY',
-        'info.attributions.jscwlib': 'Biblioteca JavaScript para código Morse',
-        'info.attributions.cat-icon': 'Ícono de gato',
-        'info.attributions.settings-icon': 'Ícono de ajustes',
+        'info.acknowledgements.title': 'Agradecimientos',
+        'info.acknowledgements.mit-license': 'Licencia MIT',
+        'info.acknowledgements.cc0-license': 'Licencia CC0',
+        'info.acknowledgements.cc-by-license': 'Licencia CC-BY',
+        'info.acknowledgements.jscwlib': 'Biblioteca JavaScript para código Morse',
+        'info.acknowledgements.cat-icon': 'Ícono de gato',
+        'info.acknowledgements.settings-icon': 'Ícono de ajustes',
         'info.tooSlow': '¡Demasiado lento!',
         'info.lostFocus': '¡Se perdió el foco!',
     },
@@ -378,13 +378,13 @@ const translations = {
         'settings.wordLength.details': 'caràcters',
         'settings.lcwo.title': 'Lliçó <a href="https://lcwo.net/" title="Learn CW Online">LCWO</A>',
         'settings.charset.title': 'Seleccionar els caràcters',
-        'info.attributions.title': 'Atribucions',
-        'info.attributions.mit-license': 'Llicència MIT',
-        'info.attributions.cc0-license': 'Llicència CC0',
-        'info.attributions.cc-by-license': 'Llicència CC-BY',
-        'info.attributions.jscwlib': 'Biblioteca JavaScript per al codi Morse',
-        'info.attributions.cat-icon': 'Icona de gat',
-        'info.attributions.settings-icon': 'Icona de configuració',
+        'info.acknowledgements.title': 'Agraïments',
+        'info.acknowledgements.mit-license': 'Llicència MIT',
+        'info.acknowledgements.cc0-license': 'Llicència CC0',
+        'info.acknowledgements.cc-by-license': 'Llicència CC-BY',
+        'info.acknowledgements.jscwlib': 'Biblioteca JavaScript per al codi Morse',
+        'info.acknowledgements.cat-icon': 'Icona de gat',
+        'info.acknowledgements.settings-icon': 'Icona de configuració',
         'info.tooSlow': 'Massa lent!',
         'info.lostFocus': "S'ha perdut el focus!",
     },
@@ -443,7 +443,7 @@ function getElement(id, type) {
 
 function setElements() {
     settingsModalElement = getElement('settings-modal', HTMLDivElement);
-    attributionsElement = getElement('attributions', HTMLElement);
+    acknowledgementsElement = getElement('acknowledgements', HTMLElement);
     historyElement = getElement('history', HTMLElement);
     statisticsElement = getElement('statistics', HTMLElement);
     infoElement = getElement('info', HTMLElement);
@@ -787,26 +787,26 @@ function renderSettingsModal() {
     `;
 }
 
-function renderInfoModal() {
-    attributionsElement.innerHTML = `
-    <h3>${t('info.attributions.title')}</h3>
+function renderAcknowledgements() {
+    acknowledgementsElement.innerHTML = `
+    <h3>${t('info.acknowledgements.title')}</h3>
     <ul>
         <li>
-            ${t('info.attributions.jscwlib')}:
+            ${t('info.acknowledgements.jscwlib')}:
             <a href="https://fkurz.net/ham/jscwlib.html">jscwlib</a>
-            (${t('info.attributions.mit-license')})
+            (${t('info.acknowledgements.mit-license')})
         </li>
         <li>
             <img src="cat.svg" class="inline-button">
-            ${t('info.attributions.cat-icon')}:
+            ${t('info.acknowledgements.cat-icon')}:
             <a href="https://github.com/twitter/twemoji">Twemoji</a>
-            (${t('info.attributions.cc-by-license')})
+            (${t('info.acknowledgements.cc-by-license')})
         </li>
         <li>
             <img src="settings.svg" class="inline-button">
-            ${t('info.attributions.settings-icon')}:
+            ${t('info.acknowledgements.settings-icon')}:
             <a href="https://www.svgrepo.com/svg/474780/combo-chart">SVG Repo</a>
-            (${t('info.attributions.cc0-license')})
+            (${t('info.acknowledgements.cc0-license')})
         </li>
     </ul>
     `;
@@ -849,7 +849,7 @@ function setLanguage(lang) {
     renderHistory();
     renderSettingsModal();
     renderStatistics();
-    renderInfoModal();
+    renderAcknowledgements();
 }
 
 /** Refresh the stats as needed
