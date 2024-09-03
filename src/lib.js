@@ -177,8 +177,8 @@ let settingsModalElement;
 let infoModalElement;
 /** @type {HTMLElement} */
 let historyElement;
-/** @type {HTMLDivElement} */
-let statsModalElement;
+/** @type {HTMLElement} */
+let statsSectionElement;
 /** @type {HTMLElement} */
 let infoElement;
 
@@ -221,7 +221,6 @@ const translations = {
         'info.attributions.jscwlib': 'JavaScript library for Morse Code',
         'info.attributions.cat-icon': 'Cat icon',
         'info.attributions.info-icon': 'Info icon',
-        'info.attributions.statistics-icon': 'Statistics icon',
         'info.attributions.settings-icon': 'Settings icon',
         'info.tooSlow': 'Too slow!',
         'info.lostFocus': 'Focus lost!',
@@ -264,7 +263,6 @@ const translations = {
         'info.attributions.jscwlib': 'Bibliothèque JavaScript pour le code Morse',
         'info.attributions.cat-icon': 'Icône de chat',
         'info.attributions.info-icon': 'Icône d\'information',
-        'info.attributions.statistics-icon': 'Icône des statistiques',
         'info.attributions.settings-icon': 'Icône des paramètres',
         'info.tooSlow': 'Trop lent !',
         'info.lostFocus': 'Focus perdu !',
@@ -307,7 +305,6 @@ const translations = {
         'info.attributions.jscwlib': 'モールス信号用JavaScriptライブラリ',
         'info.attributions.cat-icon': '猫アイコン',
         'info.attributions.info-icon': '情報アイコン',
-        'info.attributions.statistics-icon': '統計アイコン',
         'info.attributions.settings-icon': '設定アイコン',
         'info.tooSlow': '遅すぎます！',
         'info.lostFocus': 'フォーカスが外れました！',
@@ -350,7 +347,6 @@ const translations = {
         'info.attributions.jscwlib': 'Biblioteca JavaScript para código Morse',
         'info.attributions.cat-icon': 'Ícono de gato',
         'info.attributions.info-icon': 'Ícono de información',
-        'info.attributions.statistics-icon': 'Ícono de estadísticas',
         'info.attributions.settings-icon': 'Ícono de ajustes',
         'info.tooSlow': '¡Demasiado lento!',
         'info.lostFocus': '¡Se perdió el foco!',
@@ -393,7 +389,6 @@ const translations = {
         'info.attributions.jscwlib': 'Biblioteca JavaScript per al codi Morse',
         'info.attributions.cat-icon': 'Icona de gat',
         'info.attributions.info-icon': 'Icona d\'informació',
-        'info.attributions.statistics-icon': 'Icona d\'estadístiques',
         'info.attributions.settings-icon': 'Icona de configuració',
         'info.tooSlow': 'Massa lent!',
         'info.lostFocus': "S'ha perdut el focus!",
@@ -455,7 +450,7 @@ function setElements() {
     settingsModalElement = getElement('settings-modal', HTMLDivElement);
     infoModalElement = getElement('info-modal', HTMLDivElement);
     historyElement = getElement('history', HTMLElement);
-    statsModalElement = getElement('stats-modal', HTMLDivElement);
+    statsSectionElement = getElement('stats-section', HTMLElement);
     infoElement = getElement('info', HTMLElement);
 }
 
@@ -587,67 +582,58 @@ function restoreSettings() {
     updateTogglesFromCharset();
 }
 
-function renderStatsModal() {
+function renderStats() {
     const lang = activeLanguage;
-    statsModalElement.innerHTML = `
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title">${t('stats.title')}</h3>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th></th>
-                            <th scope="col">${t('stats.elapsed')}</th>
-                            <th scope="col">${t('stats.copiedCharacters')}</th>
-                            <th scope="col">${t('stats.copiedWords')}</th>
-                            <th scope="col">${t('stats.score')}</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <th scope="row">${t('stats.lastSession')}</th>
-                            <td>${stats.elapsed.lastSession.toLocaleString(lang)} s</td>
-                            <td>${stats.copiedCharacters.lastSession.toLocaleString(lang)}</td>
-                            <td>${stats.copiedWords.lastSession.toLocaleString(lang)}</td>
-                            <td>${stats.score.lastSession.toLocaleString(lang)}</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">${t('stats.bestSession')}</th>
-                            <td>${stats.elapsed.bestSession.toLocaleString(lang)} s</td>
-                            <td>${stats.copiedCharacters.bestSession.toLocaleString(lang)}</td>
-                            <td>${stats.copiedWords.bestSession.toLocaleString(lang)}</td>
-                            <td>${stats.score.bestSession.toLocaleString(lang)}</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">${t('stats.currentDay')}</th>
-                            <td>${stats.elapsed.currentDay.toLocaleString(lang)} s</td>
-                            <td>${stats.copiedCharacters.currentDay.toLocaleString(lang)}</td>
-                            <td>${stats.copiedWords.currentDay.toLocaleString(lang)}</td>
-                            <td>${stats.score.currentDay.toLocaleString(lang)}</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">${t('stats.bestDay')}</th>
-                            <td>${stats.elapsed.bestDay.toLocaleString(lang)} s</td>
-                            <td>${stats.copiedCharacters.bestDay.toLocaleString(lang)}</td>
-                            <td>${stats.copiedWords.bestDay.toLocaleString(lang)}</td>
-                            <td>${stats.score.bestDay.toLocaleString(lang)}</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">${t('stats.total')}</th>
-                            <td>${stats.elapsed.total.toLocaleString(lang)} s</td>
-                            <td>${stats.copiedCharacters.total.toLocaleString(lang)}</td>
-                            <td>${stats.copiedWords.total.toLocaleString(lang)}</td>
-                            <td>${stats.score.total.toLocaleString(lang)}</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
+    statsSectionElement.innerHTML = `
+    <h3>${t('stats.title')}</h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th></th>
+                <th scope="col">${t('stats.elapsed')}</th>
+                <th scope="col">${t('stats.copiedCharacters')}</th>
+                <th scope="col">${t('stats.copiedWords')}</th>
+                <th scope="col">${t('stats.score')}</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th scope="row">${t('stats.lastSession')}</th>
+                <td>${stats.elapsed.lastSession.toLocaleString(lang)} s</td>
+                <td>${stats.copiedCharacters.lastSession.toLocaleString(lang)}</td>
+                <td>${stats.copiedWords.lastSession.toLocaleString(lang)}</td>
+                <td>${stats.score.lastSession.toLocaleString(lang)}</td>
+            </tr>
+            <tr>
+                <th scope="row">${t('stats.bestSession')}</th>
+                <td>${stats.elapsed.bestSession.toLocaleString(lang)} s</td>
+                <td>${stats.copiedCharacters.bestSession.toLocaleString(lang)}</td>
+                <td>${stats.copiedWords.bestSession.toLocaleString(lang)}</td>
+                <td>${stats.score.bestSession.toLocaleString(lang)}</td>
+            </tr>
+            <tr>
+                <th scope="row">${t('stats.currentDay')}</th>
+                <td>${stats.elapsed.currentDay.toLocaleString(lang)} s</td>
+                <td>${stats.copiedCharacters.currentDay.toLocaleString(lang)}</td>
+                <td>${stats.copiedWords.currentDay.toLocaleString(lang)}</td>
+                <td>${stats.score.currentDay.toLocaleString(lang)}</td>
+            </tr>
+            <tr>
+                <th scope="row">${t('stats.bestDay')}</th>
+                <td>${stats.elapsed.bestDay.toLocaleString(lang)} s</td>
+                <td>${stats.copiedCharacters.bestDay.toLocaleString(lang)}</td>
+                <td>${stats.copiedWords.bestDay.toLocaleString(lang)}</td>
+                <td>${stats.score.bestDay.toLocaleString(lang)}</td>
+            </tr>
+            <tr>
+                <th scope="row">${t('stats.total')}</th>
+                <td>${stats.elapsed.total.toLocaleString(lang)} s</td>
+                <td>${stats.copiedCharacters.total.toLocaleString(lang)}</td>
+                <td>${stats.copiedWords.total.toLocaleString(lang)}</td>
+                <td>${stats.score.total.toLocaleString(lang)}</td>
+            </tr>
+        </tbody>
+    </table>
     `;
 }
 
@@ -834,12 +820,6 @@ function renderInfoModal() {
                         (${t('info.attributions.cc0-license')})
                     </li>
                     <li>
-                        <img src="stats.svg" class="inline-button">
-                        ${t('info.attributions.statistics-icon')}:
-                        <a href="https://www.svgrepo.com/svg/474780/combo-chart">SVG Repo</a>
-                        (${t('info.attributions.cc0-license')})
-                    </li>
-                    <li>
                         <img src="settings.svg" class="inline-button">
                         ${t('info.attributions.settings-icon')}:
                         <a href="https://www.svgrepo.com/svg/474780/combo-chart">SVG Repo</a>
@@ -888,7 +868,7 @@ function setLanguage(lang) {
     localStorage.setItem('language', lang);
     renderHistory();
     renderSettingsModal();
-    renderStatsModal();
+    renderStats();
     renderInfoModal();
 }
 
@@ -1012,7 +992,7 @@ function startSession() {
     cwPlayer.play();
     infoElement.innerText = '';
     historyElement.focus();
-    renderStatsModal();
+    renderStats();
     renderHistory();
 }
 
@@ -1068,7 +1048,7 @@ function stopSession(sent, userInput) {
         score: stats.score.lastSession,
     });
 
-    renderStatsModal();
+    renderStats();
     renderHistory();
 }
 
