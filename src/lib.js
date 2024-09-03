@@ -1098,6 +1098,7 @@ document.addEventListener('keydown', (event) => {
         // correct
         incrementCopiedCharacters(sent);
         renderHistory();
+        renderStatistics();
     } else {
         // incorrect
         // play sound, replay character, and end session
