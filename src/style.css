@@ -36,10 +36,10 @@ h1 svg {
 .inline-button {
     height:1em;
 }
-#stats-section table {
+#statistics table {
     text-align: right;
 }
-#stats-section table th {
+#statistics table th {
     width: 140px;
     height: 40px;
 }

@@ -178,7 +178,7 @@ let infoModalElement;
 /** @type {HTMLElement} */
 let historyElement;
 /** @type {HTMLElement} */
-let statsSectionElement;
+let statisticsElement;
 /** @type {HTMLElement} */
 let infoElement;
 
@@ -450,7 +450,7 @@ function setElements() {
     settingsModalElement = getElement('settings-modal', HTMLDivElement);
     infoModalElement = getElement('info-modal', HTMLDivElement);
     historyElement = getElement('history', HTMLElement);
-    statsSectionElement = getElement('stats-section', HTMLElement);
+    statisticsElement = getElement('statistics', HTMLElement);
     infoElement = getElement('info', HTMLElement);
 }
 
@@ -582,9 +582,9 @@ function restoreSettings() {
     updateTogglesFromCharset();
 }
 
-function renderStats() {
+function renderStatistics() {
     const lang = activeLanguage;
-    statsSectionElement.innerHTML = `
+    statisticsElement.innerHTML = `
     <h3>${t('stats.title')}</h3>
     <table class="table">
         <thead>
@@ -868,14 +868,14 @@ function setLanguage(lang) {
     localStorage.setItem('language', lang);
     renderHistory();
     renderSettingsModal();
-    renderStats();
+    renderStatistics();
     renderInfoModal();
 }
 
 /** Refresh the stats as needed
  *  @param {boolean} [modified] - Where the stats recently modified?
 */
-function refreshStats(modified) {
+function refreshStatistics(modified) {
     // update day stats
     const now = new Date();
     const today = new Date(now);
@@ -961,7 +961,7 @@ function incrementCopiedCharacters(sent) {
     }
     increaseStat(stats.score, stats.copiedWords.lastSession + 1);
 
-    refreshStats(true);
+    refreshStatistics(true);
 }
 
 function onFinished() {
@@ -980,7 +980,7 @@ function startSession() {
     inSession = true;
     sessionId = crypto.randomUUID(),
     sessionStart = new Date();
-    sessionDurationUpdater = setInterval(refreshStats, 1000);
+    sessionDurationUpdater = setInterval(refreshStatistics, 1000);
     stats.elapsed.lastSession = 0;
     stats.copiedCharacters.lastSession = 0;
     stats.copiedWords.lastSession = 0;
@@ -992,7 +992,7 @@ function startSession() {
     cwPlayer.play();
     infoElement.innerText = '';
     historyElement.focus();
-    renderStats();
+    renderStatistics();
     renderHistory();
 }
 
@@ -1048,7 +1048,7 @@ function stopSession(sent, userInput) {
         score: stats.score.lastSession,
     });
 
-    renderStats();
+    renderStatistics();
     renderHistory();
 }
 
@@ -1279,7 +1279,7 @@ function main() {
     cwPlayer.onLampOff = () => catNose.style.fill = '#E75A70';
     cwPlayer.onLampOn = () => catNose.style.fill = 'yellow';
     setElements();
-    refreshStats();
+    refreshStatistics();
     historyElement.addEventListener('blur', () => {
         if (inSession) {
             infoElement.innerText = t('info.lostFocus');
