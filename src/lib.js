@@ -778,7 +778,7 @@ function renderSettingsModal() {
                     <label class="form-check-label" for="settings-charset-punct"><code>.,:?'-/()"=+×@</code></label>
                 </div>
             </div>
-        </div>
+        </fieldset>
     </div>
     `;
 }
