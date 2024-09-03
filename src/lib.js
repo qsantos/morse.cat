@@ -220,7 +220,6 @@ const translations = {
         'acknowledgements.cc-by-license': 'CC-BY License',
         'acknowledgements.jscwlib': 'JavaScript library for Morse Code',
         'acknowledgements.cat-icon': 'Cat icon',
-        'acknowledgements.settings-icon': 'Settings icon',
         'info.tooSlow': 'Too slow!',
         'info.lostFocus': 'Focus lost!',
     },
@@ -261,7 +260,6 @@ const translations = {
         'acknowledgements.cc-by-license': 'Licence CC-BY',
         'acknowledgements.jscwlib': 'Bibliothèque JavaScript pour le code Morse',
         'acknowledgements.cat-icon': 'Icône de chat',
-        'acknowledgements.settings-icon': 'Icône des paramètres',
         'info.tooSlow': 'Trop lent !',
         'info.lostFocus': 'Focus perdu !',
     },
@@ -302,7 +300,6 @@ const translations = {
         'acknowledgements.cc-by-license': 'CC-BY ライセンス',
         'acknowledgements.jscwlib': 'モールス信号用JavaScriptライブラリ',
         'acknowledgements.cat-icon': '猫アイコン',
-        'acknowledgements.settings-icon': '設定アイコン',
         'info.tooSlow': '遅すぎます！',
         'info.lostFocus': 'フォーカスが外れました！',
     },
@@ -343,7 +340,6 @@ const translations = {
         'acknowledgements.cc-by-license': 'Licencia CC-BY',
         'acknowledgements.jscwlib': 'Biblioteca JavaScript para código Morse',
         'acknowledgements.cat-icon': 'Ícono de gato',
-        'acknowledgements.settings-icon': 'Ícono de ajustes',
         'info.tooSlow': '¡Demasiado lento!',
         'info.lostFocus': '¡Se perdió el foco!',
     },
@@ -384,7 +380,6 @@ const translations = {
         'acknowledgements.cc-by-license': 'Llicència CC-BY',
         'acknowledgements.jscwlib': 'Biblioteca JavaScript per al codi Morse',
         'acknowledgements.cat-icon': 'Icona de gat',
-        'acknowledgements.settings-icon': 'Icona de configuració',
         'info.tooSlow': 'Massa lent!',
         'info.lostFocus': "S'ha perdut el focus!",
     },
@@ -797,12 +792,6 @@ function renderAcknowledgements() {
             ${t('acknowledgements.cat-icon')}:
             <a href="https://github.com/twitter/twemoji">Twemoji</a>
             (${t('acknowledgements.cc-by-license')})
-        </li>
-        <li>
-            <img src="settings.svg" class="inline-button">
-            ${t('acknowledgements.settings-icon')}:
-            <a href="https://www.svgrepo.com/svg/474780/combo-chart">SVG Repo</a>
-            (${t('acknowledgements.cc0-license')})
         </li>
     </ul>
     `;
