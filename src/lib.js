@@ -173,8 +173,8 @@ const stats = readStats();
 
 /** @type {HTMLDivElement} */
 let settingsModalElement;
-/** @type {HTMLDivElement} */
-let infoModalElement;
+/** @type {HTMLElement} */
+let attributionsElement;
 /** @type {HTMLElement} */
 let historyElement;
 /** @type {HTMLElement} */
@@ -220,7 +220,6 @@ const translations = {
         'info.attributions.cc-by-license': 'CC-BY License',
         'info.attributions.jscwlib': 'JavaScript library for Morse Code',
         'info.attributions.cat-icon': 'Cat icon',
-        'info.attributions.info-icon': 'Info icon',
         'info.attributions.settings-icon': 'Settings icon',
         'info.tooSlow': 'Too slow!',
         'info.lostFocus': 'Focus lost!',
@@ -262,7 +261,6 @@ const translations = {
         'info.attributions.cc-by-license': 'Licence CC-BY',
         'info.attributions.jscwlib': 'Bibliothèque JavaScript pour le code Morse',
         'info.attributions.cat-icon': 'Icône de chat',
-        'info.attributions.info-icon': 'Icône d\'information',
         'info.attributions.settings-icon': 'Icône des paramètres',
         'info.tooSlow': 'Trop lent !',
         'info.lostFocus': 'Focus perdu !',
@@ -304,7 +302,6 @@ const translations = {
         'info.attributions.cc-by-license': 'CC-BY ライセンス',
         'info.attributions.jscwlib': 'モールス信号用JavaScriptライブラリ',
         'info.attributions.cat-icon': '猫アイコン',
-        'info.attributions.info-icon': '情報アイコン',
         'info.attributions.settings-icon': '設定アイコン',
         'info.tooSlow': '遅すぎます！',
         'info.lostFocus': 'フォーカスが外れました！',
@@ -346,7 +343,6 @@ const translations = {
         'info.attributions.cc-by-license': 'Licencia CC-BY',
         'info.attributions.jscwlib': 'Biblioteca JavaScript para código Morse',
         'info.attributions.cat-icon': 'Ícono de gato',
-        'info.attributions.info-icon': 'Ícono de información',
         'info.attributions.settings-icon': 'Ícono de ajustes',
         'info.tooSlow': '¡Demasiado lento!',
         'info.lostFocus': '¡Se perdió el foco!',
@@ -388,7 +384,6 @@ const translations = {
         'info.attributions.cc-by-license': 'Llicència CC-BY',
         'info.attributions.jscwlib': 'Biblioteca JavaScript per al codi Morse',
         'info.attributions.cat-icon': 'Icona de gat',
-        'info.attributions.info-icon': 'Icona d\'informació',
         'info.attributions.settings-icon': 'Icona de configuració',
         'info.tooSlow': 'Massa lent!',
         'info.lostFocus': "S'ha perdut el focus!",
@@ -448,7 +443,7 @@ function getElement(id, type) {
 
 function setElements() {
     settingsModalElement = getElement('settings-modal', HTMLDivElement);
-    infoModalElement = getElement('info-modal', HTMLDivElement);
+    attributionsElement = getElement('attributions', HTMLElement);
     historyElement = getElement('history', HTMLElement);
     statisticsElement = getElement('statistics', HTMLElement);
     infoElement = getElement('info', HTMLElement);
@@ -793,42 +788,27 @@ function renderSettingsModal() {
 }
 
 function renderInfoModal() {
-    infoModalElement.innerHTML = `
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title">${t('info.attributions.title')}</h3>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-        <div class="modal-body">
-                <ul>
-                    <li>
-                        ${t('info.attributions.jscwlib')}:
-                        <a href="https://fkurz.net/ham/jscwlib.html">jscwlib</a>
-                        (${t('info.attributions.mit-license')})
-                    </li>
-                    <li>
-                        <img src="cat.svg" class="inline-button">
-                        ${t('info.attributions.cat-icon')}:
-                        <a href="https://github.com/twitter/twemoji">Twemoji</a>
-                        (${t('info.attributions.cc-by-license')})
-                    </li>
-                    <li>
-                        <img src="info.svg" class="inline-button">
-                        ${t('info.attributions.info-icon')}:
-                        <a href="https://www.svgrepo.com/svg/474780/combo-chart">SVG Repo</a>
-                        (${t('info.attributions.cc0-license')})
-                    </li>
-                    <li>
-                        <img src="settings.svg" class="inline-button">
-                        ${t('info.attributions.settings-icon')}:
-                        <a href="https://www.svgrepo.com/svg/474780/combo-chart">SVG Repo</a>
-                        (${t('info.attributions.cc0-license')})
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
+    attributionsElement.innerHTML = `
+    <h3>${t('info.attributions.title')}</h3>
+    <ul>
+        <li>
+            ${t('info.attributions.jscwlib')}:
+            <a href="https://fkurz.net/ham/jscwlib.html">jscwlib</a>
+            (${t('info.attributions.mit-license')})
+        </li>
+        <li>
+            <img src="cat.svg" class="inline-button">
+            ${t('info.attributions.cat-icon')}:
+            <a href="https://github.com/twitter/twemoji">Twemoji</a>
+            (${t('info.attributions.cc-by-license')})
+        </li>
+        <li>
+            <img src="settings.svg" class="inline-button">
+            ${t('info.attributions.settings-icon')}:
+            <a href="https://www.svgrepo.com/svg/474780/combo-chart">SVG Repo</a>
+            (${t('info.attributions.cc0-license')})
+        </li>
+    </ul>
     `;
 }
 
