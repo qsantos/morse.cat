@@ -27,12 +27,6 @@ h1 rt {
 h1 svg {
     vertical-align: middle;
 }
-.button {
-    text-decoration: none;
-}
-.button>img {
-    width:50px;
-}
 .inline-button {
     height:1em;
 }
