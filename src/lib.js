@@ -768,7 +768,7 @@ function renderSettings() {
         <div class="row mb-3">
             <label class="col-form-label col-sm-5" for="settings-charset">${t('settings.charset.title')}</label>
             <div class="col-sm-5">
-                <textarea class="form-control" style="word-break:break-all" rows="3" id="settings-charset" oninput="onCustomCharsetInput()"></textarea>
+                <textarea class="form-control" style="word-break:break-all; font-family:mono" rows="3" id="settings-charset" oninput="onCustomCharsetInput()"></textarea>
             </div>
         </div>
         <fieldset class="row mb-3">
