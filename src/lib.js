@@ -216,6 +216,8 @@ const translations = {
         'settings.export': 'Export Data',
         'settings.import': 'Import Data',
         'settings.delete': 'Delete Data',
+        'settings.delete.warning': 'Are you sure you want to delete all data? You will lose your practice history, as well as the statistics.',
+        'settings.delete.cancel': 'Close',
         'acknowledgements.title': 'Acknowledgements',
         'acknowledgements.mit-license': 'MIT License',
         'acknowledgements.cc0-license': 'CC0 License',
@@ -259,6 +261,8 @@ const translations = {
         'settings.export': 'Exporter les données',
         'settings.import': 'Importer les données',
         'settings.delete': 'Supprimer les données',
+        'settings.delete.warning': 'Êtes-vous sûr de vouloir supprimer toutes les données ? Vous perdrez votre historique de pratique ainsi que les statistiques.',
+        'settings.delete.cancel': 'Fermer',
         'acknowledgements.title': 'Remerciements',
         'acknowledgements.mit-license': 'Licence MIT',
         'acknowledgements.cc0-license': 'Licence CC0',
@@ -302,6 +306,8 @@ const translations = {
         'settings.export': 'データをエクスポートする',
         'settings.import': 'データをエクスポートする',
         'settings.delete': 'データを削除する',
+        'settings.delete.warning': 'すべてのデータを削除してもよろしいですか？ 練習履歴および統計情報が失われます。',
+        'settings.delete.cancel': '閉じる',
         'acknowledgements.title': '謝辞',
         'acknowledgements.mit-license': 'MIT ライセンス',
         'acknowledgements.cc0-license': 'CC0 ライセンス',
@@ -345,6 +351,8 @@ const translations = {
         'settings.export': 'Exportar los datos',
         'settings.import': 'Exportar los datos',
         'settings.delete': 'Eliminar los datos',
+        'settings.delete.warning': '¿Estás seguro de que deseas eliminar todos los datos? Perderás tu historial de práctica, así como las estadísticas.',
+        'settings.delete.cancel': 'Cerrar',
         'acknowledgements.title': 'Agradecimientos',
         'acknowledgements.mit-license': 'Licencia MIT',
         'acknowledgements.cc0-license': 'Licencia CC0',
@@ -388,6 +396,8 @@ const translations = {
         'settings.export': 'Exportar les dades',
         'settings.import': 'Exportar les dades',
         'settings.delete': 'Eliminar les dades',
+        'settings.delete.warning': 'Estàs segur que vols eliminar totes les dades? Perdràs l\'historial de pràctica i també les estadístiques.',
+        'settings.delete.cancel': 'Tancar',
         'acknowledgements.title': 'Agraïments',
         'acknowledgements.mit-license': 'Llicència MIT',
         'acknowledgements.cc0-license': 'Llicència CC0',
@@ -795,7 +805,28 @@ function renderSettings() {
             <button class="btn btn-primary" onclick="importData()">${t('settings.import')}</button>
         </div>
         <div class="row mb-3">
-            <button class="btn btn-danger" onclick="deleteData()">${t('settings.delete')}</button>
+            <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete-confirm">${t('settings.delete')}</button>
+        </div>
+    </div>
+    `;
+}
+
+function renderDeleteConfirm() {
+    const modal = getElement('delete-confirm', HTMLDivElement);
+    modal.innerHTML = `
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">${t('settings.delete')}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>${t('settings.delete.warning')}</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">${t('settings.delete.cancel')}</button>
+                <button type="button" class="btn btn-danger" onclick="deleteData()">${t('settings.delete')}</button>
+            </div>
         </div>
     </div>
     `;
@@ -859,6 +890,7 @@ function setLanguage(lang) {
     renderSettings();
     renderStatistics();
     renderAcknowledgements();
+    renderDeleteConfirm();
 }
 
 /** Refresh the stats as needed
@@ -1255,10 +1287,8 @@ function importData() {
 }
 
 function deleteData() {
-    if (confirm("Are you sure you want to delete all your practice history?")) {
-        indexedDB.deleteDatabase('morse.cat');
-        document.location.reload();
-    }
+    indexedDB.deleteDatabase('morse.cat');
+    document.location.reload();
 }
 
 function recalculateCharacterDurations() {
