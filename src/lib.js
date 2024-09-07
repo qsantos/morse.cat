@@ -1246,6 +1246,9 @@ function importData() {
                     objectStore.put(character);
                 }
             }
+            transaction.oncomplete = function() {
+                document.location.reload();
+            };
         })
     }
     input.click();
