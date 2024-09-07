@@ -774,6 +774,9 @@ function renderSettings() {
                 </div>
             </div>
         </fieldset>
+        <div class="row mb-3">
+            <button class="btn btn-primary" onclick="exportData()">Export Data</button>
+        </div>
     </div>
     `;
 }
