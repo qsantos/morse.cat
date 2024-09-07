@@ -782,6 +782,9 @@ function renderSettings() {
         <div class="row mb-3">
             <button class="btn btn-primary" onclick="exportData()">${t('settings.export')}</button>
         </div>
+        <div class="row mb-3">
+            <button class="btn btn-primary" onclick="importData()">Import Data</button>
+        </div>
     </div>
     `;
 }
@@ -1194,6 +1197,45 @@ function exportData() {
         const request = objectStore.getAll();
         request.onsuccess = () => { characters = request.result; exportAsJsonWhenReady(); };
     }
+}
+
+function importData() {
+    const input = document.createElement('input');
+    input.type= 'file';
+    input.oninput = function(event) {
+        /** @type {HTMLInputElement | null} */
+        // @ts-ignore
+        const element = event.target;
+        const file = element?.files?.[0];
+        if (!file) {
+            return;
+        }
+        if (file.type != "application/json") {
+            // TODO
+            console.error("no!");
+            return;
+        }
+        file.text().then(function (data){
+            if (!db) {
+                return;
+            }
+            const j = JSON.parse(data);
+            const transaction = db.transaction(['sessions', 'characters'], 'readwrite');
+            {
+                const objectStore = transaction.objectStore('sessions');
+                j['sessions'].forEach(function(session) {
+                    objectStore.put(session);
+                });
+            }
+            {
+                const objectStore = transaction.objectStore('characters');
+                j['characters'].forEach(function(character) {
+                    objectStore.put(character);
+                });
+            }
+        })
+    }
+    input.click();
 }
 
 function recalculateCharacterDurations() {
