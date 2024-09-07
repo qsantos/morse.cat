@@ -7,7 +7,6 @@ const lcwoLessons = 'KMURESNAPTLWI.JZ=FOY,VG5/Q92H38B?47C1D60X';
 let db = null;
 /** @param {() => void} callback */
 function prepareDB(callback) {
-    // indexedDB.deleteDatabase('morse.cat') // TODO
     const request = indexedDB.open("morse.cat", 1);
     request.onerror = () => {
         alert("Failed to open IndexedDB; histroy won't be saved");
@@ -790,6 +789,9 @@ function renderSettings() {
         <div class="row mb-3">
             <button class="btn btn-primary" onclick="importData()">${t('settings.import')}</button>
         </div>
+        <div class="row mb-3">
+            <button class="btn btn-danger" onclick="deleteData()">Delete Data</button>
+        </div>
     </div>
     `;
 }
@@ -1241,6 +1243,13 @@ function importData() {
         })
     }
     input.click();
+}
+
+function deleteData() {
+    if (confirm("Are you sure you want to delete all your practice history?")) {
+        indexedDB.deleteDatabase('morse.cat');
+        document.location.reload();
+    }
 }
 
 function recalculateCharacterDurations() {
