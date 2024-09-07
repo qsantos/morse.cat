@@ -1236,15 +1236,15 @@ function importData() {
             const transaction = db.transaction(['sessions', 'characters'], 'readwrite');
             {
                 const objectStore = transaction.objectStore('sessions');
-                j['sessions'].forEach(function(session) {
+                for (const session of j['sessions']) {
                     objectStore.put(session);
-                });
+                }
             }
             {
                 const objectStore = transaction.objectStore('characters');
-                j['characters'].forEach(function(character) {
+                for (const character of j['characters']) {
                     objectStore.put(character);
-                });
+                }
             }
         })
     }
