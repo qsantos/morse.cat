@@ -215,6 +215,7 @@ const translations = {
         'settings.charset.title': 'Customize Charset',
         'settings.export': 'Export Data',
         'settings.import': 'Import Data',
+        'settings.delete': 'Delete Data',
         'acknowledgements.title': 'Acknowledgements',
         'acknowledgements.mit-license': 'MIT License',
         'acknowledgements.cc0-license': 'CC0 License',
@@ -257,6 +258,7 @@ const translations = {
         'settings.charset.title': 'Choisir les caractères',
         'settings.export': 'Exporter les données',
         'settings.import': 'Importer les données',
+        'settings.delete': 'Supprimer les données',
         'acknowledgements.title': 'Remerciements',
         'acknowledgements.mit-license': 'Licence MIT',
         'acknowledgements.cc0-license': 'Licence CC0',
@@ -299,6 +301,7 @@ const translations = {
         'settings.charset.title': '文字セット',
         'settings.export': 'データをエクスポートする',
         'settings.import': 'データをエクスポートする',
+        'settings.delete': 'データを削除する',
         'acknowledgements.title': '謝辞',
         'acknowledgements.mit-license': 'MIT ライセンス',
         'acknowledgements.cc0-license': 'CC0 ライセンス',
@@ -341,6 +344,7 @@ const translations = {
         'settings.charset.title': 'Seleccionar los caracteres',
         'settings.export': 'Exportar los datos',
         'settings.import': 'Exportar los datos',
+        'settings.delete': 'Eliminar los datos',
         'acknowledgements.title': 'Agradecimientos',
         'acknowledgements.mit-license': 'Licencia MIT',
         'acknowledgements.cc0-license': 'Licencia CC0',
@@ -383,6 +387,7 @@ const translations = {
         'settings.charset.title': 'Seleccionar els caràcters',
         'settings.export': 'Exportar les dades',
         'settings.import': 'Exportar les dades',
+        'settings.delete': 'Eliminar les dades',
         'acknowledgements.title': 'Agraïments',
         'acknowledgements.mit-license': 'Llicència MIT',
         'acknowledgements.cc0-license': 'Llicència CC0',
@@ -790,7 +795,7 @@ function renderSettings() {
             <button class="btn btn-primary" onclick="importData()">${t('settings.import')}</button>
         </div>
         <div class="row mb-3">
-            <button class="btn btn-danger" onclick="deleteData()">Delete Data</button>
+            <button class="btn btn-danger" onclick="deleteData()">${t('settings.delete')}</button>
         </div>
     </div>
     `;
