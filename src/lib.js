@@ -854,6 +854,7 @@ function setLanguage(lang) {
     activeLanguage = lang;
     document.title = 'Morse Cat - ' + t('pageTitle');
     localStorage.setItem('language', lang);
+    getElement('settings-button', HTMLElement).innerText = t('settings.title');
     renderHistory();
     renderSettings();
     renderStatistics();
