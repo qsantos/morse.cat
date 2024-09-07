@@ -172,7 +172,7 @@ function readStats() {
 const stats = readStats();
 
 /** @type {HTMLDivElement} */
-let settingsModalElement;
+let settingsElement;
 /** @type {HTMLElement} */
 let acknowledgementsElement;
 /** @type {HTMLElement} */
@@ -437,7 +437,7 @@ function getElement(id, type) {
 }
 
 function setElements() {
-    settingsModalElement = getElement('settings-modal', HTMLDivElement);
+    settingsElement = getElement('settings', HTMLDivElement);
     acknowledgementsElement = getElement('acknowledgements', HTMLElement);
     historyElement = getElement('history', HTMLElement);
     statisticsElement = getElement('statistics', HTMLElement);
@@ -661,8 +661,8 @@ function renderHistory() {
     });
 }
 
-function renderSettingsModal() {
-    settingsModalElement.innerHTML = `
+function renderSettings() {
+    settingsElement.innerHTML = `
     <div class="offcanvas-header">
         <h3 class="offcanvas-title">${t('settings.title')}</h3>
         <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
@@ -832,7 +832,7 @@ function setLanguage(lang) {
     document.title = 'Morse Cat - ' + t('pageTitle');
     localStorage.setItem('language', lang);
     renderHistory();
-    renderSettingsModal();
+    renderSettings();
     renderStatistics();
     renderAcknowledgements();
 }
