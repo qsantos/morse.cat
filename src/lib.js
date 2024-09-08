@@ -197,6 +197,7 @@ const translations = {
         'stats.bestDay': 'Best Day',
         'stats.total': 'Total',
         'history.startSession': 'Press Return to start',
+        'start': 'Start',
         'settings.title': 'Settings',
         'settings.speed.title': 'Speed',
         'settings.speed.unit': 'WPM',
@@ -242,6 +243,7 @@ const translations = {
         'stats.bestDay': 'Meilleur jour',
         'stats.total': 'Total',
         'history.startSession': 'Appuyez sur Entrée pour commencer',
+        'start': 'Démarrer',
         'settings.title': 'Paramètres',
         'settings.speed.title': 'Vitesse',
         'settings.speed.unit': 'MPM',
@@ -287,6 +289,7 @@ const translations = {
         'stats.bestDay': 'ベスト日',
         'stats.total': '総数',
         'history.startSession': '開始するには、リターンキーを押してください。',
+        'start': '開始する',
         'settings.title': '設定',
         'settings.speed.title': '速度',
         'settings.speed.unit': 'WPM',
@@ -332,6 +335,7 @@ const translations = {
         'stats.bestDay': 'Mejor día',
         'stats.total': 'Total',
         'history.startSession': 'Presione Return para empezar',
+        'start': 'Iniciar',
         'settings.title': 'Configuración',
         'settings.speed.title': 'Velocidad',
         'settings.speed.unit': 'PPM',
@@ -377,6 +381,7 @@ const translations = {
         'stats.bestDay': 'Millor dia',
         'stats.total': 'Total',
         'history.startSession': 'Premeu Return per començar',
+        'start': 'Iniciar',
         'settings.title': 'Configuració',
         'settings.speed.title': 'Velocitat',
         'settings.speed.unit': 'PPM',
@@ -886,6 +891,7 @@ function setLanguage(lang) {
     document.title = 'Morse Cat - ' + t('pageTitle');
     localStorage.setItem('language', lang);
     getElement('settings-button', HTMLElement).innerText = t('settings.title');
+    getElement('start-button', HTMLElement).innerText = t('start');
     renderHistory();
     renderSettings();
     renderStatistics();
