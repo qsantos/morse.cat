@@ -814,6 +814,7 @@ function renderSettings() {
         </div>
     </div>
     `;
+    restoreSettings();
 }
 
 function renderDeleteConfirm() {
