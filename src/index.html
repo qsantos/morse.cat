@@ -62,7 +62,15 @@
         </button>
         <div id="info"></div>
         <ul id="current-session" tabindex="1"></ul>
-        <ul id="history" tabindex="1"></ul>
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Date & time</th>
+                    <th>Copied text</th>
+                </tr>
+            </thead>
+            <tbody id="history"></tbody>
+        </table>
         <section id="statistics"></section>
         <section id="acknowledgements"></section>
         <div class="offcanvas offcanvas-end" id="settings"></div>

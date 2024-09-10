@@ -48,7 +48,7 @@ h1 svg {
 .active {
     color: #b11d1d;
 }
-#current-session, #history {
+#current-session {
     position: relative;
     font-family: monospace;
     font-size: 20px;
