@@ -175,6 +175,8 @@ let settingsElement;
 /** @type {HTMLElement} */
 let acknowledgementsElement;
 /** @type {HTMLElement} */
+let currentSessionElement;
+/** @type {HTMLElement} */
 let historyElement;
 /** @type {HTMLElement} */
 let statisticsElement;
@@ -468,6 +470,7 @@ function getElement(id, type) {
 function setElements() {
     settingsElement = getElement('settings', HTMLDivElement);
     acknowledgementsElement = getElement('acknowledgements', HTMLElement);
+    currentSessionElement = getElement('current-session', HTMLElement);
     historyElement = getElement('history', HTMLElement);
     statisticsElement = getElement('statistics', HTMLElement);
     infoElement = getElement('info', HTMLElement);
@@ -684,9 +687,10 @@ function formatHistoryEntry(entry) {
 }
 
 function renderHistory() {
+    currentSessionElement.innerHTML = formatCurrentSession();
     getLastSessions(10, (sessions) => {
         const formattedEntries = [...sessions.map(formatHistoryEntry)];
-        historyElement.innerHTML = formatCurrentSession() + formattedEntries.reverse().join('');
+        historyElement.innerHTML = formattedEntries.reverse().join('');
     });
 }
 
