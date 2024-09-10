@@ -686,7 +686,7 @@ function formatHistoryEntry(entry) {
     return `
     <tr>
         <td><time datetime="${entry.started}">${entry.started}</time></td>
-        <td>${entry.copiedText}${mistake}</td>
+        <td class="font-monospace">${entry.copiedText}${mistake}</td>
         <td class="text-end">${entry.elapsed} s</td>
         <td class="text-end">${entry.copiedCharacters}</td>
         <td class="text-end">${entry.copiedWords}</td>
