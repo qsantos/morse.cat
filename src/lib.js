@@ -678,13 +678,20 @@ function formatCurrentSession() {
  *  @return {string} - The formatted entry
 */
 function formatHistoryEntry(entry) {
-    let ret = `<tr><td><time datetime="${entry.started}">${entry.started}</time></td><td>${entry.copiedText}`;
+    let mistake = '';
     if (entry.mistake) {
         const { expectedCharacter, mistakenCharacter } = entry.mistake;
-        ret += `<span class="strike">${mistakenCharacter}</span>${expectedCharacter}`;
+        mistake = `<span class="strike">${mistakenCharacter}</span>${expectedCharacter}`;
     }
-    ret += '</td></tr>';
-    return ret;
+    return `
+    <tr>
+        <td><time datetime="${entry.started}">${entry.started}</time></td>
+        <td>${entry.copiedText}${mistake}</td>
+        <td class="text-end">${entry.elapsed} s</td>
+        <td class="text-end">${entry.copiedCharacters}</td>
+        <td class="text-end">${entry.copiedWords}</td>
+        <td class="text-end">${entry.score}</td>
+    </tr>`;
 }
 
 function renderHistory() {
