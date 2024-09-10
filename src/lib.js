@@ -198,7 +198,6 @@ const translations = {
         'stats.currentDay': 'Today',
         'stats.bestDay': 'Best Day',
         'stats.total': 'Total',
-        'history.startSession': 'Press Return to start',
         'start': 'Start',
         'settings.title': 'Settings',
         'settings.speed.title': 'Speed',
@@ -244,7 +243,6 @@ const translations = {
         'stats.currentDay': "Aujourd'hui",
         'stats.bestDay': 'Meilleur jour',
         'stats.total': 'Total',
-        'history.startSession': 'Appuyez sur Entrée pour commencer',
         'start': 'Démarrer',
         'settings.title': 'Paramètres',
         'settings.speed.title': 'Vitesse',
@@ -290,7 +288,6 @@ const translations = {
         'stats.currentDay': '今日',
         'stats.bestDay': 'ベスト日',
         'stats.total': '総数',
-        'history.startSession': '開始するには、リターンキーを押してください。',
         'start': '開始する',
         'settings.title': '設定',
         'settings.speed.title': '速度',
@@ -336,7 +333,6 @@ const translations = {
         'stats.currentDay': 'Hoy',
         'stats.bestDay': 'Mejor día',
         'stats.total': 'Total',
-        'history.startSession': 'Presione Return para empezar',
         'start': 'Iniciar',
         'settings.title': 'Configuración',
         'settings.speed.title': 'Velocidad',
@@ -382,7 +378,6 @@ const translations = {
         'stats.currentDay': 'Avui',
         'stats.bestDay': 'Millor dia',
         'stats.total': 'Total',
-        'history.startSession': 'Premeu Return per començar',
         'start': 'Iniciar',
         'settings.title': 'Configuració',
         'settings.speed.title': 'Velocitat',
@@ -668,7 +663,7 @@ function formatCurrentSession() {
         const started = sessionStart.toISOString();
         ret = `<span class="meta active"><time datetime="${started}">${started}</time>:</span> ${copiedText}…`;
     } else {
-        ret = t('history.startSession');
+        ret = '';
     }
     return `<li>${ret}<li>`;
 }
