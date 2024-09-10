@@ -1253,7 +1253,7 @@ function exportData() {
 
 function importData() {
     const input = document.createElement('input');
-    input.type= 'file';
+    input.type = 'file';
     input.oninput = function(event) {
         /** @type {HTMLInputElement | null} */
         // @ts-ignore
