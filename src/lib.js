@@ -676,7 +676,9 @@ function formatHistoryEntry(entry) {
     let mistake = '';
     if (entry.mistake) {
         const { expectedCharacter, mistakenCharacter } = entry.mistake;
-        mistake = `<span class="strike">${mistakenCharacter}</span>${expectedCharacter}`;
+        // make sure the expected character is visible even when it is a space
+        const visibleExpectedCharacter = expectedCharacter === ' ' ? '⎵' : expectedCharacter;
+        mistake = `<span class="strike">${mistakenCharacter}</span>${visibleExpectedCharacter}`;
     }
     return `
     <tr>
