@@ -121,6 +121,8 @@ let inSession = false;
 let sessionId = '';
 /** @type {Date} */
 let sessionStart;
+/** @type {Date | undefined} */
+let sessionEnd = undefined;
 /** @type {number} */
 let sessionDurationUpdater = 0;
 
@@ -1028,11 +1030,13 @@ function stopSession(sent, userInput) {
         return;
     }
 
+    const now = new Date();
+
     let lastReceivedIndex = stats.copiedCharacters.lastSession;
     if (userInput) {
         // save incorrectly received character
         const received = {
-            time: new Date().toISOString(),
+            time: now.toISOString(),
             character: userInput,
         };
         if (sent) {
@@ -1055,11 +1059,12 @@ function stopSession(sent, userInput) {
     cwPlayer.onFinished = undefined;
     clearInterval(sessionDurationUpdater);
     sessionDurationUpdater = 0;
+    sessionEnd = now;
 
     saveSession({
         id: sessionId,
         started: sessionStart.toISOString(),
-        finished: new Date().toISOString(),
+        finished: now.toISOString(),
         copiedText,
         mistake: !sent || !userInput ? null : {
             expectedCharacter: sent.character,
@@ -1163,7 +1168,6 @@ document.addEventListener('keydown', (event) => {
         // play sound, replay character, and end session
         fail(sent, userInput);
     }
-
 });
 
 /** Event handler for when a character has been fully played
