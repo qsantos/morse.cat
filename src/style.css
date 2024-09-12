@@ -41,13 +41,6 @@ h1 svg {
     text-decoration: line-through;
     color: red;
 }
-.meta {
-    font-size: 15px;
-    color: #444;
-}
-.active {
-    color: #b11d1d;
-}
 #current-session {
     position: relative;
     font-family: monospace;

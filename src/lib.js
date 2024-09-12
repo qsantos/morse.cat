@@ -658,13 +658,7 @@ function renderStatistics() {
  *  @return {string} - The formatted current session
 */
 function formatCurrentSession() {
-    let ret;
-    if (inSession) {
-        const started = sessionStart.toISOString();
-        ret = `<span class="meta active"><time datetime="${started}">${started}</time>:</span> ${copiedText}…`;
-    } else {
-        ret = '';
-    }
+    const ret = inSession ? copiedText : '';
     return `<li>${ret}<li>`;
 }
 
