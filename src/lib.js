@@ -1014,7 +1014,7 @@ function startSession() {
     cwPlayer.onFinished = onFinished;
     cwPlayer.play();
     infoElement.innerText = '';
-    historyElement.focus();
+    currentSessionElement.focus();
     renderStatistics();
     renderHistory();
 }
