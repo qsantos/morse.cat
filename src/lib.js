@@ -174,7 +174,7 @@ const stats = readStats();
 let settingsElement;
 /** @type {HTMLElement} */
 let acknowledgementsElement;
-/** @type {HTMLElement} */
+/** @type {HTMLTextAreaElement} */
 let currentSessionElement;
 /** @type {HTMLElement} */
 let historyElement;
@@ -465,7 +465,7 @@ function getElement(id, type) {
 function setElements() {
     settingsElement = getElement('settings', HTMLDivElement);
     acknowledgementsElement = getElement('acknowledgements', HTMLElement);
-    currentSessionElement = getElement('current-session', HTMLElement);
+    currentSessionElement = getElement('current-session', HTMLTextAreaElement);
     historyElement = getElement('history', HTMLElement);
     statisticsElement = getElement('statistics', HTMLElement);
     infoElement = getElement('info', HTMLElement);
@@ -654,14 +654,6 @@ function renderStatistics() {
     `;
 }
 
-/** Format the current session
- *  @return {string} - The formatted current session
-*/
-function formatCurrentSession() {
-    const ret = inSession ? copiedText : '';
-    return `<li>${ret}<li>`;
-}
-
 /** Format an history entry
  *  @param {import("./types").HistoryEntry} entry - The entry to format
  *  @return {string} - The formatted entry
@@ -686,7 +678,7 @@ function formatHistoryEntry(entry) {
 }
 
 function renderHistory() {
-    currentSessionElement.innerHTML = formatCurrentSession();
+    currentSessionElement.value = copiedText;
     getLastSessions(10, (sessions) => {
         const formattedEntries = [...sessions.map(formatHistoryEntry)];
         historyElement.innerHTML = formattedEntries.reverse().join('');

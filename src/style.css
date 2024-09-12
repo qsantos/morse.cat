@@ -42,16 +42,7 @@ h1 svg {
     color: red;
 }
 #current-session {
-    position: relative;
     font-family: monospace;
     font-size: 20px;
     text-transform: uppercase;
-    border:1px solid grey;
-    height:200px;
-    padding: 5px;
-    margin: 15px;
-    background-color:#fcf8f8;
-    list-style: none;
-    color: linear-gradient(#f69d3c, #3f87a6);;
-    overflow: hidden;
 }
