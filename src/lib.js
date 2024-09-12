@@ -887,7 +887,7 @@ function setLanguage(lang) {
     document.title = 'Morse Cat - ' + t('pageTitle');
     localStorage.setItem('language', lang);
     getElement('settings-button', HTMLElement).innerText = t('settings.title');
-    getElement('start-button', HTMLElement).innerText = t('start');
+    getElement('start-button-label', HTMLElement).innerText = t('start');
     renderHistory();
     renderSettings();
     renderStatistics();
@@ -1049,6 +1049,7 @@ function stopSession(sent, userInput) {
         saveCharacter({ sessionId, result: "Pending", sent })
     }
 
+    getElement('start-button', HTMLElement).focus();
     cwPlayer.stop();
     inSession = false;
     cwPlayer.onFinished = undefined;
