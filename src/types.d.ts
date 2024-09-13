@@ -21,6 +21,7 @@ export type Settings = {
     min_word_length: number,
     max_word_length: number,
     charset: string,
+    session_debounce_time: number,
 };
 
 export type SentCharacter = {
