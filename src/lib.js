@@ -88,6 +88,9 @@ const settings = (() => {
             settings.max_word_length = settings.word_length;
             delete settings["word_length"];
         }
+        if (!settings.hasOwnProperty("session_debounce_time")) {
+            settings.session_debounce_time = 1;
+        }
         return settings;
     } catch (e) {
         return {
@@ -170,19 +173,6 @@ function readStats() {
 
 // stats
 const stats = readStats();
-
-/** @type {HTMLDivElement} */
-let settingsElement;
-/** @type {HTMLElement} */
-let acknowledgementsElement;
-/** @type {HTMLTextAreaElement} */
-let currentSessionElement;
-/** @type {HTMLElement} */
-let historyElement;
-/** @type {HTMLElement} */
-let statisticsElement;
-/** @type {HTMLElement} */
-let infoElement;
 
 const translations = {
     en: {
@@ -508,15 +498,6 @@ function getElement(id, type) {
     return element;
 }
 
-function setElements() {
-    settingsElement = getElement('settings', HTMLDivElement);
-    acknowledgementsElement = getElement('acknowledgements', HTMLElement);
-    currentSessionElement = getElement('current-session', HTMLTextAreaElement);
-    historyElement = getElement('history', HTMLElement);
-    statisticsElement = getElement('statistics', HTMLElement);
-    infoElement = getElement('info', HTMLElement);
-}
-
 function onSettingsChange() {
     // eslint-disable-next-line no-use-before-define
     stopSession();
@@ -649,7 +630,7 @@ function restoreSettings() {
 
 function renderStatistics() {
     const lang = activeLanguage;
-    statisticsElement.innerHTML = `
+    getElement('statistics', HTMLElement).innerHTML = `
     <h3>${t('stats.title')}</h3>
     <table class="table">
         <thead>
@@ -726,15 +707,15 @@ function formatHistoryEntry(entry) {
 }
 
 function renderHistory() {
-    currentSessionElement.value = copiedText;
+    getElement('current-session', HTMLTextAreaElement).value = copiedText;
     getLastSessions(10, (sessions) => {
         const formattedEntries = [...sessions.map(formatHistoryEntry)];
-        historyElement.innerHTML = formattedEntries.reverse().join('');
+        getElement('history', HTMLElement).innerHTML = formattedEntries.reverse().join('');
     });
 }
 
 function renderSettings() {
-    settingsElement.innerHTML = `
+    getElement('settings', HTMLDivElement).innerHTML = `
     <div class="offcanvas-header">
         <h3 class="offcanvas-title">${t('settings.title')}</h3>
         <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
@@ -889,7 +870,7 @@ function renderDeleteConfirm() {
 }
 
 function renderAcknowledgements() {
-    acknowledgementsElement.innerHTML = `
+    getElement('acknowledgements', HTMLElement).innerHTML = `
     <h3>${t('acknowledgements.title')}</h3>
     <ul>
         <li>
@@ -1061,7 +1042,7 @@ function startSession() {
     const now = new Date();
 
     if (Array.from(settings.charset).filter((c) => c.trim() !== '').length === 0) {
-        infoElement.innerText = 'Empty charset!';
+        getElement('info', HTMLElement).innerText = 'Empty charset!';
         return;
     }
     pushWord();
@@ -1080,8 +1061,8 @@ function startSession() {
     cwPlayer.setFreq(settings.tone);
     cwPlayer.onFinished = onFinished;
     cwPlayer.play();
-    infoElement.innerText = '';
-    currentSessionElement.focus();
+    getElement('info', HTMLElement).innerText = '';
+    getElement('current-session', HTMLTextAreaElement).focus();
     renderStatistics();
     renderHistory();
 }
@@ -1263,7 +1244,7 @@ cwPlayer.onCharacterPlay = (c) => {
     // detect when user has stopped copying
     if (played.length - copiedText.length > 5) {
         fail();
-        infoElement.innerText = t('info.tooSlow');
+        getElement('info', HTMLElement).innerText = t('info.tooSlow');
     }
 };
 
@@ -1424,11 +1405,10 @@ function main() {
     const catNose = getElement('nose', SVGElement);
     cwPlayer.onLampOff = () => catNose.style.fill = '#E75A70';
     cwPlayer.onLampOn = () => catNose.style.fill = 'yellow';
-    setElements();
     refreshStatistics();
-    historyElement.addEventListener('blur', () => {
+    getElement('history', HTMLElement).addEventListener('blur', () => {
         if (inSession) {
-            infoElement.innerText = t('info.lostFocus');
+            getElement('info', HTMLElement).innerText = t('info.lostFocus');
             stopSession();
         }
     });
