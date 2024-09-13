@@ -121,8 +121,8 @@ let inSession = false;
 let sessionId = '';
 /** @type {Date} */
 let sessionStart;
-/** @type {Date | undefined} */
-let sessionEnd = undefined;
+/** @type {Date} */
+let sessionEnd;
 /** @type {number} */
 let sessionDurationUpdater = 0;
 
@@ -995,6 +995,15 @@ function onFinished() {
 }
 
 function startSession() {
+    const now = new Date();
+
+    if (sessionEnd && now.getTime() - sessionEnd.getTime() < 1000) {
+        // ignore session starts that are too close to the end of the previous
+        // session, which could be caused by pressing the space key while
+        // copying, right after a mistake
+        return;
+    }
+
     if (Array.from(settings.charset).filter((c) => c.trim() !== '').length === 0) {
         infoElement.innerText = 'Empty charset!';
         return;
@@ -1004,7 +1013,7 @@ function startSession() {
     copiedText = '';
     inSession = true;
     sessionId = crypto.randomUUID(),
-    sessionStart = new Date();
+    sessionStart = now;
     sessionDurationUpdater = setInterval(refreshStatistics, 1000);
     stats.elapsed.lastSession = 0;
     stats.copiedCharacters.lastSession = 0;
