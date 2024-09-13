@@ -707,7 +707,6 @@ function formatHistoryEntry(entry) {
 }
 
 function renderHistory() {
-    getElement('current-session', HTMLTextAreaElement).value = copiedText;
     getLastSessions(10, (sessions) => {
         const formattedEntries = [...sessions.map(formatHistoryEntry)];
         getElement('history', HTMLElement).innerHTML = formattedEntries.reverse().join('');
@@ -1006,6 +1005,7 @@ function characterDuration(c, wpm) {
 */
 function incrementCopiedCharacters(sent) {
     copiedText += sent.character;
+    getElement('current-session', HTMLTextAreaElement).value = copiedText;
 
     const now = new Date();
     const elapsedSinceStart = Math.round((now.getTime() - sessionStart.getTime()) / 1000);
@@ -1048,6 +1048,7 @@ function startSession() {
     pushWord();
     played.length = 0;
     copiedText = '';
+    getElement('current-session', HTMLTextAreaElement).value = copiedText;
     inSession = true;
     sessionId = crypto.randomUUID(),
     sessionStart = now;
