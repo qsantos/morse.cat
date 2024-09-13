@@ -97,6 +97,7 @@ const settings = (() => {
             min_word_length: 5,
             max_word_length: 5,
             charset: lcwoLessons,
+            session_debounce_time: 1,
         };
     }
 })();
@@ -215,6 +216,9 @@ const translations = {
         'settings.wordLength.details': 'characters',
         'settings.lcwo.title': '<a href="https://lcwo.net/" title="Learn CW Online">LCWO</A> Lesson',
         'settings.charset.title': 'Customize Charset',
+        'settings.sessionDebounceTime.title': 'Post-Session Cooldown',
+        'settings.sessionDebounceTime.unit': 's.',
+        'settings.sessionDebounceTime.details': 'seconds',
         'settings.export': 'Export Data',
         'settings.import': 'Import Data',
         'settings.delete': 'Delete Data',
@@ -260,6 +264,9 @@ const translations = {
         'settings.wordLength.details': 'caractères',
         'settings.lcwo.title': 'Leçon <a href="https://lcwo.net/" title="Learn CW Online">LCWO</A>',
         'settings.charset.title': 'Choisir les caractères',
+        'settings.sessionDebounceTime.title': 'Délai après session',
+        'settings.sessionDebounceTime.unit': 's.',
+        'settings.sessionDebounceTime.details': 'secondes',
         'settings.export': 'Exporter les données',
         'settings.import': 'Importer les données',
         'settings.delete': 'Supprimer les données',
@@ -305,6 +312,9 @@ const translations = {
         'settings.wordLength.details': '言葉ずつの文字数',
         'settings.lcwo.title': '<a href="https://lcwo.net/" title="Learn CW Online">LCWO</A> レッスン',
         'settings.charset.title': '文字セット',
+        'settings.sessionDebounceTime.title': 'セッション後のクールダウン',
+        'settings.sessionDebounceTime.unit': '秒',
+        'settings.sessionDebounceTime.details': '秒',
         'settings.export': 'データをエクスポートする',
         'settings.import': 'データをエクスポートする',
         'settings.delete': 'データを削除する',
@@ -350,6 +360,9 @@ const translations = {
         'settings.wordLength.details': 'caracteres',
         'settings.lcwo.title': 'Leccíon <a href="https://lcwo.net/" title="Learn CW Online">LCWO</A>',
         'settings.charset.title': 'Seleccionar los caracteres',
+        'settings.sessionDebounceTime.title': 'Enfriamiento post-sesión',
+        'settings.sessionDebounceTime.unit': 's.',
+        'settings.sessionDebounceTime.details': 'segundos',
         'settings.export': 'Exportar los datos',
         'settings.import': 'Exportar los datos',
         'settings.delete': 'Eliminar los datos',
@@ -395,6 +408,9 @@ const translations = {
         'settings.wordLength.details': 'caràcters',
         'settings.lcwo.title': 'Lliçó <a href="https://lcwo.net/" title="Learn CW Online">LCWO</A>',
         'settings.charset.title': 'Seleccionar els caràcters',
+        'settings.sessionDebounceTime.title': 'Refredament post-sessió',
+        'settings.sessionDebounceTime.unit': 's.',
+        'settings.sessionDebounceTime.details': 'segons',
         'settings.export': 'Exportar les dades',
         'settings.import': 'Exportar les dades',
         'settings.delete': 'Eliminar les dades',
@@ -480,6 +496,7 @@ function onSettingsChange() {
     settings.min_word_length = parseInt(getElement('settings-word-length-min', HTMLInputElement).value, 10);
     settings.max_word_length = parseInt(getElement('settings-word-length-max', HTMLInputElement).value, 10);
     settings.charset = getElement('settings-charset', HTMLTextAreaElement).value;
+    settings.session_debounce_time = parseFloat(getElement('settings-session-debounce-time', HTMLInputElement).value);
     localStorage.setItem('settings', JSON.stringify(settings));
 }
 
@@ -594,6 +611,7 @@ function restoreSettings() {
     getElement('settings-error-tone', HTMLInputElement).value = settings.error_tone.toString();
     getElement('settings-word-length-min', HTMLInputElement).value = settings.min_word_length.toString();
     getElement('settings-word-length-max', HTMLInputElement).value = settings.max_word_length.toString();
+    getElement('settings-session-debounce-time', HTMLInputElement).value = settings.session_debounce_time.toString();
     getElement('settings-charset', HTMLTextAreaElement).value = settings.charset;
     updateLCWOLessonFromCharset();
     updateTogglesFromCharset();
@@ -798,6 +816,13 @@ function renderSettings() {
                 </div>
             </div>
         </fieldset>
+        <div class="row mb-3">
+            <label class="col-form-label col-sm-5" for="settings-session-debounce-time">${t('settings.sessionDebounceTime.title')}</label>
+            <div class="col-sm-5">
+                <input class="form-control" id="settings-session-debounce-time" oninput="onSettingsChange()" type="number" value="1" min="0" step="0.1" />
+            </div>
+            <abbr class="col-sm-2" title="${t('settings.sessionDebounceTime.details')}">${t('settings.sessionDebounceTime.unit')}</abbr>
+        </div>
         <div class="row mb-3">
             <button class="btn btn-primary" onclick="exportData()">${t('settings.export')}</button>
         </div>
@@ -1083,7 +1108,7 @@ function stopSession(sent, userInput) {
     setTimeout(function() {
         startButton.disabled = false;
         startButton.focus();
-    }, 1000);
+    }, settings.session_debounce_time * 1000);
 }
 
 /** Play a buzzer and then replay the correct character
