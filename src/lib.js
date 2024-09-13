@@ -1065,7 +1065,6 @@ function startSession() {
     getElement('info', HTMLElement).innerText = '';
     getElement('current-session', HTMLTextAreaElement).focus();
     renderStatistics();
-    renderHistory();
 }
 
 /** End the current session
@@ -1213,7 +1212,6 @@ document.addEventListener('keydown', (event) => {
     if (sent && userInput === expected) {
         // correct
         incrementCopiedCharacters(sent);
-        renderHistory();
         renderStatistics();
     } else {
         // incorrect
