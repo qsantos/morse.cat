@@ -193,12 +193,12 @@ const translations = {
         'history.copiedText': 'Copied Text',
         'history.elapsed': 'Duration',
         'history.characters': 'Characters',
-        'history.words': 'Words',
+        'history.groups': 'Groups',
         'history.score': 'Score',
         'stats.title': 'Statistics',
         'stats.elapsed': 'Time',
         'stats.copiedCharacters': 'Characters',
-        'stats.copiedWords': 'Words',
+        'stats.copiedGroups': 'Groups',
         'stats.score': 'Score',
         'stats.lastSession': 'Last Session',
         'stats.bestSession': 'Best Session',
@@ -216,8 +216,8 @@ const translations = {
         'settings.errorTone.title': 'Error Tone',
         'settings.errorTone.unit': 'Hz',
         'settings.errorTone.details': 'Hertz',
-        'settings.minWordLength.title': 'Min. Word Length',
-        'settings.maxWordLength.title': 'Max. Word Length',
+        'settings.minGroupSize.title': 'Min. Group Size',
+        'settings.maxGroupSize.title': 'Max. Group Size',
         'settings.wordLength.unit': 'chars.',
         'settings.wordLength.details': 'characters',
         'settings.lcwo.title': '<a href="https://lcwo.net/" title="Learn CW Online">LCWO</A> Lesson',
@@ -247,12 +247,12 @@ const translations = {
         'history.copiedText': 'Texte copié',
         'history.elapsed': 'Durée',
         'history.characters': 'Caractères',
-        'history.words': 'Mots',
+        'history.groups': 'Groupes',
         'history.score': 'Score',
         'stats.title': 'Statistiques',
         'stats.elapsed': 'Temps',
         'stats.copiedCharacters': 'Caractères',
-        'stats.copiedWords': 'Mots',
+        'stats.copiedGroups': 'Groupes',
         'stats.score': 'Score',
         'stats.lastSession': 'Dernière Session',
         'stats.bestSession': 'Meilleure Session',
@@ -270,8 +270,8 @@ const translations = {
         'settings.errorTone.title': "Ton d'erreur",
         'settings.errorTone.unit': 'Hz',
         'settings.errorTone.details': 'Hertz',
-        'settings.minWordLength.title': 'Longueur min. des mots',
-        'settings.maxWordLength.title': 'Longueur max. des mots',
+        'settings.minGroupSize.title': 'Taille min. des groupes',
+        'settings.maxGroupSize.title': 'Taille max. des groupes',
         'settings.wordLength.unit': 'car.',
         'settings.wordLength.details': 'caractères',
         'settings.lcwo.title': 'Leçon <a href="https://lcwo.net/" title="Learn CW Online">LCWO</A>',
@@ -301,12 +301,12 @@ const translations = {
         'history.copiedText': 'コピーしたテキスト',
         'history.elapsed': '期間',
         'history.characters': '文字',
-        'history.words': '単語',
+        'history.groups': 'グループ',
         'history.score': 'スコア',
         'stats.title': '統計',
         'stats.elapsed': '時間',
         'stats.copiedCharacters': '文字数',
-        'stats.copiedWords': '語数',
+        'stats.copiedGroups': 'グループ',
         'stats.score': 'スコア',
         'stats.lastSession': '前セッション',
         'stats.bestSession': 'ベストセッション',
@@ -324,8 +324,8 @@ const translations = {
         'settings.errorTone.title': 'エラートーン',
         'settings.errorTone.unit': 'Hz',
         'settings.errorTone.details': 'ヘルツ',
-        'settings.minWordLength.title': '最小語長',
-        'settings.maxWordLength.title': '最大語長',
+        'settings.minGroupSize.title': 'グループの最小サイズ',
+        'settings.maxGroupSize.title': 'グループの最大サイズ',
         'settings.wordLength.unit': '字',
         'settings.wordLength.details': '言葉ずつの文字数',
         'settings.lcwo.title': '<a href="https://lcwo.net/" title="Learn CW Online">LCWO</A> レッスン',
@@ -355,12 +355,12 @@ const translations = {
         'history.copiedText': 'Texto copiado',
         'history.elapsed': 'Duración',
         'history.characters': 'Caracteres',
-        'history.words': 'Palabras',
+        'history.groups': 'Grupos',
         'history.score': 'Puntuación',
         'stats.title': 'Estadísticas',
         'stats.elapsed': 'Tiempo',
         'stats.copiedCharacters': 'Caracteres',
-        'stats.copiedWords': 'Palabras',
+        'stats.copiedGroups': 'Grupos',
         'stats.score': 'Puntuación',
         'stats.lastSession': 'Sesión anterior',
         'stats.bestSession': 'Mejor sesión',
@@ -378,8 +378,8 @@ const translations = {
         'settings.errorTone.title': 'Tono de error',
         'settings.errorTone.unit': 'Hz',
         'settings.errorTone.details': 'Hertz',
-        'settings.minWordLength.title': 'Longitud mín. de las palabras',
-        'settings.maxWordLength.title': 'Longitud máx. de las palabras',
+        'settings.minGroupSize.title': 'Tamaño mín. de los grupos',
+        'settings.maxGroupSize.title': 'Tamaño máx. de los grupos',
         'settings.wordLength.unit': 'car.',
         'settings.wordLength.details': 'caracteres',
         'settings.lcwo.title': 'Leccíon <a href="https://lcwo.net/" title="Learn CW Online">LCWO</A>',
@@ -409,12 +409,12 @@ const translations = {
         'history.copiedText': 'Text copiat',
         'history.elapsed': 'Durada',
         'history.characters': 'Caràcters',
-        'history.words': 'Paraules',
+        'history.groups': 'Grups',
         'history.score': 'Puntuació',
         'stats.title': 'Estadístiques',
         'stats.elapsed': 'Temps',
         'stats.copiedCharacters': 'Caràcters',
-        'stats.copiedWords': 'Paraules',
+        'stats.copiedGroups': 'Grups',
         'stats.score': 'Puntuació',
         'stats.lastSession': 'Sessió anterior',
         'stats.bestSession': 'Millor sesió',
@@ -432,8 +432,8 @@ const translations = {
         'settings.errorTone.title': "To d'error",
         'settings.errorTone.unit': 'Hz',
         'settings.errorTone.details': 'Hertz',
-        'settings.minWordLength.title': 'Mida mín. de les paraules',
-        'settings.maxWordLength.title': 'Mida màx. de les paraules',
+        'settings.minGroupSize.title': 'Mida mín. dels grups',
+        'settings.maxGroupSize.title': 'Mida màx. dels grups',
         'settings.wordLength.unit': 'car.',
         'settings.wordLength.details': 'caràcters',
         'settings.lcwo.title': 'Lliçó <a href="https://lcwo.net/" title="Learn CW Online">LCWO</A>',
@@ -657,7 +657,7 @@ function renderStatistics() {
                 <th></th>
                 <th scope="col">${t('stats.elapsed')}</th>
                 <th scope="col">${t('stats.copiedCharacters')}</th>
-                <th scope="col">${t('stats.copiedWords')}</th>
+                <th scope="col">${t('stats.copiedGroups')}</th>
                 <th scope="col">${t('stats.score')}</th>
             </tr>
         </thead>
@@ -762,14 +762,14 @@ function renderSettings() {
             <abbr class="col-sm-2" title="${t('settings.errorTone.details')}">${t('settings.errorTone.unit')}</abbr>
         </div>
         <div class="row mb-3">
-            <label class="col-form-label col-sm-5" for="settings-word-length-min">${t('settings.minWordLength.title')}</label>
+            <label class="col-form-label col-sm-5" for="settings-word-length-min">${t('settings.minGroupSize.title')}</label>
             <div class="col-sm-5">
                 <input class="form-control" id="settings-word-length-min" oninput="onSettingsChange()" type="number" value="5" min="1" />
             </div>
             <abbr class="col-sm-2" title="${t('settings.wordLength.details')}">${t('settings.wordLength.unit')}</abbr>
         </div>
         <div class="row mb-3">
-            <label class="col-form-label col-sm-5" for="settings-word-length-max">${t('settings.maxWordLength.title')}</label>
+            <label class="col-form-label col-sm-5" for="settings-word-length-max">${t('settings.maxGroupSize.title')}</label>
             <div class="col-sm-5">
                 <input class="form-control" id="settings-word-length-max" oninput="onSettingsChange()" type="number" value="5" min="1" />
             </div>
@@ -949,7 +949,7 @@ function setLanguage(lang) {
         <th>${t('history.copiedText')}</th>
         <th>${t('history.elapsed')}</th>
         <th>${t('history.characters')}</th>
-        <th>${t('history.words')}</th>
+        <th>${t('history.groups')}</th>
         <th>${t('history.score')}</th>
     </tr>
     `;
