@@ -1064,7 +1064,6 @@ function startSession() {
     cwPlayer.play();
     getElement('info', HTMLElement).innerText = '';
     getElement('current-session', HTMLTextAreaElement).focus();
-    renderStatistics();
 }
 
 /** End the current session
@@ -1212,7 +1211,6 @@ document.addEventListener('keydown', (event) => {
     if (sent && userInput === expected) {
         // correct
         incrementCopiedCharacters(sent);
-        renderStatistics();
     } else {
         // incorrect
         // play sound, replay character, and end session
