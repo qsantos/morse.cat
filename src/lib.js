@@ -189,6 +189,12 @@ const translations = {
         languageName: 'English',
         pageTitle: 'Sharpen your claws and learn Morse code!',
         'key.space': 'Space',
+        'history.started': 'Session start time',
+        'history.copiedText': 'Copied Text',
+        'history.elapsed': 'Duration',
+        'history.characters': 'Characters',
+        'history.words': 'Words',
+        'history.score': 'Score',
         'stats.title': 'Statistics',
         'stats.elapsed': 'Time',
         'stats.copiedCharacters': 'Characters',
@@ -237,6 +243,12 @@ const translations = {
         languageName: 'French',
         pageTitle: 'Aiguisez vos griffes et apprenez le code Morse !',
         'key.space': 'Espace',
+        'history.started': 'Heure de début de la session',
+        'history.copiedText': 'Texte copié',
+        'history.elapsed': 'Durée',
+        'history.characters': 'Caractères',
+        'history.words': 'Mots',
+        'history.score': 'Score',
         'stats.title': 'Statistiques',
         'stats.elapsed': 'Temps',
         'stats.copiedCharacters': 'Caractères',
@@ -285,6 +297,12 @@ const translations = {
         languageName: '日本語',
         pageTitle: '爪とぎしてモールス信号を学びましょう！',
         'key.space': '空白',
+        'history.started': 'セッション開始時間',
+        'history.copiedText': 'コピーしたテキスト',
+        'history.elapsed': '期間',
+        'history.characters': '文字',
+        'history.words': '単語',
+        'history.score': 'スコア',
         'stats.title': '統計',
         'stats.elapsed': '時間',
         'stats.copiedCharacters': '文字数',
@@ -333,6 +351,12 @@ const translations = {
         languageName: 'Español',
         pageTitle: '¡Afilen sus garras y aprendan el código Morse!',
         'key.space': 'Espacio',
+        'history.started': 'Hora de inicio de la sesión',
+        'history.copiedText': 'Texto copiado',
+        'history.elapsed': 'Duración',
+        'history.characters': 'Caracteres',
+        'history.words': 'Palabras',
+        'history.score': 'Puntuación',
         'stats.title': 'Estadísticas',
         'stats.elapsed': 'Tiempo',
         'stats.copiedCharacters': 'Caracteres',
@@ -381,6 +405,12 @@ const translations = {
         languageName: 'Català',
         pageTitle: 'Esmola les urpes i aprèn codi Morse!',
         'key.space': 'Espai',
+        'history.started': 'Hora d\'inici de la sessió',
+        'history.copiedText': 'Text copiat',
+        'history.elapsed': 'Durada',
+        'history.characters': 'Caràcters',
+        'history.words': 'Paraules',
+        'history.score': 'Puntuació',
         'stats.title': 'Estadístiques',
         'stats.elapsed': 'Temps',
         'stats.copiedCharacters': 'Caràcters',
@@ -913,6 +943,16 @@ function setLanguage(lang) {
     localStorage.setItem('language', lang);
     getElement('settings-button', HTMLElement).innerText = t('settings.title');
     getElement('start-button-label', HTMLElement).innerText = t('start');
+    getElement('history-thead', HTMLElement).innerHTML = `
+    <tr>
+        <th>${t('history.started')}</th>
+        <th>${t('history.copiedText')}</th>
+        <th>${t('history.elapsed')}</th>
+        <th>${t('history.characters')}</th>
+        <th>${t('history.words')}</th>
+        <th>${t('history.score')}</th>
+    </tr>
+    `;
     renderHistory();
     renderSettings();
     renderStatistics();
