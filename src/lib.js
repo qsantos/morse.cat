@@ -1124,8 +1124,7 @@ function stopSession(sent, userInput) {
         score: stats.score.lastSession,
     });
 
-    renderStatistics();
-    renderHistory();
+    render();
 
     const startButton = getElement('start-button', HTMLButtonElement);
     startButton.disabled = true;
