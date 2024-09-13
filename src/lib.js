@@ -121,8 +121,6 @@ let inSession = false;
 let sessionId = '';
 /** @type {Date} */
 let sessionStart;
-/** @type {Date} */
-let sessionEnd;
 /** @type {number} */
 let sessionDurationUpdater = 0;
 
@@ -997,13 +995,6 @@ function onFinished() {
 function startSession() {
     const now = new Date();
 
-    if (sessionEnd && now.getTime() - sessionEnd.getTime() < 1000) {
-        // ignore session starts that are too close to the end of the previous
-        // session, which could be caused by pressing the space key while
-        // copying, right after a mistake
-        return;
-    }
-
     if (Array.from(settings.charset).filter((c) => c.trim() !== '').length === 0) {
         infoElement.innerText = 'Empty charset!';
         return;
@@ -1062,13 +1053,11 @@ function stopSession(sent, userInput) {
         saveCharacter({ sessionId, result: "Pending", sent })
     }
 
-    getElement('start-button', HTMLElement).focus();
     cwPlayer.stop();
     inSession = false;
     cwPlayer.onFinished = undefined;
     clearInterval(sessionDurationUpdater);
     sessionDurationUpdater = 0;
-    sessionEnd = now;
 
     saveSession({
         id: sessionId,
@@ -1088,6 +1077,13 @@ function stopSession(sent, userInput) {
 
     renderStatistics();
     renderHistory();
+
+    const startButton = getElement('start-button', HTMLButtonElement);
+    startButton.disabled = true;
+    setTimeout(function() {
+        startButton.disabled = false;
+        startButton.focus();
+    }, 1000);
 }
 
 /** Play a buzzer and then replay the correct character
