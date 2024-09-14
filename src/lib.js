@@ -682,7 +682,6 @@ function getPreferredLanguage() {
 */
 function setLanguage(lang) {
     document.documentElement.lang = lang;
-    getElement('language-select', HTMLSelectElement).value = lang;
     activeLanguage = lang;
     document.title = 'Morse Cat - ' + t('pageTitle');
     localStorage.setItem('language', lang);
@@ -694,8 +693,44 @@ function render() {
         const formattedEntries = [...sessions.map(formatHistoryEntry)];
         const history = formattedEntries.reverse().join('');
         const lang = activeLanguage;
-        getElement('settings-button', HTMLElement).innerText = t('settings.title');
         getElement('root', HTMLDivElement).innerHTML = `
+        <nav class="navbar navbar-expand-lg">
+            <div class="container-fluid">
+                <h1 id="main-header" class="navbar-brand">
+                    <!-- Morse (−− −−− ·−· ··· ·) -->
+                    <ruby><span class="first-letter">M</span><rp>(</rp><rt>−−</rt><rp>)</rp>o<rp>(</rp><rt>−−−</rt><rp>)</rp>r<rp>(</rp><rt>·−·</rt><rp>)</rp>s<rp>(</rp><rt>···</rt><rp>)</rp>e<rp>(</rp><rt>·</rt><rp>)</rp></ruby>
+                    <!-- Cat (−·−· ·− −) -->
+                    <ruby><span class="first-letter">C</span><rp>(</rp><rt>−·−·</rt><rp>)</rp>a<rp>(</rp><rt>·−</rt><rp>)</rp>t<rp>(</rp><rt>−</rt><rp>)</rp></ruby>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36" height="50"><path fill="#FFCC4D" d="M35.734 19.929C35.375 16.66 35 15 34 13c0 0 3-9 1-12.7-.674-1.246-7.404 1.688-10 3.7 0 0-4-.998-7-.998S11 4 11 4C8.404 1.988 1.674-.946 1 .3-1 4 2 13 2 13 1 15 .625 16.66.266 19.929-.129 23.513.657 26.37 1 27c.39.716 2.367 3.025 5 5 4 3 10 4 12 4s8-1 12-4c2.633-1.975 4.61-4.284 5-5 .343-.63 1.129-3.487.734-7.071z"/><a href="ponyo.webp"><path id="nose" fill="#E75A70" d="M18 19.5c3 0 3 .5 3 1.5s-1.5 3-3 3-3-2-3-3-.001-1.5 3-1.5z"/></a><a href="https://www.youtube.com/watch?v=fVUWjoTxOU8"><path fill="#F18F26" d="M2 3c.447-1.342 5.64 1 6.64 2C8.64 5 4 8 3 11c0 0-2-5-1-8zm32 0c-.447-1.342-5.64 1-6.64 2 0 0 4.64 3 5.64 6 0 0 2-5 1-8z"/></a><path fill="#FFCC4D" d="M4.934 5.603C4.934 4.189 11 7 10 8s-2 1.603-3 2.603-2.066-4-2.066-5zm26.132 0C31.066 4.189 25 7 26 8s2 1.603 3 2.603 2.066-4 2.066-5z"/><path fill="#FEE7B8" d="M.701 25c-.148 0-.294-.065-.393-.19-.171-.217-.134-.531.083-.702.162-.127 4.02-3.12 10.648-2.605.275.02.481.261.46.536-.021.275-.257.501-.537.46-6.233-.474-9.915 2.366-9.951 2.395-.093.071-.202.106-.31.106zm8.868-4.663c-.049 0-.1-.007-.149-.022-4.79-1.497-8.737-.347-8.777-.336-.265.081-.543-.07-.623-.335-.079-.265.071-.543.335-.622.173-.052 4.286-1.247 9.362.338.264.083.411.363.328.627-.066.213-.263.35-.476.35zM35.299 25c.148 0 .294-.065.393-.19.171-.217.134-.531-.083-.702-.162-.127-4.02-3.12-10.648-2.605-.275.02-.481.261-.46.536.021.275.257.501.537.46 6.233-.474 9.915 2.366 9.951 2.395.093.071.202.106.31.106zm-8.868-4.663c.049 0 .1-.007.149-.022 4.79-1.497 8.737-.347 8.777-.336.265.081.543-.07.623-.335.079-.265-.071-.543-.335-.622-.173-.052-4.286-1.247-9.362.338-.264.083-.411.363-.328.627.065.213.263.35.476.35z"/><path fill="#292F33" d="M28.023 24.191C27.046 24.383 23 26 18 26s-9.046-1.617-10.023-1.809C7 24 6.885 25.264 7.442 27.132 8 29 11 33 18 33s10-4 10.558-5.868c.557-1.868.442-3.132-.535-2.941z"/><path fill="#F5F8FA" d="M8 25s5 2 10 2 10-2 10-2-.5 3-1.5 3-1.5-1-1.5-1-4 2-7 2-7-2-7-2-.5 1-1.5 1S8 25 8 25z"/><a href="https://en.wikipedia.org/wiki/Jeremiah_Denton"><g fill="#292F33"><ellipse cx="12" cy="14.5" rx="2" ry="3.5"/><ellipse cx="24" cy="14.5" rx="2" ry="3.5"/></g></a></svg>
+                </h1>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item me-2">
+                            <select class="form-select" id="language-select" onchange="setLanguage(this.value)">
+                                <option value="ca">Català</option>
+                                <option value="en">English</option>
+                                <option value="fr">Français</option>
+                                <option value="ja">日本語</option>
+                                <option value="es">Español</option>
+                            </select>
+                        </li>
+                        <li class="nav-item">
+                            <button class="btn btn-primary" data-bs-toggle="offcanvas" data-bs-target="#settings" tabindex="1">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-gear" viewBox="0 0 16 16">
+                                    <path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492M5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0"/>
+                                    <path d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115z"/>
+                                </svg>
+                                ${t('settings.title')}
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <div id="info"></div>
         <p>
             This page will help you practice copying <a href="https://en.wikipedia.org/wiki/Morse_code">Morse code</a>.
             You might already know about <a href="https://lcwo.net/">LCWO</a>.
@@ -940,6 +975,7 @@ function render() {
         </div>
         `;
         restoreSettings();
+        getElement('language-select', HTMLSelectElement).value = lang;
     });
 }
 
@@ -1408,9 +1444,8 @@ function onCurrentSessionBlur() {
 }
 
 function main() {
-    const catNose = getElement('nose', SVGElement);
-    cwPlayer.onLampOff = () => catNose.style.fill = '#E75A70';
-    cwPlayer.onLampOn = () => catNose.style.fill = 'yellow';
+    cwPlayer.onLampOff = () => getElement('nose', SVGElement).style.fill = '#E75A70';
+    cwPlayer.onLampOn = () => getElement('nose', SVGElement).style.fill = 'yellow';
     refreshStatistics();
     setLanguage(getPreferredLanguage());
 }
