@@ -204,7 +204,6 @@ const translations = {
         languageName: 'English',
         pageTitle: 'Sharpen your claws and learn Morse code!',
         description: 'Practice Morse code with instant feedback to guide your learning. If you\'re familiar with <a href="https://lcwo.net/">LCWO</a>,, you\'ll find this tool a fun and helpful way to keep building your skills.',
-        'key.space': 'Space',
         'history.started': 'Start time',
         'history.copiedText': 'Copied Text',
         'history.elapsed': 'Duration',
@@ -259,7 +258,6 @@ const translations = {
         languageName: 'French',
         pageTitle: 'Aiguisez vos griffes et apprenez le code Morse !',
         description: 'Entraînez-vous au code Morse avec un feedback immédiat pour vous aider à progresser. Si vous connaissez déjà <a href="https://lcwo.net/">LCWO</a>, vous trouverez cet outil amusant et pratique pour continuer à améliorer vos compétences.',
-        'key.space': 'Espace',
         'history.started': 'Heure de début',
         'history.copiedText': 'Texte copié',
         'history.elapsed': 'Durée',
@@ -314,7 +312,6 @@ const translations = {
         languageName: '日本語',
         pageTitle: '爪とぎしてモールス信号を学びましょう！',
         description: 'モールス符号の練習をしながら、即時フィードバックで学習をサポートします。<a href="https://lcwo.net/">LCWO</a>を知っているなら、このツールは楽しく役立つ方法でスキルを伸ばすのにぴったりです。',
-        'key.space': '空白',
         'history.started': '開始時間',
         'history.copiedText': 'コピーしたテキスト',
         'history.elapsed': '期間',
@@ -369,7 +366,6 @@ const translations = {
         languageName: 'Español',
         pageTitle: '¡Afilen sus garras y aprendan el código Morse!',
         description: 'Practica código Morse con retroalimentación instantánea para guiar tu aprendizaje. Si ya conoces <a href="https://lcwo.net/">LCWO</a>, encontrarás que esta herramienta es divertida y útil para seguir mejorando tus habilidades.',
-        'key.space': 'Espacio',
         'history.started': 'Hora de inicio',
         'history.copiedText': 'Texto copiado',
         'history.elapsed': 'Duración',
@@ -424,7 +420,6 @@ const translations = {
         languageName: 'Català',
         pageTitle: 'Esmola les urpes i aprèn codi Morse!',
         description: 'Practica codi Morse amb comentaris instantanis per guiar el teu aprenentatge. Si ja coneixes <a href="https://lcwo.net/">LCWO</a>, trobaràs que aquesta eina és divertida i útil per seguir millorant les teves habilitats.',
-        'key.space': 'Espai',
         'history.started': 'Hora d\'inici',
         'history.copiedText': 'Text copiat',
         'history.elapsed': 'Durada',
@@ -950,20 +945,6 @@ function replayAfterMistake(c) {
     };
     cwPlayer.setFreq(settings.error_tone);
     cwPlayer.play('T');
-}
-
-/** Format a character for display
- *  @param {string | undefined} c - The character to format
- *  @return {string} - The formatted character
-*/
-function formatCharacter(c) {
-    if (c === undefined) {
-        return '-';
-    } else if (c === ' ') {
-        return t('key.space');
-    } else {
-        return c;
-    }
 }
 
 /** Interrupt a session due to an user error
