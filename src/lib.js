@@ -14,7 +14,6 @@ let inSession = false;
 let sessionId = '';
 /** @type {Date} */
 let sessionStart;
-/** @type {number} */
 let sessionDurationUpdater = 0;
 
 /** @type {keyof typeof translations} */
