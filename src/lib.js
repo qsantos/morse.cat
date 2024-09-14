@@ -1145,58 +1145,6 @@ function deleteData() {
     document.location.reload();
 }
 
-function recalculateCharacterDurations() {
-    if (!db) {
-        return;
-    }
-    const transaction = db.transaction(['sessions', 'characters']);
-    /** @type {import("./types").HistoryEntry[] | null} */
-    let sessions = null;
-    /** @type {import("./types").TransmittedCharacter[] | null} */
-    let characters = null;
-    function fixCharacterDurations() {
-        if (!db || !sessions || !characters) {
-            return;
-        }
-        const transaction = db.transaction(['characters'], 'readwrite');
-        const objectStore = transaction.objectStore('characters');
-        /** @type { { [id: string]: import("./types").HistoryEntry } | null} */
-        const sessionById = {};
-        for (const session of sessions) {
-            sessionById[session.id] = session;
-        }
-        for (const character of characters) {
-            if (!character.sent) {
-                continue;
-            }
-            const session = sessionById[character.sessionId];
-            if (!session) {
-                console.warn(`Could not find session for characer ${character.id}`);
-                continue;
-            }
-            const wpm = session.settings.wpm;
-            const newDuration = characterDuration(character.sent.character, wpm);
-            if (newDuration == character.sent.duration) {
-                continue;
-            }
-            console.info(`Updated characer ${character.id}: ${character.sent.duration} -> ${newDuration}`);
-            character.sent.duration = newDuration;
-            objectStore.put(character);
-        }
-        transaction.commit();
-    }
-    {
-        const objectStore = transaction.objectStore('sessions');
-        const request = objectStore.getAll();
-        request.onsuccess = () => { sessions = request.result; fixCharacterDurations(); };
-    }
-    {
-        const objectStore = transaction.objectStore('characters');
-        const request = objectStore.getAll();
-        request.onsuccess = () => { characters = request.result; fixCharacterDurations(); };
-    }
-}
-
 function onCurrentSessionBlur() {
     if (inSession) {
         getElement('info', HTMLElement).innerText = t('info.lostFocus');
