@@ -2,6 +2,7 @@ const latin = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'; // A-Z
 const digits = '0123456789'; // 0-9
 const punct = '.,:?\'-/()"=+×@';
 const lcwoLessons = 'KMURESNAPTLWI.JZ=FOY,VG5/Q92H38B?47C1D60X';
+const HTML_TEMPLATE = getElement('template', HTMLElement).innerText;
 
 /** @type {IDBDatabase | null} */
 let db = null;
@@ -717,289 +718,24 @@ function setLanguage(lang) {
     render();
 }
 
+/**
+ *  @param {string} template
+ *  @param {{[key: string]: any;}} vars
+ *  @return {string}
+*/
+function evaluateTemplate(template, vars) {
+    const f = new Function(...Object.keys(vars), 'return `' + template + '`');
+    return f(...Object.values(vars))
+}
+
 function render() {
     getLastSessions(10, (sessions) => {
-        const formattedEntries = [...sessions.map(formatHistoryEntry)];
-        const history = formattedEntries.reverse().join('');
-        const lang = activeLanguage;
-        getElement('root', HTMLDivElement).innerHTML = `
-        <nav class="navbar navbar-expand-lg">
-            <div class="container-fluid">
-                <h1 id="main-header" class="navbar-brand">
-                    <!-- Morse (−− −−− ·−· ··· ·) -->
-                    <ruby><span class="first-letter">M</span><rp>(</rp><rt>−−</rt><rp>)</rp>o<rp>(</rp><rt>−−−</rt><rp>)</rp>r<rp>(</rp><rt>·−·</rt><rp>)</rp>s<rp>(</rp><rt>···</rt><rp>)</rp>e<rp>(</rp><rt>·</rt><rp>)</rp></ruby>
-                    <!-- Cat (−·−· ·− −) -->
-                    <ruby><span class="first-letter">C</span><rp>(</rp><rt>−·−·</rt><rp>)</rp>a<rp>(</rp><rt>·−</rt><rp>)</rp>t<rp>(</rp><rt>−</rt><rp>)</rp></ruby>
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36" height="50"><path fill="#FFCC4D" d="M35.734 19.929C35.375 16.66 35 15 34 13c0 0 3-9 1-12.7-.674-1.246-7.404 1.688-10 3.7 0 0-4-.998-7-.998S11 4 11 4C8.404 1.988 1.674-.946 1 .3-1 4 2 13 2 13 1 15 .625 16.66.266 19.929-.129 23.513.657 26.37 1 27c.39.716 2.367 3.025 5 5 4 3 10 4 12 4s8-1 12-4c2.633-1.975 4.61-4.284 5-5 .343-.63 1.129-3.487.734-7.071z"/><a href="ponyo.webp"><path id="nose" fill="#E75A70" d="M18 19.5c3 0 3 .5 3 1.5s-1.5 3-3 3-3-2-3-3-.001-1.5 3-1.5z"/></a><a href="https://www.youtube.com/watch?v=fVUWjoTxOU8"><path fill="#F18F26" d="M2 3c.447-1.342 5.64 1 6.64 2C8.64 5 4 8 3 11c0 0-2-5-1-8zm32 0c-.447-1.342-5.64 1-6.64 2 0 0 4.64 3 5.64 6 0 0 2-5 1-8z"/></a><path fill="#FFCC4D" d="M4.934 5.603C4.934 4.189 11 7 10 8s-2 1.603-3 2.603-2.066-4-2.066-5zm26.132 0C31.066 4.189 25 7 26 8s2 1.603 3 2.603 2.066-4 2.066-5z"/><path fill="#FEE7B8" d="M.701 25c-.148 0-.294-.065-.393-.19-.171-.217-.134-.531.083-.702.162-.127 4.02-3.12 10.648-2.605.275.02.481.261.46.536-.021.275-.257.501-.537.46-6.233-.474-9.915 2.366-9.951 2.395-.093.071-.202.106-.31.106zm8.868-4.663c-.049 0-.1-.007-.149-.022-4.79-1.497-8.737-.347-8.777-.336-.265.081-.543-.07-.623-.335-.079-.265.071-.543.335-.622.173-.052 4.286-1.247 9.362.338.264.083.411.363.328.627-.066.213-.263.35-.476.35zM35.299 25c.148 0 .294-.065.393-.19.171-.217.134-.531-.083-.702-.162-.127-4.02-3.12-10.648-2.605-.275.02-.481.261-.46.536.021.275.257.501.537.46 6.233-.474 9.915 2.366 9.951 2.395.093.071.202.106.31.106zm-8.868-4.663c.049 0 .1-.007.149-.022 4.79-1.497 8.737-.347 8.777-.336.265.081.543-.07.623-.335.079-.265-.071-.543-.335-.622-.173-.052-4.286-1.247-9.362.338-.264.083-.411.363-.328.627.065.213.263.35.476.35z"/><path fill="#292F33" d="M28.023 24.191C27.046 24.383 23 26 18 26s-9.046-1.617-10.023-1.809C7 24 6.885 25.264 7.442 27.132 8 29 11 33 18 33s10-4 10.558-5.868c.557-1.868.442-3.132-.535-2.941z"/><path fill="#F5F8FA" d="M8 25s5 2 10 2 10-2 10-2-.5 3-1.5 3-1.5-1-1.5-1-4 2-7 2-7-2-7-2-.5 1-1.5 1S8 25 8 25z"/><a href="https://en.wikipedia.org/wiki/Jeremiah_Denton"><g fill="#292F33"><ellipse cx="12" cy="14.5" rx="2" ry="3.5"/><ellipse cx="24" cy="14.5" rx="2" ry="3.5"/></g></a></svg>
-                </h1>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav ms-auto">
-                        <li class="nav-item me-2">
-                            <select class="form-select" id="language-select" onchange="setLanguage(this.value)">
-                                <option value="ca">Català</option>
-                                <option value="en">English</option>
-                                <option value="fr">Français</option>
-                                <option value="ja">日本語</option>
-                                <option value="es">Español</option>
-                            </select>
-                        </li>
-                        <li class="nav-item">
-                            <button class="btn btn-primary" data-bs-toggle="offcanvas" data-bs-target="#settings" tabindex="1">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-gear" viewBox="0 0 16 16">
-                                    <path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492M5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0"/>
-                                    <path d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115z"/>
-                                </svg>
-                                ${t('settings.title')}
-                            </button>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-        <div id="info"></div>
-        <p>${t('description')}</p>
-        <button class="btn btn-primary d-block mx-auto m-3" autofocus id="start-button" onclick="startSession()">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-play" viewBox="0 0 16 16">
-                <path d="M10.804 8 5 4.633v6.734zm.792-.696a.802.802 0 0 1 0 1.392l-6.363 3.692C4.713 12.69 4 12.345 4 11.692V4.308c0-.653.713-.998 1.233-.696z"/>
-            </svg>
-            ${t('start')}
-        </button>
-        <textarea class="form-control mb-5" id="current-session" rows="5" onkeydown="onKeyDown(event)" onblur="onCurrentSessionBlur()" readonly></textarea>
-        <section>
-            <table class="table table-bordered table-striped">
-                <thead>
-                    <tr>
-                        <th>${t('history.started')}</th>
-                        <th>${t('history.copiedText')}</th>
-                        <th>${t('history.elapsed')}</th>
-                        <th>${t('history.characters')}</th>
-                        <th>${t('history.groups')}</th>
-                        <th>${t('history.score')}</th>
-                    </tr>
-                </thead>
-                <tbody>${history}</tbody>
-            </table>
-        </section>
-        <section>
-            <h3>${t('stats.title')}</h3>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th></th>
-                        <th scope="col">${t('stats.elapsed')}</th>
-                        <th scope="col">${t('stats.copiedCharacters')}</th>
-                        <th scope="col">${t('stats.copiedGroups')}</th>
-                        <th scope="col">${t('stats.score')}</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <th scope="row">${t('stats.lastSession')}</th>
-                        <td>${stats.elapsed.lastSession.toLocaleString(lang)} s</td>
-                        <td>${stats.copiedCharacters.lastSession.toLocaleString(lang)}</td>
-                        <td>${stats.copiedGroups.lastSession.toLocaleString(lang)}</td>
-                        <td>${stats.score.lastSession.toLocaleString(lang)}</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">${t('stats.bestSession')}</th>
-                        <td>${stats.elapsed.bestSession.toLocaleString(lang)} s</td>
-                        <td>${stats.copiedCharacters.bestSession.toLocaleString(lang)}</td>
-                        <td>${stats.copiedGroups.bestSession.toLocaleString(lang)}</td>
-                        <td>${stats.score.bestSession.toLocaleString(lang)}</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">${t('stats.currentDay')}</th>
-                        <td>${stats.elapsed.currentDay.toLocaleString(lang)} s</td>
-                        <td>${stats.copiedCharacters.currentDay.toLocaleString(lang)}</td>
-                        <td>${stats.copiedGroups.currentDay.toLocaleString(lang)}</td>
-                        <td>${stats.score.currentDay.toLocaleString(lang)}</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">${t('stats.bestDay')}</th>
-                        <td>${stats.elapsed.bestDay.toLocaleString(lang)} s</td>
-                        <td>${stats.copiedCharacters.bestDay.toLocaleString(lang)}</td>
-                        <td>${stats.copiedGroups.bestDay.toLocaleString(lang)}</td>
-                        <td>${stats.score.bestDay.toLocaleString(lang)}</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">${t('stats.total')}</th>
-                        <td>${stats.elapsed.total.toLocaleString(lang)} s</td>
-                        <td>${stats.copiedCharacters.total.toLocaleString(lang)}</td>
-                        <td>${stats.copiedGroups.total.toLocaleString(lang)}</td>
-                        <td>${stats.score.total.toLocaleString(lang)}</td>
-                    </tr>
-                </tbody>
-            </table>
-        </section>
-        <section>
-            <h3>${t('acknowledgements.title')}</h3>
-            <ul>
-                <li>
-                    ${t('acknowledgements.jscwlib')}:
-                    <a href="https://fkurz.net/ham/jscwlib.html">jscwlib</a>
-                    (${t('acknowledgements.mit-license')})
-                </li>
-                <li>
-                    <img src="cat.svg" class="inline-button">
-                    ${t('acknowledgements.cat-icon')}:
-                    <a href="https://github.com/twitter/twemoji">Twemoji</a>
-                    (${t('acknowledgements.cc-by-license')})
-                </li>
-            </ul>
-        </section>
-        <div class="offcanvas offcanvas-end" id="settings">
-            <div class="offcanvas-header">
-                <h3 class="offcanvas-title">${t('settings.title')}</h3>
-                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-            </div>
-            <div class="offcanvas-body">
-                <div class="row mb-3">
-                    <label class="col-form-label col-sm-5" for="settings-wpm">${t('settings.speed.title')}</label>
-                    <div class="col-sm-5">
-                        <input class="form-control" id="settings-wpm" oninput="onSettingsChange()" type="number" value="20" min="1" step="0.5" />
-                    </div>
-                    <abbr class="col-sm-2" title="${t('settings.speed.details')}">${t('settings.speed.unit')}</abbr>
-                </div>
-                <div class="row mb-3">
-                    <label class="col-form-label col-sm-5" for="settings-tone">${t('settings.tone.title')}</label>
-                    <div class="col-sm-5">
-                        <input class="form-control" id="settings-tone" oninput="onSettingsChange()" type="number" value="600" min="10" step="10" />
-                    </div>
-                    <abbr class="col-sm-2" title="${t('settings.tone.details')}">${t('settings.tone.unit')}</abbr>
-                </div>
-                <div class="row mb-3">
-                    <label class="col-form-label col-sm-5" for="settings-error-tone">${t('settings.errorTone.title')}</label>
-                    <div class="col-sm-5">
-                        <input class="form-control" id="settings-error-tone" oninput="onSettingsChange()" type="number" value="200" min="10" step="10" />
-                    </div>
-                    <abbr class="col-sm-2" title="${t('settings.errorTone.details')}">${t('settings.errorTone.unit')}</abbr>
-                </div>
-                <div class="row mb-3">
-                    <label class="col-form-label col-sm-5" for="settings-group-length-min">${t('settings.minGroupSize.title')}</label>
-                    <div class="col-sm-5">
-                        <input class="form-control" id="settings-group-length-min" oninput="onSettingsChange()" type="number" value="5" min="1" />
-                    </div>
-                    <abbr class="col-sm-2" title="${t('settings.groupSize.details')}">${t('settings.groupSize.unit')}</abbr>
-                </div>
-                <div class="row mb-3">
-                    <label class="col-form-label col-sm-5" for="settings-group-length-max">${t('settings.maxGroupSize.title')}</label>
-                    <div class="col-sm-5">
-                        <input class="form-control" id="settings-group-length-max" oninput="onSettingsChange()" type="number" value="5" min="1" />
-                    </div>
-                    <abbr class="col-sm-2" title="${t('settings.groupSize.details')}">${t('settings.groupSize.unit')}</abbr>
-                </div>
-                <div class="row mb-3">
-                    <label class="col-form-label col-sm-5" for="settings-lcwo-lesson">${t('settings.lcwo.title')}</label>
-                    <div class="col-sm-5">
-                        <select class="form-select" id="settings-lcwo-lesson" oninput="onLCWOLessonInput()">
-                            <option value="0">-</option>
-                            <option value="1">1 - K, M</option>
-                            <option value="2">2 - U</option>
-                            <option value="3">3 - R</option>
-                            <option value="4">4 - E</option>
-                            <option value="5">5 - S</option>
-                            <option value="6">6 - N</option>
-                            <option value="7">7 - A</option>
-                            <option value="8">8 - P</option>
-                            <option value="9">9 - T</option>
-                            <option value="10">10 - L</option>
-                            <option value="11">11 - W</option>
-                            <option value="12">12 - I</option>
-                            <option value="13">13 - .</option>
-                            <option value="14">14 - J</option>
-                            <option value="15">15 - Z</option>
-                            <option value="16">16 - =</option>
-                            <option value="17">17 - F</option>
-                            <option value="18">18 - O</option>
-                            <option value="19">19 - Y</option>
-                            <option value="20">20 - ,</option>
-                            <option value="21">21 - V</option>
-                            <option value="22">22 - G</option>
-                            <option value="23">23 - 5</option>
-                            <option value="24">24 - /</option>
-                            <option value="25">25 - Q</option>
-                            <option value="26">26 - 9</option>
-                            <option value="27">27 - 2</option>
-                            <option value="28">28 - H</option>
-                            <option value="29">29 - 3</option>
-                            <option value="30">30 - 8</option>
-                            <option value="31">31 - B</option>
-                            <option value="32">32 - ?</option>
-                            <option value="33">33 - 4</option>
-                            <option value="34">34 - 7</option>
-                            <option value="35">35 - C</option>
-                            <option value="36">36 - 1</option>
-                            <option value="37">37 - D</option>
-                            <option value="38">38 - 6</option>
-                            <option value="39">39 - 0</option>
-                            <option value="40">40 - X</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="row mb-3">
-                    <label class="col-form-label col-sm-5" for="settings-charset">${t('settings.charset.title')}</label>
-                    <div class="col-sm-5">
-                        <textarea class="form-control" style="word-break:break-all; font-family:mono" rows="3" id="settings-charset" oninput="onCustomCharsetInput()"></textarea>
-                    </div>
-                </div>
-                <fieldset class="row mb-3">
-                    <legend class="col-form-label col-sm-5 pt-0">Charset</legend>
-                    <div class="col-sm-7">
-                        <div class="form-check">
-                            <input class="form-check-input" id="settings-charset-latin" type="checkbox" oninput="onToggleChars(event, latin)">
-                            <label class="form-check-label" for="settings-charset-latin"><code>A-Z</code></label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" id="settings-charset-digits" type="checkbox" oninput="onToggleChars(event, digits)">
-                            <label class="form-check-label" for="settings-charset-digits"><code>0-9</Code></label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" id="settings-charset-punct" type="checkbox" oninput="onToggleChars(event, punct)">
-                            <label class="form-check-label" for="settings-charset-punct"><code>.,:?'-/()"=+×@</code></label>
-                        </div>
-                    </div>
-                </fieldset>
-                <div class="row mb-3">
-                    <label class="col-form-label col-sm-5" for="settings-session-debounce-time">${t('settings.sessionDebounceTime.title')}</label>
-                    <div class="col-sm-5">
-                        <input class="form-control" id="settings-session-debounce-time" oninput="onSettingsChange()" type="number" value="1" min="0" step="0.1" />
-                    </div>
-                    <abbr class="col-sm-2" title="${t('settings.sessionDebounceTime.details')}">${t('settings.sessionDebounceTime.unit')}</abbr>
-                </div>
-                <div class="row mb-3">
-                    <button class="btn btn-primary" onclick="exportData()">${t('settings.export')}</button>
-                </div>
-                <div class="row mb-3">
-                    <button class="btn btn-primary" onclick="importData()">${t('settings.import')}</button>
-                </div>
-                <div class="row mb-3">
-                    <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete-confirm">${t('settings.delete')}</button>
-                </div>
-            </div>
-        </div>
-        <div class="modal fade" tabindex="-1" role="dialog" id="delete-confirm">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">${t('settings.delete')}</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <p>${t('settings.delete.warning')}</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">${t('settings.delete.cancel')}</button>
-                        <button type="button" class="btn btn-danger" onclick="deleteData()">${t('settings.delete')}</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        `;
+        getElement('root', HTMLDivElement).innerHTML = evaluateTemplate(HTML_TEMPLATE, {
+            lang: activeLanguage,
+            history: [...sessions.map(formatHistoryEntry)].reverse().join(''),
+        });
         restoreSettings();
-        getElement('language-select', HTMLSelectElement).value = lang;
+        getElement('language-select', HTMLSelectElement).value = activeLanguage;
         getElement('current-session', HTMLTextAreaElement).value = copiedText;
 
         const startButton = getElement('start-button', HTMLButtonElement);
