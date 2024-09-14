@@ -18,8 +18,8 @@ export type Settings = {
     wpm: number,
     tone: number,
     error_tone: number,
-    min_word_length: number,
-    max_word_length: number,
+    min_group_size: number,
+    max_group_size: number,
     charset: string,
     session_debounce_time: number,
 };

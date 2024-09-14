@@ -83,13 +83,22 @@ function getLastSessions(count, callback) {
 const settings = (() => {
     try {
         const settings = JSON.parse(localStorage.getItem('settings') || '');
+        // migrations
         if (settings.hasOwnProperty("word_length")) {
-            settings.min_word_length = settings.word_length;
-            settings.max_word_length = settings.word_length;
+            settings.min_group_size = settings.word_length;
+            settings.max_group_size = settings.word_length;
             delete settings["word_length"];
         }
         if (!settings.hasOwnProperty("session_debounce_time")) {
             settings.session_debounce_time = 1;
+        }
+        if (settings.hasOwnProperty("min_word_length")) {
+            settings.min_group_size = settings.min_word_length;
+            delete settings["min_word_length"];
+        }
+        if (settings.hasOwnProperty("max_word_length")) {
+            settings.max_group_size = settings.max_word_length;
+            delete settings["max_word_length"];
         }
         return settings;
     } catch (e) {
@@ -97,8 +106,8 @@ const settings = (() => {
             wpm: 20,
             tone: 600,
             error_tone: 200,
-            min_word_length: 5,
-            max_word_length: 5,
+            min_group_size: 5,
+            max_group_size: 5,
             charset: lcwoLessons,
             session_debounce_time: 1,
         };
@@ -109,13 +118,13 @@ const settings = (() => {
 const cwPlayer = new jscw();
 cwPlayer.q = 13;
 
-function pushWord() {
-    const word_length = randint(settings.min_word_length, settings.max_word_length);
-    const word = Array.from(
-        { length: word_length },
+function pushGroup() {
+    const groupLength = randint(settings.min_group_size, settings.max_group_size);
+    const group = Array.from(
+        { length: groupLength },
         () => settings.charset[Math.floor(Math.random() * settings.charset.length)],
     ).join('');
-    cwPlayer.setText(` ${word}`);
+    cwPlayer.setText(` ${group}`);
 }
 
 /** @type {import("./types").SentCharacter[]} */
@@ -209,8 +218,8 @@ const translations = {
         'settings.errorTone.details': 'Hertz',
         'settings.minGroupSize.title': 'Min. Group Size',
         'settings.maxGroupSize.title': 'Max. Group Size',
-        'settings.wordLength.unit': 'chars.',
-        'settings.wordLength.details': 'characters',
+        'settings.groupSize.unit': 'chars.',
+        'settings.groupSize.details': 'characters',
         'settings.lcwo.title': '<a href="https://lcwo.net/" title="Learn CW Online">LCWO</A> Lesson',
         'settings.charset.title': 'Customize Charset',
         'settings.sessionDebounceTime.title': 'Post-Session Cooldown',
@@ -264,8 +273,8 @@ const translations = {
         'settings.errorTone.details': 'Hertz',
         'settings.minGroupSize.title': 'Taille min. des groupes',
         'settings.maxGroupSize.title': 'Taille max. des groupes',
-        'settings.wordLength.unit': 'car.',
-        'settings.wordLength.details': 'caractères',
+        'settings.groupSize.unit': 'car.',
+        'settings.groupSize.details': 'caractères',
         'settings.lcwo.title': 'Leçon <a href="https://lcwo.net/" title="Learn CW Online">LCWO</A>',
         'settings.charset.title': 'Choisir les caractères',
         'settings.sessionDebounceTime.title': 'Délai après session',
@@ -319,8 +328,8 @@ const translations = {
         'settings.errorTone.details': 'ヘルツ',
         'settings.minGroupSize.title': 'グループの最小サイズ',
         'settings.maxGroupSize.title': 'グループの最大サイズ',
-        'settings.wordLength.unit': '字',
-        'settings.wordLength.details': '言葉ずつの文字数',
+        'settings.groupSize.unit': '字',
+        'settings.groupSize.details': '言葉ずつの文字数',
         'settings.lcwo.title': '<a href="https://lcwo.net/" title="Learn CW Online">LCWO</A> レッスン',
         'settings.charset.title': '文字セット',
         'settings.sessionDebounceTime.title': 'セッション後のクールダウン',
@@ -374,8 +383,8 @@ const translations = {
         'settings.errorTone.details': 'Hertz',
         'settings.minGroupSize.title': 'Tamaño mín. de los grupos',
         'settings.maxGroupSize.title': 'Tamaño máx. de los grupos',
-        'settings.wordLength.unit': 'car.',
-        'settings.wordLength.details': 'caracteres',
+        'settings.groupSize.unit': 'car.',
+        'settings.groupSize.details': 'caracteres',
         'settings.lcwo.title': 'Leccíon <a href="https://lcwo.net/" title="Learn CW Online">LCWO</A>',
         'settings.charset.title': 'Seleccionar los caracteres',
         'settings.sessionDebounceTime.title': 'Enfriamiento post-sesión',
@@ -429,8 +438,8 @@ const translations = {
         'settings.errorTone.details': 'Hertz',
         'settings.minGroupSize.title': 'Mida mín. dels grups',
         'settings.maxGroupSize.title': 'Mida màx. dels grups',
-        'settings.wordLength.unit': 'car.',
-        'settings.wordLength.details': 'caràcters',
+        'settings.groupSize.unit': 'car.',
+        'settings.groupSize.details': 'caràcters',
         'settings.lcwo.title': 'Lliçó <a href="https://lcwo.net/" title="Learn CW Online">LCWO</A>',
         'settings.charset.title': 'Seleccionar els caràcters',
         'settings.sessionDebounceTime.title': 'Refredament post-sessió',
@@ -509,8 +518,8 @@ function onSettingsChange() {
     settings.wpm = parseFloat(getElement('settings-wpm', HTMLInputElement).value);
     settings.tone = parseFloat(getElement('settings-tone', HTMLInputElement).value);
     settings.error_tone = parseFloat(getElement('settings-error-tone', HTMLInputElement).value);
-    settings.min_word_length = parseInt(getElement('settings-word-length-min', HTMLInputElement).value, 10);
-    settings.max_word_length = parseInt(getElement('settings-word-length-max', HTMLInputElement).value, 10);
+    settings.min_group_size = parseInt(getElement('settings-group-length-min', HTMLInputElement).value, 10);
+    settings.max_group_size = parseInt(getElement('settings-group-length-max', HTMLInputElement).value, 10);
     settings.charset = getElement('settings-charset', HTMLTextAreaElement).value;
     settings.session_debounce_time = parseFloat(getElement('settings-session-debounce-time', HTMLInputElement).value);
     localStorage.setItem('settings', JSON.stringify(settings));
@@ -625,8 +634,8 @@ function restoreSettings() {
     getElement('settings-wpm', HTMLInputElement).value = settings.wpm.toString();
     getElement('settings-tone', HTMLInputElement).value = settings.tone.toString();
     getElement('settings-error-tone', HTMLInputElement).value = settings.error_tone.toString();
-    getElement('settings-word-length-min', HTMLInputElement).value = settings.min_word_length.toString();
-    getElement('settings-word-length-max', HTMLInputElement).value = settings.max_word_length.toString();
+    getElement('settings-group-length-min', HTMLInputElement).value = settings.min_group_size.toString();
+    getElement('settings-group-length-max', HTMLInputElement).value = settings.max_group_size.toString();
     getElement('settings-session-debounce-time', HTMLInputElement).value = settings.session_debounce_time.toString();
     getElement('settings-charset', HTMLTextAreaElement).value = settings.charset;
     updateLCWOLessonFromCharset();
@@ -854,18 +863,18 @@ function render() {
                     <abbr class="col-sm-2" title="${t('settings.errorTone.details')}">${t('settings.errorTone.unit')}</abbr>
                 </div>
                 <div class="row mb-3">
-                    <label class="col-form-label col-sm-5" for="settings-word-length-min">${t('settings.minGroupSize.title')}</label>
+                    <label class="col-form-label col-sm-5" for="settings-group-length-min">${t('settings.minGroupSize.title')}</label>
                     <div class="col-sm-5">
-                        <input class="form-control" id="settings-word-length-min" oninput="onSettingsChange()" type="number" value="5" min="1" />
+                        <input class="form-control" id="settings-group-length-min" oninput="onSettingsChange()" type="number" value="5" min="1" />
                     </div>
-                    <abbr class="col-sm-2" title="${t('settings.wordLength.details')}">${t('settings.wordLength.unit')}</abbr>
+                    <abbr class="col-sm-2" title="${t('settings.groupSize.details')}">${t('settings.groupSize.unit')}</abbr>
                 </div>
                 <div class="row mb-3">
-                    <label class="col-form-label col-sm-5" for="settings-word-length-max">${t('settings.maxGroupSize.title')}</label>
+                    <label class="col-form-label col-sm-5" for="settings-group-length-max">${t('settings.maxGroupSize.title')}</label>
                     <div class="col-sm-5">
-                        <input class="form-control" id="settings-word-length-max" oninput="onSettingsChange()" type="number" value="5" min="1" />
+                        <input class="form-control" id="settings-group-length-max" oninput="onSettingsChange()" type="number" value="5" min="1" />
                     </div>
-                    <abbr class="col-sm-2" title="${t('settings.wordLength.details')}">${t('settings.wordLength.unit')}</abbr>
+                    <abbr class="col-sm-2" title="${t('settings.groupSize.details')}">${t('settings.groupSize.unit')}</abbr>
                 </div>
                 <div class="row mb-3">
                     <label class="col-form-label col-sm-5" for="settings-lcwo-lesson">${t('settings.lcwo.title')}</label>
@@ -1030,7 +1039,7 @@ function characterDuration(c, wpm) {
         // NOTE: to make things slightly more regular in some cases, a space
         // will count as a regular character of length 1 dit; when adding the
         // previous and next inter-character gap, this totals a gap of 7 dits,
-        // which is the actual duration of the inter-word gap
+        // which is the actual duration of the inter-group gap
         const dits = element == "-" ? 3 : 1;
         time += dotlen * dits;
     }
@@ -1073,7 +1082,7 @@ function incrementCopiedCharacters(sent) {
 }
 
 function onFinished() {
-    pushWord();
+    pushGroup();
     cwPlayer.play();
 }
 
@@ -1084,7 +1093,7 @@ function startSession() {
         getElement('info', HTMLElement).innerText = 'Empty charset!';
         return;
     }
-    pushWord();
+    pushGroup();
     played.length = 0;
     copiedText = '';
     getElement('current-session', HTMLTextAreaElement).value = copiedText;
