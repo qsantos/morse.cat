@@ -1000,6 +1000,13 @@ function render() {
         restoreSettings();
         getElement('language-select', HTMLSelectElement).value = lang;
         getElement('current-session', HTMLTextAreaElement).value = copiedText;
+
+        const startButton = getElement('start-button', HTMLButtonElement);
+        startButton.disabled = true;
+        setTimeout(function() {
+            startButton.disabled = false;
+            startButton.focus();
+        }, settings.session_debounce_time * 1000);
     });
 }
 
@@ -1191,13 +1198,6 @@ function stopSession(sent, userInput) {
     });
 
     render();
-
-    const startButton = getElement('start-button', HTMLButtonElement);
-    startButton.disabled = true;
-    setTimeout(function() {
-        startButton.disabled = false;
-        startButton.focus();
-    }, settings.session_debounce_time * 1000);
 }
 
 /** Play a buzzer and then replay the correct character
