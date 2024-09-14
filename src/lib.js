@@ -766,7 +766,7 @@ function render() {
             </svg>
             ${t('start')}
         </button>
-        <textarea class="form-control mb-5" id="current-session" rows="5" onblur="onCurrentSessionBlur()" readonly></textarea>
+        <textarea class="form-control mb-5" id="current-session" rows="5" onkeydown="onKeyDown(event)" onblur="onCurrentSessionBlur()" readonly></textarea>
         <section>
             <table class="table table-bordered table-striped">
                 <thead>
@@ -1237,20 +1237,10 @@ function fail(sent, userInput) {
     replayAfterMistake(sent?.character);
 }
 
-document.addEventListener('keydown', (event) => {
+function onKeyDown(event) {
     const userInput = event.key.toLowerCase();
 
-    // disable Firefox's quick search when pressing forward slash
-    if (userInput === '/') {
-        event.preventDefault();
-    }
-
-    // hitting Return starts the keying
-    if (!inSession && userInput === 'enter') {
-        startSession();
-    }
-
-    // ignore other inputs when not in session
+    // ignore inputs when not in session
     if (!inSession) {
         return;
     }
@@ -1284,7 +1274,7 @@ document.addEventListener('keydown', (event) => {
         // play sound, replay character, and end session
         fail(sent, userInput);
     }
-});
+}
 
 /** Event handler for when a character has been fully played
  *  @param {{c: string}} c - The character played
