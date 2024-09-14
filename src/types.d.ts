@@ -10,7 +10,7 @@ export type Stats = {
     updated: Date,
     elapsed: Stat,
     copiedCharacters: Stat,
-    copiedWords: Stat,
+    copiedGroups: Stat,
     score: Stat,
 };
 

@@ -163,7 +163,7 @@ function readStats() {
             bestDay: 0,
             total: 0,
         },
-        copiedWords: {
+        copiedGroups: {
             lastSession: 0,
             bestSession: 0,
             currentDay: 0,
@@ -785,35 +785,35 @@ function render() {
                         <th scope="row">${t('stats.lastSession')}</th>
                         <td>${stats.elapsed.lastSession.toLocaleString(lang)} s</td>
                         <td>${stats.copiedCharacters.lastSession.toLocaleString(lang)}</td>
-                        <td>${stats.copiedWords.lastSession.toLocaleString(lang)}</td>
+                        <td>${stats.copiedGroups.lastSession.toLocaleString(lang)}</td>
                         <td>${stats.score.lastSession.toLocaleString(lang)}</td>
                     </tr>
                     <tr>
                         <th scope="row">${t('stats.bestSession')}</th>
                         <td>${stats.elapsed.bestSession.toLocaleString(lang)} s</td>
                         <td>${stats.copiedCharacters.bestSession.toLocaleString(lang)}</td>
-                        <td>${stats.copiedWords.bestSession.toLocaleString(lang)}</td>
+                        <td>${stats.copiedGroups.bestSession.toLocaleString(lang)}</td>
                         <td>${stats.score.bestSession.toLocaleString(lang)}</td>
                     </tr>
                     <tr>
                         <th scope="row">${t('stats.currentDay')}</th>
                         <td>${stats.elapsed.currentDay.toLocaleString(lang)} s</td>
                         <td>${stats.copiedCharacters.currentDay.toLocaleString(lang)}</td>
-                        <td>${stats.copiedWords.currentDay.toLocaleString(lang)}</td>
+                        <td>${stats.copiedGroups.currentDay.toLocaleString(lang)}</td>
                         <td>${stats.score.currentDay.toLocaleString(lang)}</td>
                     </tr>
                     <tr>
                         <th scope="row">${t('stats.bestDay')}</th>
                         <td>${stats.elapsed.bestDay.toLocaleString(lang)} s</td>
                         <td>${stats.copiedCharacters.bestDay.toLocaleString(lang)}</td>
-                        <td>${stats.copiedWords.bestDay.toLocaleString(lang)}</td>
+                        <td>${stats.copiedGroups.bestDay.toLocaleString(lang)}</td>
                         <td>${stats.score.bestDay.toLocaleString(lang)}</td>
                     </tr>
                     <tr>
                         <th scope="row">${t('stats.total')}</th>
                         <td>${stats.elapsed.total.toLocaleString(lang)} s</td>
                         <td>${stats.copiedCharacters.total.toLocaleString(lang)}</td>
-                        <td>${stats.copiedWords.total.toLocaleString(lang)}</td>
+                        <td>${stats.copiedGroups.total.toLocaleString(lang)}</td>
                         <td>${stats.score.total.toLocaleString(lang)}</td>
                     </tr>
                 </tbody>
@@ -992,6 +992,11 @@ function render() {
  *  @param {boolean} [modified] - Where the stats recently modified?
 */
 function refreshStatistics(modified) {
+    // migration
+    if (stats.hasOwnProperty("copiedWords")) {
+        stats.copiedGroups = stats.copiedWords;
+        delete stats["copiedWords"];
+    }
     // update day stats
     const now = new Date();
     const today = new Date(now);
@@ -1000,7 +1005,7 @@ function refreshStatistics(modified) {
         // reset on new day
         stats.elapsed.currentDay = 0;
         stats.copiedCharacters.currentDay = 0;
-        stats.copiedWords.currentDay = 0;
+        stats.copiedGroups.currentDay = 0;
         stats.score.currentDay = 0;
         modified = true;
     }
@@ -1074,9 +1079,9 @@ function incrementCopiedCharacters(sent) {
     increaseStat(stats.elapsed, newElapsed);
     increaseStat(stats.copiedCharacters, 1);
     if (sent.character === ' ') {
-        increaseStat(stats.copiedWords, 1);
+        increaseStat(stats.copiedGroups, 1);
     }
-    increaseStat(stats.score, stats.copiedWords.lastSession + 1);
+    increaseStat(stats.score, stats.copiedGroups.lastSession + 1);
 
     refreshStatistics(true);
 }
@@ -1103,7 +1108,7 @@ function startSession() {
     sessionDurationUpdater = setInterval(refreshStatistics, 1000);
     stats.elapsed.lastSession = 0;
     stats.copiedCharacters.lastSession = 0;
-    stats.copiedWords.lastSession = 0;
+    stats.copiedGroups.lastSession = 0;
     stats.score.lastSession = 0;
     cwPlayer.setWpm(settings.wpm);
     cwPlayer.setEff(settings.wpm);
@@ -1164,7 +1169,7 @@ function stopSession(sent, userInput) {
         settings,
         elapsed: stats.elapsed.lastSession,
         copiedCharacters: stats.copiedCharacters.lastSession,
-        copiedWords: stats.copiedWords.lastSession,
+        copiedWords: stats.copiedGroups.lastSession,
         score: stats.score.lastSession,
     });
 
