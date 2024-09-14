@@ -6,94 +6,28 @@ const HTML_TEMPLATE = getElement('template', HTMLElement).innerText;
 
 /** @type {IDBDatabase | null} */
 let db = null;
-/** @param {() => void} callback */
-function prepareDB(callback) {
-    const request = indexedDB.open("morse.cat", 2);
-    request.onerror = () => {
-        alert("Failed to open IndexedDB; histroy won't be saved");
-    }
-    request.onupgradeneeded = (event) => {
-        const db = request.result;
-        if (event.oldVersion == 0) {
-            const sessionsStore = db.createObjectStore('sessions', { keyPath: 'id' });
-            sessionsStore.createIndex('started', 'started');
-            db.createObjectStore('characters', { keyPath: 'id' });
-        }
-        if (event.oldVersion <= 1) {
-            // @ts-ignore
-            const transaction = event.target.transaction;
-            const objectStore = transaction.objectStore('sessions');
-            const request2 = objectStore.getAll();
-            request2.onsuccess = () => {
-                for (const session of request2.result) {
-                    session.copiedGroups = session.copiedWords;
-                    delete session["copiedWords"];
-                    objectStore.put(session);
-                }
-            }
-        }
-    };
-    request.onsuccess = () => {
-        db = request.result;
-        callback();
-    }
-}
 
-/**
- * @param {import("./types").HistoryEntry} session
-*/
-function saveSession(session) {
-    if (!db) {
-        return;
-    }
-    const transaction = db.transaction(['sessions'], 'readwrite');
-    const objectStore = transaction.objectStore('sessions');
-    objectStore.add(session);
-}
+/** @type {import("./types").SentCharacter[]} */
+const played = [];
+let copiedText = '';
+let inSession = false;
+let sessionId = '';
+/** @type {Date} */
+let sessionStart;
+/** @type {number} */
+let sessionDurationUpdater = 0;
 
-/**
- * @param {import("./types").TransmittedCharacter} character
-*/
-function saveCharacter(character) {
-    if (!db) {
-        return;
-    }
-    const transaction = db.transaction(['characters'], 'readwrite');
-    const objectStore = transaction.objectStore('characters');
-    if (!character.id) {
-        character.id = crypto.randomUUID();
-    }
-    objectStore.add(character);
-}
+/** @type {keyof typeof translations} */
+let activeLanguage = 'en';
 
-/**
- * @param {number} count
- * @param {(sessions: import("./types").HistoryEntry[]) => void} callback
-*/
-function getLastSessions(count, callback) {
-    if (!db) {
-        return;
-    }
-    // IndexedBD must be a joke
-    const transaction = db.transaction('sessions');
-    const objectStore = transaction.objectStore('sessions');
-    const index = objectStore.index('started');
-    const request = index.openCursor(null, 'prev');
-    /** @type{import("./types").HistoryEntry[]} */
-    const sessions = [];
-    request.onsuccess = () => {
-        const result = request.result;
-        if (result) {
-            sessions.push(result.value);
-        }
-        if (result && sessions.length < count) {
-            result.continue();
-        } else {
-            sessions.reverse();
-            callback(sessions);
-        }
-    }
-}
+let domReady = false;
+let dbReady = false;
+
+// @ts-ignore
+const cwPlayer = new jscw();
+cwPlayer.q = 13;
+
+const stats = readStats();
 
 /** @type{import("./types").Settings} */
 const settings = (() => {
@@ -129,75 +63,6 @@ const settings = (() => {
         };
     }
 })();
-
-// @ts-ignore
-const cwPlayer = new jscw();
-cwPlayer.q = 13;
-
-function pushGroup() {
-    const groupLength = randint(settings.min_group_size, settings.max_group_size);
-    const group = Array.from(
-        { length: groupLength },
-        () => settings.charset[Math.floor(Math.random() * settings.charset.length)],
-    ).join('');
-    cwPlayer.setText(` ${group}`);
-}
-
-/** @type {import("./types").SentCharacter[]} */
-const played = [];
-let copiedText = '';
-let inSession = false;
-let sessionId = '';
-/** @type {Date} */
-let sessionStart;
-/** @type {number} */
-let sessionDurationUpdater = 0;
-
-/** Load the stats from the local storage
- *  @return { import("./types").Stats } - The stats
-*/
-function readStats() {
-    const json = localStorage.getItem('stats');
-    if (json) {
-        const stats = JSON.parse(json);
-        stats.updated = new Date(stats.updated);
-        return stats;
-    }
-    return {
-        updated: new Date(),
-        elapsed: {
-            lastSession: 0,
-            bestSession: 0,
-            currentDay: 0,
-            bestDay: 0,
-            total: 0,
-        },
-        copiedCharacters: {
-            lastSession: 0,
-            bestSession: 0,
-            currentDay: 0,
-            bestDay: 0,
-            total: 0,
-        },
-        copiedGroups: {
-            lastSession: 0,
-            bestSession: 0,
-            currentDay: 0,
-            bestDay: 0,
-            total: 0,
-        },
-        score: {
-            lastSession: 0,
-            bestSession: 0,
-            currentDay: 0,
-            bestDay: 0,
-            total: 0,
-        },
-    };
-}
-
-// stats
-const stats = readStats();
 
 const translations = {
     en: {
@@ -472,8 +337,146 @@ const translations = {
     },
 };
 
-/** @type {keyof typeof translations} */
-let activeLanguage = 'en';
+/** @param {() => void} callback */
+function prepareDB(callback) {
+    const request = indexedDB.open("morse.cat", 2);
+    request.onerror = () => {
+        alert("Failed to open IndexedDB; histroy won't be saved");
+    }
+    request.onupgradeneeded = (event) => {
+        const db = request.result;
+        if (event.oldVersion == 0) {
+            const sessionsStore = db.createObjectStore('sessions', { keyPath: 'id' });
+            sessionsStore.createIndex('started', 'started');
+            db.createObjectStore('characters', { keyPath: 'id' });
+        }
+        if (event.oldVersion <= 1) {
+            // @ts-ignore
+            const transaction = event.target.transaction;
+            const objectStore = transaction.objectStore('sessions');
+            const request2 = objectStore.getAll();
+            request2.onsuccess = () => {
+                for (const session of request2.result) {
+                    session.copiedGroups = session.copiedWords;
+                    delete session["copiedWords"];
+                    objectStore.put(session);
+                }
+            }
+        }
+    };
+    request.onsuccess = () => {
+        db = request.result;
+        callback();
+    }
+}
+
+/**
+ * @param {import("./types").HistoryEntry} session
+*/
+function saveSession(session) {
+    if (!db) {
+        return;
+    }
+    const transaction = db.transaction(['sessions'], 'readwrite');
+    const objectStore = transaction.objectStore('sessions');
+    objectStore.add(session);
+}
+
+/**
+ * @param {import("./types").TransmittedCharacter} character
+*/
+function saveCharacter(character) {
+    if (!db) {
+        return;
+    }
+    const transaction = db.transaction(['characters'], 'readwrite');
+    const objectStore = transaction.objectStore('characters');
+    if (!character.id) {
+        character.id = crypto.randomUUID();
+    }
+    objectStore.add(character);
+}
+
+/**
+ * @param {number} count
+ * @param {(sessions: import("./types").HistoryEntry[]) => void} callback
+*/
+function getLastSessions(count, callback) {
+    if (!db) {
+        return;
+    }
+    // IndexedBD must be a joke
+    const transaction = db.transaction('sessions');
+    const objectStore = transaction.objectStore('sessions');
+    const index = objectStore.index('started');
+    const request = index.openCursor(null, 'prev');
+    /** @type{import("./types").HistoryEntry[]} */
+    const sessions = [];
+    request.onsuccess = () => {
+        const result = request.result;
+        if (result) {
+            sessions.push(result.value);
+        }
+        if (result && sessions.length < count) {
+            result.continue();
+        } else {
+            sessions.reverse();
+            callback(sessions);
+        }
+    }
+}
+
+function pushGroup() {
+    const groupLength = randint(settings.min_group_size, settings.max_group_size);
+    const group = Array.from(
+        { length: groupLength },
+        () => settings.charset[Math.floor(Math.random() * settings.charset.length)],
+    ).join('');
+    cwPlayer.setText(` ${group}`);
+}
+
+/** Load the stats from the local storage
+ *  @return { import("./types").Stats } - The stats
+*/
+function readStats() {
+    const json = localStorage.getItem('stats');
+    if (json) {
+        const stats = JSON.parse(json);
+        stats.updated = new Date(stats.updated);
+        return stats;
+    }
+    return {
+        updated: new Date(),
+        elapsed: {
+            lastSession: 0,
+            bestSession: 0,
+            currentDay: 0,
+            bestDay: 0,
+            total: 0,
+        },
+        copiedCharacters: {
+            lastSession: 0,
+            bestSession: 0,
+            currentDay: 0,
+            bestDay: 0,
+            total: 0,
+        },
+        copiedGroups: {
+            lastSession: 0,
+            bestSession: 0,
+            currentDay: 0,
+            bestDay: 0,
+            total: 0,
+        },
+        score: {
+            lastSession: 0,
+            bestSession: 0,
+            currentDay: 0,
+            bestDay: 0,
+            total: 0,
+        },
+    };
+}
 
 /**
  * @param {number} min
@@ -1140,8 +1143,6 @@ function main() {
     setLanguage(getPreferredLanguage());
 }
 
-let domReady = false;
-let dbReady = false;
 document.addEventListener('DOMContentLoaded', () => {
     if (dbReady) {
         main();
