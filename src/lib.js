@@ -19,6 +19,7 @@ function prepareDB(callback) {
             db.createObjectStore('characters', { keyPath: 'id' });
         }
         if (event.oldVersion <= 1) {
+            // @ts-ignore
             const transaction = event.target.transaction;
             const objectStore = transaction.objectStore('sessions');
             const request2 = objectStore.getAll();
@@ -1238,6 +1239,9 @@ function fail(sent, userInput) {
     replayAfterMistake(sent?.character);
 }
 
+/**
+ *  @param {KeyboardEvent} event
+*/
 function onKeyDown(event) {
     const userInput = event.key.toLowerCase();
 
