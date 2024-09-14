@@ -697,6 +697,7 @@ function render() {
         getElement('settings-button', HTMLElement).innerText = t('settings.title');
         getElement('start-button-label', HTMLElement).innerText = t('start');
         getElement('root', HTMLDivElement).innerHTML = `
+        <textarea class="form-control mb-5" id="current-session" rows="5" onblur="onCurrentSessionBlu()" readonly></textarea>
         <section>
             <table class="table table-bordered table-striped">
                 <thead>
@@ -1388,19 +1389,19 @@ function recalculateCharacterDurations() {
     }
 }
 
+function onCurrentSessionBlur() {
+    if (inSession) {
+        getElement('info', HTMLElement).innerText = t('info.lostFocus');
+        stopSession();
+    }
+}
+
 function main() {
     const catNose = getElement('nose', SVGElement);
     cwPlayer.onLampOff = () => catNose.style.fill = '#E75A70';
     cwPlayer.onLampOn = () => catNose.style.fill = 'yellow';
     refreshStatistics();
-    getElement('current-session', HTMLElement).addEventListener('blur', () => {
-        if (inSession) {
-            getElement('info', HTMLElement).innerText = t('info.lostFocus');
-            stopSession();
-        }
-    });
     setLanguage(getPreferredLanguage());
-    restoreSettings();
 }
 
 let domReady = false;
