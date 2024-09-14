@@ -994,7 +994,9 @@ function render() {
 function refreshStatistics(modified) {
     // migration
     if (stats.hasOwnProperty("copiedWords")) {
+        // @ts-ignore
         stats.copiedGroups = stats.copiedWords;
+        // @ts-ignore
         delete stats["copiedWords"];
     }
     // update day stats
