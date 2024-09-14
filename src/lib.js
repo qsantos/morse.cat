@@ -718,6 +718,7 @@ function setLanguage(lang) {
     activeLanguage = lang;
     document.title = 'Morse Cat - ' + t('pageTitle');
     localStorage.setItem('language', lang);
+    infoMessage = '';
     render();
 }
 
