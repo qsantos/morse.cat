@@ -1,5 +1,4 @@
 body {
-    position: relative;
     margin: 5px auto;
     max-width: 62.5rem;
 }
@@ -23,9 +22,6 @@ h1 rt {
     font-size: 12px;
     position:relative;
     top:-10px;
-}
-h1 svg {
-    vertical-align: middle;
 }
 #statistics table {
     text-align: right;
