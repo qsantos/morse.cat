@@ -1120,15 +1120,20 @@ function importData() {
             return;
         }
         if (file.type != "application/json") {
-            // TODO
-            console.error("no!");
+            alert('Incorrect file type!');
             return;
         }
         file.text().then(function (data){
             if (!db) {
                 return;
             }
-            const j = JSON.parse(data);
+            let j;
+            try {
+                j = JSON.parse(data);
+            } catch (e) {
+                alert(`Failed to parse file: ${e}`);
+                return;
+            }
             const transaction = db.transaction(['sessions', 'characters'], 'readwrite');
             {
                 const objectStore = transaction.objectStore('sessions');
