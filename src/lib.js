@@ -999,6 +999,7 @@ function render() {
         `;
         restoreSettings();
         getElement('language-select', HTMLSelectElement).value = lang;
+        getElement('current-session', HTMLTextAreaElement).value = copiedText;
     });
 }
 
