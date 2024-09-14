@@ -12,6 +12,7 @@ const played = [];
 let copiedText = '';
 let inSession = false;
 let sessionId = '';
+let infoMessage = '';
 /** @type {Date} */
 let sessionStart;
 let sessionDurationUpdater = 0;
@@ -716,6 +717,14 @@ function setLanguage(lang) {
 }
 
 /**
+ *  @param {string} message
+*/
+function setInfoMessage(message) {
+    infoMessage = message;
+    getElement('info', HTMLElement).innerText = message;
+}
+
+/**
  *  @param {string} template
  *  @param {{[key: string]: any;}} vars
  *  @return {string}
@@ -734,6 +743,7 @@ function render() {
         restoreSettings();
         getElement('language-select', HTMLSelectElement).value = activeLanguage;
         getElement('current-session', HTMLTextAreaElement).value = copiedText;
+        getElement('info', HTMLElement).innerText = infoMessage;
 
         const startButton = getElement('start-button', HTMLButtonElement);
         startButton.disabled = true;
@@ -853,7 +863,7 @@ function startSession() {
     const now = new Date();
 
     if (Array.from(settings.charset).filter((c) => c.trim() !== '').length === 0) {
-        getElement('info', HTMLElement).innerText = 'Empty charset!';
+        setInfoMessage('Empty charset!');
         return;
     }
     pushGroup();
@@ -873,7 +883,7 @@ function startSession() {
     cwPlayer.setFreq(settings.tone);
     cwPlayer.onFinished = onFinished;
     cwPlayer.play();
-    getElement('info', HTMLElement).innerText = '';
+    setInfoMessage('');
     getElement('current-session', HTMLTextAreaElement).focus();
 }
 
@@ -1023,7 +1033,7 @@ cwPlayer.onCharacterPlay = (c) => {
     // detect when user has stopped copying
     if (played.length - copiedText.length > 5) {
         fail();
-        getElement('info', HTMLElement).innerText = t('info.tooSlow');
+        setInfoMessage(t('info.tooSlow'));
     }
 };
 
@@ -1130,7 +1140,7 @@ function deleteData() {
 
 function onCurrentSessionBlur() {
     if (inSession) {
-        getElement('info', HTMLElement).innerText = t('info.lostFocus');
+        setInfoMessage(t('info.lostFocus'));
         stopSession();
     }
 }
