@@ -1406,7 +1406,7 @@ function main() {
     cwPlayer.onLampOff = () => catNose.style.fill = '#E75A70';
     cwPlayer.onLampOn = () => catNose.style.fill = 'yellow';
     refreshStatistics();
-    getElement('history', HTMLElement).addEventListener('blur', () => {
+    getElement('current-session', HTMLElement).addEventListener('blur', () => {
         if (inSession) {
             getElement('info', HTMLElement).innerText = t('info.lostFocus');
             stopSession();
