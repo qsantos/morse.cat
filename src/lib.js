@@ -628,61 +628,6 @@ function restoreSettings() {
     updateTogglesFromCharset();
 }
 
-function renderStatistics() {
-    const lang = activeLanguage;
-    getElement('statistics', HTMLElement).innerHTML = `
-    <h3>${t('stats.title')}</h3>
-    <table class="table">
-        <thead>
-            <tr>
-                <th></th>
-                <th scope="col">${t('stats.elapsed')}</th>
-                <th scope="col">${t('stats.copiedCharacters')}</th>
-                <th scope="col">${t('stats.copiedGroups')}</th>
-                <th scope="col">${t('stats.score')}</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <th scope="row">${t('stats.lastSession')}</th>
-                <td>${stats.elapsed.lastSession.toLocaleString(lang)} s</td>
-                <td>${stats.copiedCharacters.lastSession.toLocaleString(lang)}</td>
-                <td>${stats.copiedWords.lastSession.toLocaleString(lang)}</td>
-                <td>${stats.score.lastSession.toLocaleString(lang)}</td>
-            </tr>
-            <tr>
-                <th scope="row">${t('stats.bestSession')}</th>
-                <td>${stats.elapsed.bestSession.toLocaleString(lang)} s</td>
-                <td>${stats.copiedCharacters.bestSession.toLocaleString(lang)}</td>
-                <td>${stats.copiedWords.bestSession.toLocaleString(lang)}</td>
-                <td>${stats.score.bestSession.toLocaleString(lang)}</td>
-            </tr>
-            <tr>
-                <th scope="row">${t('stats.currentDay')}</th>
-                <td>${stats.elapsed.currentDay.toLocaleString(lang)} s</td>
-                <td>${stats.copiedCharacters.currentDay.toLocaleString(lang)}</td>
-                <td>${stats.copiedWords.currentDay.toLocaleString(lang)}</td>
-                <td>${stats.score.currentDay.toLocaleString(lang)}</td>
-            </tr>
-            <tr>
-                <th scope="row">${t('stats.bestDay')}</th>
-                <td>${stats.elapsed.bestDay.toLocaleString(lang)} s</td>
-                <td>${stats.copiedCharacters.bestDay.toLocaleString(lang)}</td>
-                <td>${stats.copiedWords.bestDay.toLocaleString(lang)}</td>
-                <td>${stats.score.bestDay.toLocaleString(lang)}</td>
-            </tr>
-            <tr>
-                <th scope="row">${t('stats.total')}</th>
-                <td>${stats.elapsed.total.toLocaleString(lang)} s</td>
-                <td>${stats.copiedCharacters.total.toLocaleString(lang)}</td>
-                <td>${stats.copiedWords.total.toLocaleString(lang)}</td>
-                <td>${stats.score.total.toLocaleString(lang)}</td>
-            </tr>
-        </tbody>
-    </table>
-    `;
-}
-
 /** Format an history entry
  *  @param {import("./types").HistoryEntry} entry - The entry to format
  *  @return {string} - The formatted entry
@@ -706,186 +651,6 @@ function formatHistoryEntry(entry) {
     </tr>`;
 }
 
-function renderHistory() {
-    getLastSessions(10, (sessions) => {
-        const formattedEntries = [...sessions.map(formatHistoryEntry)];
-        getElement('history', HTMLElement).innerHTML = formattedEntries.reverse().join('');
-    });
-}
-
-function renderSettings() {
-    getElement('settings', HTMLDivElement).innerHTML = `
-    <div class="offcanvas-header">
-        <h3 class="offcanvas-title">${t('settings.title')}</h3>
-        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-    </div>
-    <div class="offcanvas-body">
-        <div class="row mb-3">
-            <label class="col-form-label col-sm-5" for="settings-wpm">${t('settings.speed.title')}</label>
-            <div class="col-sm-5">
-                <input class="form-control" id="settings-wpm" oninput="onSettingsChange()" type="number" value="20" min="1" step="0.5" />
-            </div>
-            <abbr class="col-sm-2" title="${t('settings.speed.details')}">${t('settings.speed.unit')}</abbr>
-        </div>
-        <div class="row mb-3">
-            <label class="col-form-label col-sm-5" for="settings-tone">${t('settings.tone.title')}</label>
-            <div class="col-sm-5">
-                <input class="form-control" id="settings-tone" oninput="onSettingsChange()" type="number" value="600" min="10" step="10" />
-            </div>
-            <abbr class="col-sm-2" title="${t('settings.tone.details')}">${t('settings.tone.unit')}</abbr>
-        </div>
-        <div class="row mb-3">
-            <label class="col-form-label col-sm-5" for="settings-error-tone">${t('settings.errorTone.title')}</label>
-            <div class="col-sm-5">
-                <input class="form-control" id="settings-error-tone" oninput="onSettingsChange()" type="number" value="200" min="10" step="10" />
-            </div>
-            <abbr class="col-sm-2" title="${t('settings.errorTone.details')}">${t('settings.errorTone.unit')}</abbr>
-        </div>
-        <div class="row mb-3">
-            <label class="col-form-label col-sm-5" for="settings-word-length-min">${t('settings.minGroupSize.title')}</label>
-            <div class="col-sm-5">
-                <input class="form-control" id="settings-word-length-min" oninput="onSettingsChange()" type="number" value="5" min="1" />
-            </div>
-            <abbr class="col-sm-2" title="${t('settings.wordLength.details')}">${t('settings.wordLength.unit')}</abbr>
-        </div>
-        <div class="row mb-3">
-            <label class="col-form-label col-sm-5" for="settings-word-length-max">${t('settings.maxGroupSize.title')}</label>
-            <div class="col-sm-5">
-                <input class="form-control" id="settings-word-length-max" oninput="onSettingsChange()" type="number" value="5" min="1" />
-            </div>
-            <abbr class="col-sm-2" title="${t('settings.wordLength.details')}">${t('settings.wordLength.unit')}</abbr>
-        </div>
-        <div class="row mb-3">
-            <label class="col-form-label col-sm-5" for="settings-lcwo-lesson">${t('settings.lcwo.title')}</label>
-            <div class="col-sm-5">
-                <select class="form-select" id="settings-lcwo-lesson" oninput="onLCWOLessonInput()">
-                    <option value="0">-</option>
-                    <option value="1">1 - K, M</option>
-                    <option value="2">2 - U</option>
-                    <option value="3">3 - R</option>
-                    <option value="4">4 - E</option>
-                    <option value="5">5 - S</option>
-                    <option value="6">6 - N</option>
-                    <option value="7">7 - A</option>
-                    <option value="8">8 - P</option>
-                    <option value="9">9 - T</option>
-                    <option value="10">10 - L</option>
-                    <option value="11">11 - W</option>
-                    <option value="12">12 - I</option>
-                    <option value="13">13 - .</option>
-                    <option value="14">14 - J</option>
-                    <option value="15">15 - Z</option>
-                    <option value="16">16 - =</option>
-                    <option value="17">17 - F</option>
-                    <option value="18">18 - O</option>
-                    <option value="19">19 - Y</option>
-                    <option value="20">20 - ,</option>
-                    <option value="21">21 - V</option>
-                    <option value="22">22 - G</option>
-                    <option value="23">23 - 5</option>
-                    <option value="24">24 - /</option>
-                    <option value="25">25 - Q</option>
-                    <option value="26">26 - 9</option>
-                    <option value="27">27 - 2</option>
-                    <option value="28">28 - H</option>
-                    <option value="29">29 - 3</option>
-                    <option value="30">30 - 8</option>
-                    <option value="31">31 - B</option>
-                    <option value="32">32 - ?</option>
-                    <option value="33">33 - 4</option>
-                    <option value="34">34 - 7</option>
-                    <option value="35">35 - C</option>
-                    <option value="36">36 - 1</option>
-                    <option value="37">37 - D</option>
-                    <option value="38">38 - 6</option>
-                    <option value="39">39 - 0</option>
-                    <option value="40">40 - X</option>
-                </select>
-            </div>
-        </div>
-        <div class="row mb-3">
-            <label class="col-form-label col-sm-5" for="settings-charset">${t('settings.charset.title')}</label>
-            <div class="col-sm-5">
-                <textarea class="form-control" style="word-break:break-all; font-family:mono" rows="3" id="settings-charset" oninput="onCustomCharsetInput()"></textarea>
-            </div>
-        </div>
-        <fieldset class="row mb-3">
-            <legend class="col-form-label col-sm-5 pt-0">Charset</legend>
-            <div class="col-sm-7">
-                <div class="form-check">
-                    <input class="form-check-input" id="settings-charset-latin" type="checkbox" oninput="onToggleChars(event, latin)">
-                    <label class="form-check-label" for="settings-charset-latin"><code>A-Z</code></label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" id="settings-charset-digits" type="checkbox" oninput="onToggleChars(event, digits)">
-                    <label class="form-check-label" for="settings-charset-digits"><code>0-9</Code></label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" id="settings-charset-punct" type="checkbox" oninput="onToggleChars(event, punct)">
-                    <label class="form-check-label" for="settings-charset-punct"><code>.,:?'-/()"=+×@</code></label>
-                </div>
-            </div>
-        </fieldset>
-        <div class="row mb-3">
-            <label class="col-form-label col-sm-5" for="settings-session-debounce-time">${t('settings.sessionDebounceTime.title')}</label>
-            <div class="col-sm-5">
-                <input class="form-control" id="settings-session-debounce-time" oninput="onSettingsChange()" type="number" value="1" min="0" step="0.1" />
-            </div>
-            <abbr class="col-sm-2" title="${t('settings.sessionDebounceTime.details')}">${t('settings.sessionDebounceTime.unit')}</abbr>
-        </div>
-        <div class="row mb-3">
-            <button class="btn btn-primary" onclick="exportData()">${t('settings.export')}</button>
-        </div>
-        <div class="row mb-3">
-            <button class="btn btn-primary" onclick="importData()">${t('settings.import')}</button>
-        </div>
-        <div class="row mb-3">
-            <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete-confirm">${t('settings.delete')}</button>
-        </div>
-    </div>
-    `;
-    restoreSettings();
-}
-
-function renderDeleteConfirm() {
-    const modal = getElement('delete-confirm', HTMLDivElement);
-    modal.innerHTML = `
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">${t('settings.delete')}</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <p>${t('settings.delete.warning')}</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">${t('settings.delete.cancel')}</button>
-                <button type="button" class="btn btn-danger" onclick="deleteData()">${t('settings.delete')}</button>
-            </div>
-        </div>
-    </div>
-    `;
-}
-
-function renderAcknowledgements() {
-    getElement('acknowledgements', HTMLElement).innerHTML = `
-    <h3>${t('acknowledgements.title')}</h3>
-    <ul>
-        <li>
-            ${t('acknowledgements.jscwlib')}:
-            <a href="https://fkurz.net/ham/jscwlib.html">jscwlib</a>
-            (${t('acknowledgements.mit-license')})
-        </li>
-        <li>
-            <img src="cat.svg" class="inline-button">
-            ${t('acknowledgements.cat-icon')}:
-            <a href="https://github.com/twitter/twemoji">Twemoji</a>
-            (${t('acknowledgements.cc-by-license')})
-        </li>
-    </ul>
-    `;
-}
 
 /** Type assertion that lang is a language key
  *  @param {any} lang - The candidate language key
@@ -925,23 +690,245 @@ function setLanguage(lang) {
 }
 
 function render() {
-    getElement('settings-button', HTMLElement).innerText = t('settings.title');
-    getElement('start-button-label', HTMLElement).innerText = t('start');
-    getElement('history-thead', HTMLElement).innerHTML = `
-    <tr>
-        <th>${t('history.started')}</th>
-        <th>${t('history.copiedText')}</th>
-        <th>${t('history.elapsed')}</th>
-        <th>${t('history.characters')}</th>
-        <th>${t('history.groups')}</th>
-        <th>${t('history.score')}</th>
-    </tr>
-    `;
-    renderHistory();
-    renderSettings();
-    renderStatistics();
-    renderAcknowledgements();
-    renderDeleteConfirm();
+    getLastSessions(10, (sessions) => {
+        const formattedEntries = [...sessions.map(formatHistoryEntry)];
+        const history = formattedEntries.reverse().join('');
+        const lang = activeLanguage;
+        getElement('settings-button', HTMLElement).innerText = t('settings.title');
+        getElement('start-button-label', HTMLElement).innerText = t('start');
+        getElement('root', HTMLDivElement).innerHTML = `
+        <section>
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>${t('history.started')}</th>
+                        <th>${t('history.copiedText')}</th>
+                        <th>${t('history.elapsed')}</th>
+                        <th>${t('history.characters')}</th>
+                        <th>${t('history.groups')}</th>
+                        <th>${t('history.score')}</th>
+                    </tr>
+                </thead>
+                <tbody>${history}</tbody>
+            </table>
+        </section>
+        <section>
+            <h3>${t('stats.title')}</h3>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th scope="col">${t('stats.elapsed')}</th>
+                        <th scope="col">${t('stats.copiedCharacters')}</th>
+                        <th scope="col">${t('stats.copiedGroups')}</th>
+                        <th scope="col">${t('stats.score')}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th scope="row">${t('stats.lastSession')}</th>
+                        <td>${stats.elapsed.lastSession.toLocaleString(lang)} s</td>
+                        <td>${stats.copiedCharacters.lastSession.toLocaleString(lang)}</td>
+                        <td>${stats.copiedWords.lastSession.toLocaleString(lang)}</td>
+                        <td>${stats.score.lastSession.toLocaleString(lang)}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">${t('stats.bestSession')}</th>
+                        <td>${stats.elapsed.bestSession.toLocaleString(lang)} s</td>
+                        <td>${stats.copiedCharacters.bestSession.toLocaleString(lang)}</td>
+                        <td>${stats.copiedWords.bestSession.toLocaleString(lang)}</td>
+                        <td>${stats.score.bestSession.toLocaleString(lang)}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">${t('stats.currentDay')}</th>
+                        <td>${stats.elapsed.currentDay.toLocaleString(lang)} s</td>
+                        <td>${stats.copiedCharacters.currentDay.toLocaleString(lang)}</td>
+                        <td>${stats.copiedWords.currentDay.toLocaleString(lang)}</td>
+                        <td>${stats.score.currentDay.toLocaleString(lang)}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">${t('stats.bestDay')}</th>
+                        <td>${stats.elapsed.bestDay.toLocaleString(lang)} s</td>
+                        <td>${stats.copiedCharacters.bestDay.toLocaleString(lang)}</td>
+                        <td>${stats.copiedWords.bestDay.toLocaleString(lang)}</td>
+                        <td>${stats.score.bestDay.toLocaleString(lang)}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">${t('stats.total')}</th>
+                        <td>${stats.elapsed.total.toLocaleString(lang)} s</td>
+                        <td>${stats.copiedCharacters.total.toLocaleString(lang)}</td>
+                        <td>${stats.copiedWords.total.toLocaleString(lang)}</td>
+                        <td>${stats.score.total.toLocaleString(lang)}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+        <section>
+            <h3>${t('acknowledgements.title')}</h3>
+            <ul>
+                <li>
+                    ${t('acknowledgements.jscwlib')}:
+                    <a href="https://fkurz.net/ham/jscwlib.html">jscwlib</a>
+                    (${t('acknowledgements.mit-license')})
+                </li>
+                <li>
+                    <img src="cat.svg" class="inline-button">
+                    ${t('acknowledgements.cat-icon')}:
+                    <a href="https://github.com/twitter/twemoji">Twemoji</a>
+                    (${t('acknowledgements.cc-by-license')})
+                </li>
+            </ul>
+        </section>
+        <div class="offcanvas offcanvas-end" id="settings">
+            <div class="offcanvas-header">
+                <h3 class="offcanvas-title">${t('settings.title')}</h3>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+                <div class="row mb-3">
+                    <label class="col-form-label col-sm-5" for="settings-wpm">${t('settings.speed.title')}</label>
+                    <div class="col-sm-5">
+                        <input class="form-control" id="settings-wpm" oninput="onSettingsChange()" type="number" value="20" min="1" step="0.5" />
+                    </div>
+                    <abbr class="col-sm-2" title="${t('settings.speed.details')}">${t('settings.speed.unit')}</abbr>
+                </div>
+                <div class="row mb-3">
+                    <label class="col-form-label col-sm-5" for="settings-tone">${t('settings.tone.title')}</label>
+                    <div class="col-sm-5">
+                        <input class="form-control" id="settings-tone" oninput="onSettingsChange()" type="number" value="600" min="10" step="10" />
+                    </div>
+                    <abbr class="col-sm-2" title="${t('settings.tone.details')}">${t('settings.tone.unit')}</abbr>
+                </div>
+                <div class="row mb-3">
+                    <label class="col-form-label col-sm-5" for="settings-error-tone">${t('settings.errorTone.title')}</label>
+                    <div class="col-sm-5">
+                        <input class="form-control" id="settings-error-tone" oninput="onSettingsChange()" type="number" value="200" min="10" step="10" />
+                    </div>
+                    <abbr class="col-sm-2" title="${t('settings.errorTone.details')}">${t('settings.errorTone.unit')}</abbr>
+                </div>
+                <div class="row mb-3">
+                    <label class="col-form-label col-sm-5" for="settings-word-length-min">${t('settings.minGroupSize.title')}</label>
+                    <div class="col-sm-5">
+                        <input class="form-control" id="settings-word-length-min" oninput="onSettingsChange()" type="number" value="5" min="1" />
+                    </div>
+                    <abbr class="col-sm-2" title="${t('settings.wordLength.details')}">${t('settings.wordLength.unit')}</abbr>
+                </div>
+                <div class="row mb-3">
+                    <label class="col-form-label col-sm-5" for="settings-word-length-max">${t('settings.maxGroupSize.title')}</label>
+                    <div class="col-sm-5">
+                        <input class="form-control" id="settings-word-length-max" oninput="onSettingsChange()" type="number" value="5" min="1" />
+                    </div>
+                    <abbr class="col-sm-2" title="${t('settings.wordLength.details')}">${t('settings.wordLength.unit')}</abbr>
+                </div>
+                <div class="row mb-3">
+                    <label class="col-form-label col-sm-5" for="settings-lcwo-lesson">${t('settings.lcwo.title')}</label>
+                    <div class="col-sm-5">
+                        <select class="form-select" id="settings-lcwo-lesson" oninput="onLCWOLessonInput()">
+                            <option value="0">-</option>
+                            <option value="1">1 - K, M</option>
+                            <option value="2">2 - U</option>
+                            <option value="3">3 - R</option>
+                            <option value="4">4 - E</option>
+                            <option value="5">5 - S</option>
+                            <option value="6">6 - N</option>
+                            <option value="7">7 - A</option>
+                            <option value="8">8 - P</option>
+                            <option value="9">9 - T</option>
+                            <option value="10">10 - L</option>
+                            <option value="11">11 - W</option>
+                            <option value="12">12 - I</option>
+                            <option value="13">13 - .</option>
+                            <option value="14">14 - J</option>
+                            <option value="15">15 - Z</option>
+                            <option value="16">16 - =</option>
+                            <option value="17">17 - F</option>
+                            <option value="18">18 - O</option>
+                            <option value="19">19 - Y</option>
+                            <option value="20">20 - ,</option>
+                            <option value="21">21 - V</option>
+                            <option value="22">22 - G</option>
+                            <option value="23">23 - 5</option>
+                            <option value="24">24 - /</option>
+                            <option value="25">25 - Q</option>
+                            <option value="26">26 - 9</option>
+                            <option value="27">27 - 2</option>
+                            <option value="28">28 - H</option>
+                            <option value="29">29 - 3</option>
+                            <option value="30">30 - 8</option>
+                            <option value="31">31 - B</option>
+                            <option value="32">32 - ?</option>
+                            <option value="33">33 - 4</option>
+                            <option value="34">34 - 7</option>
+                            <option value="35">35 - C</option>
+                            <option value="36">36 - 1</option>
+                            <option value="37">37 - D</option>
+                            <option value="38">38 - 6</option>
+                            <option value="39">39 - 0</option>
+                            <option value="40">40 - X</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label class="col-form-label col-sm-5" for="settings-charset">${t('settings.charset.title')}</label>
+                    <div class="col-sm-5">
+                        <textarea class="form-control" style="word-break:break-all; font-family:mono" rows="3" id="settings-charset" oninput="onCustomCharsetInput()"></textarea>
+                    </div>
+                </div>
+                <fieldset class="row mb-3">
+                    <legend class="col-form-label col-sm-5 pt-0">Charset</legend>
+                    <div class="col-sm-7">
+                        <div class="form-check">
+                            <input class="form-check-input" id="settings-charset-latin" type="checkbox" oninput="onToggleChars(event, latin)">
+                            <label class="form-check-label" for="settings-charset-latin"><code>A-Z</code></label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" id="settings-charset-digits" type="checkbox" oninput="onToggleChars(event, digits)">
+                            <label class="form-check-label" for="settings-charset-digits"><code>0-9</Code></label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" id="settings-charset-punct" type="checkbox" oninput="onToggleChars(event, punct)">
+                            <label class="form-check-label" for="settings-charset-punct"><code>.,:?'-/()"=+×@</code></label>
+                        </div>
+                    </div>
+                </fieldset>
+                <div class="row mb-3">
+                    <label class="col-form-label col-sm-5" for="settings-session-debounce-time">${t('settings.sessionDebounceTime.title')}</label>
+                    <div class="col-sm-5">
+                        <input class="form-control" id="settings-session-debounce-time" oninput="onSettingsChange()" type="number" value="1" min="0" step="0.1" />
+                    </div>
+                    <abbr class="col-sm-2" title="${t('settings.sessionDebounceTime.details')}">${t('settings.sessionDebounceTime.unit')}</abbr>
+                </div>
+                <div class="row mb-3">
+                    <button class="btn btn-primary" onclick="exportData()">${t('settings.export')}</button>
+                </div>
+                <div class="row mb-3">
+                    <button class="btn btn-primary" onclick="importData()">${t('settings.import')}</button>
+                </div>
+                <div class="row mb-3">
+                    <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete-confirm">${t('settings.delete')}</button>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" tabindex="-1" role="dialog" id="delete-confirm">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">${t('settings.delete')}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>${t('settings.delete.warning')}</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">${t('settings.delete.cancel')}</button>
+                        <button type="button" class="btn btn-danger" onclick="deleteData()">${t('settings.delete')}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        `;
+        restoreSettings();
+    });
 }
 
 /** Refresh the stats as needed
