@@ -721,7 +721,13 @@ function setLanguage(lang) {
 */
 function setInfoMessage(message) {
     infoMessage = message;
-    getElement('info', HTMLElement).innerText = message;
+    const infoElement = getElement('info', HTMLElement);
+    infoElement.innerText = message;
+    if (message) {
+        infoElement.parentElement?.classList?.remove('d-none');
+    } else {
+        infoElement.parentElement?.classList?.add('d-none');
+    }
 }
 
 /**
@@ -743,7 +749,11 @@ function render() {
         restoreSettings();
         getElement('language-select', HTMLSelectElement).value = activeLanguage;
         getElement('current-session', HTMLTextAreaElement).value = copiedText;
-        getElement('info', HTMLElement).innerText = infoMessage;
+        if (infoMessage) {
+            const infoElement = getElement('info', HTMLElement);
+            infoElement.innerText = infoMessage;
+            infoElement.parentElement?.classList.remove('d-none');
+        }
 
         const startButton = getElement('start-button', HTMLButtonElement);
         startButton.disabled = true;
