@@ -178,6 +178,7 @@ const translations = {
     en: {
         languageName: 'English',
         pageTitle: 'Sharpen your claws and learn Morse code!',
+        description: 'Practice Morse code with instant feedback to guide your learning. If you\'re familiar with <a href="https://lcwo.net/">LCWO</a>,, you\'ll find this tool a fun and helpful way to keep building your skills.',
         'key.space': 'Space',
         'history.started': 'Start time',
         'history.copiedText': 'Copied Text',
@@ -232,6 +233,7 @@ const translations = {
     fr: {
         languageName: 'French',
         pageTitle: 'Aiguisez vos griffes et apprenez le code Morse !',
+        description: 'Entraînez-vous au code Morse avec un feedback immédiat pour vous aider à progresser. Si vous connaissez déjà <a href="https://lcwo.net/">LCWO</a>, vous trouverez cet outil amusant et pratique pour continuer à améliorer vos compétences.',
         'key.space': 'Espace',
         'history.started': 'Heure de début',
         'history.copiedText': 'Texte copié',
@@ -286,6 +288,7 @@ const translations = {
     ja: {
         languageName: '日本語',
         pageTitle: '爪とぎしてモールス信号を学びましょう！',
+        description: 'モールス符号の練習をしながら、即時フィードバックで学習をサポートします。<a href="https://lcwo.net/">LCWO</a>を知っているなら、このツールは楽しく役立つ方法でスキルを伸ばすのにぴったりです。',
         'key.space': '空白',
         'history.started': '開始時間',
         'history.copiedText': 'コピーしたテキスト',
@@ -340,6 +343,7 @@ const translations = {
     es: {
         languageName: 'Español',
         pageTitle: '¡Afilen sus garras y aprendan el código Morse!',
+        description: 'Practica código Morse con retroalimentación instantánea para guiar tu aprendizaje. Si ya conoces <a href="https://lcwo.net/">LCWO</a>, encontrarás que esta herramienta es divertida y útil para seguir mejorando tus habilidades.',
         'key.space': 'Espacio',
         'history.started': 'Hora de inicio',
         'history.copiedText': 'Texto copiado',
@@ -394,6 +398,7 @@ const translations = {
     ca: {
         languageName: 'Català',
         pageTitle: 'Esmola les urpes i aprèn codi Morse!',
+        description: 'Practica codi Morse amb comentaris instantanis per guiar el teu aprenentatge. Si ja coneixes <a href="https://lcwo.net/">LCWO</a>, trobaràs que aquesta eina és divertida i útil per seguir millorant les teves habilitats.',
         'key.space': 'Espai',
         'history.started': 'Hora d\'inici',
         'history.copiedText': 'Text copiat',
@@ -731,12 +736,7 @@ function render() {
             </div>
         </nav>
         <div id="info"></div>
-        <p>
-            This page will help you practice copying <a href="https://en.wikipedia.org/wiki/Morse_code">Morse code</a>.
-            You might already know about <a href="https://lcwo.net/">LCWO</a>.
-            With Morse Cat <img src="cat.svg" alt="😺" height="20" />, you will know immediately whether you have made a mistake.
-            The goal is to improve the feedback loop for learning.
-        </p>
+        <p>${t('description')}</p>
         <button class="btn btn-primary d-block mx-auto m-3" autofocus id="start-button" onclick="startSession()">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-play" viewBox="0 0 16 16">
                 <path d="M10.804 8 5 4.633v6.734zm.792-.696a.802.802 0 0 1 0 1.392l-6.363 3.692C4.713 12.69 4 12.345 4 11.692V4.308c0-.653.713-.998 1.233-.696z"/>
