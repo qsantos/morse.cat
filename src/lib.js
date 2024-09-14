@@ -743,7 +743,7 @@ function render() {
             </svg>
             ${t('start')}
         </button>
-        <textarea class="form-control mb-5" id="current-session" rows="5" onblur="onCurrentSessionBlu()" readonly></textarea>
+        <textarea class="form-control mb-5" id="current-session" rows="5" onblur="onCurrentSessionBlur()" readonly></textarea>
         <section>
             <table class="table table-bordered table-striped">
                 <thead>
