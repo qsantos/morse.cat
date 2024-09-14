@@ -116,6 +116,7 @@ const translations = {
         'acknowledgements.cc-by-license': 'CC-BY License',
         'acknowledgements.jscwlib': 'JavaScript library for Morse Code',
         'acknowledgements.cat-icon': 'Cat icon',
+        'info.incorrect': 'Incorrect!',
         'info.tooSlow': 'Too slow!',
         'info.lostFocus': 'Focus lost!',
     },
@@ -170,6 +171,7 @@ const translations = {
         'acknowledgements.cc-by-license': 'Licence CC-BY',
         'acknowledgements.jscwlib': 'Bibliothèque JavaScript pour le code Morse',
         'acknowledgements.cat-icon': 'Icône de chat',
+        'info.incorrect': 'Incorrect !',
         'info.tooSlow': 'Trop lent !',
         'info.lostFocus': 'Focus perdu !',
     },
@@ -224,6 +226,7 @@ const translations = {
         'acknowledgements.cc-by-license': 'CC-BY ライセンス',
         'acknowledgements.jscwlib': 'モールス信号用JavaScriptライブラリ',
         'acknowledgements.cat-icon': '猫アイコン',
+        'info.incorrect': '不正確！',
         'info.tooSlow': '遅すぎます！',
         'info.lostFocus': 'フォーカスが外れました！',
     },
@@ -278,6 +281,7 @@ const translations = {
         'acknowledgements.cc-by-license': 'Licencia CC-BY',
         'acknowledgements.jscwlib': 'Biblioteca JavaScript para código Morse',
         'acknowledgements.cat-icon': 'Ícono de gato',
+        'info.incorrect': '¡Incorrecto!',
         'info.tooSlow': '¡Demasiado lento!',
         'info.lostFocus': '¡Se perdió el foco!',
     },
@@ -332,6 +336,7 @@ const translations = {
         'acknowledgements.cc-by-license': 'Llicència CC-BY',
         'acknowledgements.jscwlib': 'Biblioteca JavaScript per al codi Morse',
         'acknowledgements.cat-icon': 'Icona de gat',
+        'info.incorrect': 'Incorrecte!',
         'info.tooSlow': 'Massa lent!',
         'info.lostFocus': "S'ha perdut el focus!",
     },
@@ -1017,6 +1022,7 @@ function onKeyDown(event) {
         // incorrect
         // play sound, replay character, and end session
         fail(sent, userInput);
+        setInfoMessage(t('info.incorrect'));
     }
 }
 
