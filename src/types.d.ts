@@ -64,7 +64,7 @@ export type HistoryEntry = {
     settings: Settings,
     elapsed: number,
     copiedCharacters: number,
-    copiedWords: number,
+    copiedGroups: number,
     score: number,
 };
 

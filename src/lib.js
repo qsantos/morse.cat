@@ -7,15 +7,29 @@ const lcwoLessons = 'KMURESNAPTLWI.JZ=FOY,VG5/Q92H38B?47C1D60X';
 let db = null;
 /** @param {() => void} callback */
 function prepareDB(callback) {
-    const request = indexedDB.open("morse.cat", 1);
+    const request = indexedDB.open("morse.cat", 2);
     request.onerror = () => {
         alert("Failed to open IndexedDB; histroy won't be saved");
     }
-    request.onupgradeneeded = () => {
+    request.onupgradeneeded = (event) => {
         const db = request.result;
-        const sessionsStore = db.createObjectStore('sessions', { keyPath: 'id' });
-        sessionsStore.createIndex('started', 'started');
-        db.createObjectStore('characters', { keyPath: 'id' });
+        if (event.oldVersion == 0) {
+            const sessionsStore = db.createObjectStore('sessions', { keyPath: 'id' });
+            sessionsStore.createIndex('started', 'started');
+            db.createObjectStore('characters', { keyPath: 'id' });
+        }
+        if (event.oldVersion <= 1) {
+            const transaction = event.target.transaction;
+            const objectStore = transaction.objectStore('sessions');
+            const request2 = objectStore.getAll();
+            request2.onsuccess = () => {
+                for (const session of request2.result) {
+                    session.copiedGroups = session.copiedWords;
+                    delete session["copiedWords"];
+                    objectStore.put(session);
+                }
+            }
+        }
     };
     request.onsuccess = () => {
         db = request.result;
@@ -660,7 +674,7 @@ function formatHistoryEntry(entry) {
         <td class="font-monospace text-uppercase">${entry.copiedText}${mistake}</td>
         <td class="text-end">${entry.elapsed} s</td>
         <td class="text-end">${entry.copiedCharacters}</td>
-        <td class="text-end">${entry.copiedWords}</td>
+        <td class="text-end">${entry.copiedGroups}</td>
         <td class="text-end">${entry.score}</td>
     </tr>`;
 }
@@ -1171,7 +1185,7 @@ function stopSession(sent, userInput) {
         settings,
         elapsed: stats.elapsed.lastSession,
         copiedCharacters: stats.copiedCharacters.lastSession,
-        copiedWords: stats.copiedGroups.lastSession,
+        copiedGroups: stats.copiedGroups.lastSession,
         score: stats.score.lastSession,
     });
 
