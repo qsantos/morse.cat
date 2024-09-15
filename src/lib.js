@@ -29,6 +29,16 @@ cwPlayer.q = 13;
 
 const stats = readStats();
 
+const defaultSettings = {
+    wpm: 20,
+    tone: 600,
+    error_tone: 200,
+    min_group_size: 5,
+    max_group_size: 5,
+    charset: lcwoLessons,
+    session_debounce_time: 1,
+};
+
 /** @type{import("./types").Settings} */
 const settings = (() => {
     try {
@@ -52,15 +62,7 @@ const settings = (() => {
         }
         return settings;
     } catch (e) {
-        return {
-            wpm: 20,
-            tone: 600,
-            error_tone: 200,
-            min_group_size: 5,
-            max_group_size: 5,
-            charset: lcwoLessons,
-            session_debounce_time: 1,
-        };
+        return Object.assign({}, defaultSettings);
     }
 })();
 
@@ -1166,6 +1168,9 @@ function importData() {
 
 function deleteData() {
     indexedDB.deleteDatabase('morse.cat');
+    Object.assign(settings, defaultSettings);
+    restoreSettings();
+    saveSettings();
     document.location.reload();
 }
 
