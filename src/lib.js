@@ -541,6 +541,10 @@ function onSettingsChange() {
     settings.max_group_size = parseInt(getElement('settings-group-length-max', HTMLInputElement).value, 10);
     settings.charset = getElement('settings-charset', HTMLTextAreaElement).value;
     settings.session_debounce_time = parseFloat(getElement('settings-session-debounce-time', HTMLInputElement).value);
+    saveSettings();
+}
+
+function saveSettings() {
     localStorage.setItem('settings', JSON.stringify(settings));
 }
 
@@ -1133,6 +1137,11 @@ function importData() {
             } catch (e) {
                 alert(`Failed to parse file: ${e}`);
                 return;
+            }
+            {
+                Object.assign(settings, j['settings']);
+                restoreSettings();
+                saveSettings();
             }
             const transaction = db.transaction(['sessions', 'characters'], 'readwrite');
             {
