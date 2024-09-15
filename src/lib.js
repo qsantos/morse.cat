@@ -1134,8 +1134,11 @@ function importData() {
             alert('Incorrect file type!');
             return;
         }
+        const button = getElement('import-button', HTMLButtonElement);
+        button.classList.add('spinning');
         file.text().then(function (data){
             if (!db) {
+                button.classList.remove('spinning');
                 return;
             }
             let j;
@@ -1143,6 +1146,7 @@ function importData() {
                 j = JSON.parse(data);
             } catch (e) {
                 alert(`Failed to parse file: ${e}`);
+                button.classList.remove('spinning');
                 return;
             }
             {
@@ -1164,6 +1168,7 @@ function importData() {
                 }
             }
             transaction.oncomplete = function() {
+                button.classList.remove('spinning');
                 document.location.reload();
             };
         })

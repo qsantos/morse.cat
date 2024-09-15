@@ -267,7 +267,12 @@
                         </button>
                     </div>
                     <div class="row mb-3">
-                        <button class="btn btn-primary" onclick="importData()">${t('settings.import')}</button>
+                        <button class="btn btn-primary" onclick="importData()" id="import-button">
+                            <div class="spinner-border spinner-border-sm" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                            <span>${t('settings.import')}</span>
+                        </button>
                     </div>
                     <div class="row mb-3">
                         <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete-confirm">${t('settings.delete')}</button>
