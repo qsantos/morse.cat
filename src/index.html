@@ -268,8 +268,8 @@
                     </div>
                     <div class="row mb-3">
                         <button class="btn btn-primary" onclick="importData()" id="import-button">
-                            <div class="spinner-border spinner-border-sm" role="status">
-                                <span class="visually-hidden">Loading...</span>
+                            <div class="progress my-1 bg-black" role="progressbar" aria-label="Basic example" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">
+                                <div id="progress-bar" class="progress-bar bg-white"></div>
                             </div>
                             <span>${t('settings.import')}</span>
                         </button>

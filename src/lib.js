@@ -1134,43 +1134,74 @@ function importData() {
             alert('Incorrect file type!');
             return;
         }
+
         const button = getElement('import-button', HTMLButtonElement);
         button.classList.add('spinning');
+        const progressBar = getElement('progress-bar', HTMLDivElement);
+        progressBar.style.width = '0%';
+
         file.text().then(function (data){
-            if (!db) {
-                button.classList.remove('spinning');
-                return;
-            }
-            let j;
-            try {
-                j = JSON.parse(data);
-            } catch (e) {
-                alert(`Failed to parse file: ${e}`);
-                button.classList.remove('spinning');
-                return;
-            }
-            {
-                Object.assign(settings, j['settings']);
-                restoreSettings();
-                saveSettings();
-            }
-            const transaction = db.transaction(['sessions', 'characters'], 'readwrite');
-            {
-                const objectStore = transaction.objectStore('sessions');
-                for (const session of j['sessions']) {
-                    objectStore.put(session);
+            progressBar.style.width = '5%';
+            setTimeout(function() {
+                let j;
+                try {
+                    j = JSON.parse(data);
+                } catch (e) {
+                    alert(`Failed to parse file: ${e}`);
+                    button.classList.remove('spinning');
+                    return;
                 }
-            }
-            {
-                const objectStore = transaction.objectStore('characters');
-                for (const character of j['characters']) {
-                    objectStore.put(character);
-                }
-            }
-            transaction.oncomplete = function() {
-                button.classList.remove('spinning');
-                document.location.reload();
-            };
+                progressBar.style.width = '10%';
+                setTimeout(function() {
+                    const total = j['sessions'].length + j['characters'].length;
+                    progressBar.style.width = '15%';
+                    setTimeout(function() {
+                        if (!db) {
+                            button.classList.remove('spinning');
+                            return;
+                        }
+                        {
+                            Object.assign(settings, j['settings']);
+                            restoreSettings();
+                            saveSettings();
+                        }
+                        const transaction = db.transaction(['sessions', 'characters'], 'readwrite');
+                        let processed = 0;
+                        function updateProgress() {
+                            processed += 1;
+                            if (processed % 1000 == 0) {
+                                const progress = 15 + (processed / total * 85);
+                                progressBar.style.width = progress + '%';
+                            }
+                        }
+                        // TODO: to avoid the slight pause after 15%, the loops
+                        // below (and in particular the ones for characters)
+                        // should be broken in chunks and scheduled with
+                        // setTimeout; note that the commit should only happen
+                        // once all the elements have been scheduled for put
+                        {
+                            const objectStore = transaction.objectStore('sessions');
+                            for (const session of j['sessions']) {
+                                const request = objectStore.put(session);
+                                request.onsuccess = updateProgress;
+                            }
+                        }
+                        {
+                            const objectStore = transaction.objectStore('characters');
+                            for (const character of j['characters']) {
+                                const request = objectStore.put(character);
+                                request.onsuccess = updateProgress;
+                            }
+                        }
+                        transaction.oncomplete = function() {
+                            progressBar.style.width = '100%';
+                            button.classList.remove('spinning');
+                            //document.location.reload();
+                        };
+                        transaction.commit();
+                    }, 100);
+                }, 100);
+            }, 100);
         })
     }
     input.click();

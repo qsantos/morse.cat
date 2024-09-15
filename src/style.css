@@ -39,9 +39,12 @@ h1 rt {
     font-size: 20px;
     text-transform: uppercase;
 }
-button:not(.spinning)>.spinner-border {
+button:not(.spinning)>div {
     display:none;
 }
 button.spinning>span {
     display:none;
+}
+.progress {
+    --bs-progress-bar-transition: width 0.1s ease;
 }
