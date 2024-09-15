@@ -1151,9 +1151,10 @@ function importData() {
                     button.classList.remove('spinning');
                     return;
                 }
+                const { sessions, characters, settings: newSettings } = j;
                 progressBar.style.width = '10%';
                 setTimeout(function() {
-                    const total = j['sessions'].length + j['characters'].length;
+                    const total = sessions.length + characters.length;
                     progressBar.style.width = '15%';
                     setTimeout(function() {
                         if (!db) {
@@ -1161,7 +1162,7 @@ function importData() {
                             return;
                         }
                         {
-                            Object.assign(settings, j['settings']);
+                            Object.assign(settings, newSettings);
                             restoreSettings();
                             saveSettings();
                         }
@@ -1181,14 +1182,14 @@ function importData() {
                         // once all the elements have been scheduled for put
                         {
                             const objectStore = transaction.objectStore('sessions');
-                            for (const session of j['sessions']) {
+                            for (const session of sessions) {
                                 const request = objectStore.put(session);
                                 request.onsuccess = updateProgress;
                             }
                         }
                         {
                             const objectStore = transaction.objectStore('characters');
-                            for (const character of j['characters']) {
+                            for (const character of characters) {
                                 const request = objectStore.put(character);
                                 request.onsuccess = updateProgress;
                             }
