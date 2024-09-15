@@ -1090,6 +1090,10 @@ function exportData() {
     if (!db) {
         return;
     }
+
+    const button = getElement('export-button', HTMLButtonElement);
+    button.classList.add('spinning');
+
     const transaction = db.transaction(['sessions', 'characters']);
     /** @type {import("./types").HistoryEntry[] | null} */
     let sessions = null;
@@ -1101,6 +1105,7 @@ function exportData() {
         }
         const data = JSON.stringify({sessions, characters, settings});
         saveFile(new Blob([data]), "morse-cat-data.json");
+        button.classList.remove('spinning');
     }
     {
         const objectStore = transaction.objectStore('sessions');

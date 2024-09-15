@@ -259,7 +259,12 @@
                         <abbr class="col-sm-2" title="${t('settings.sessionDebounceTime.details')}">${t('settings.sessionDebounceTime.unit')}</abbr>
                     </div>
                     <div class="row mb-3">
-                        <button class="btn btn-primary" onclick="exportData()">${t('settings.export')}</button>
+                        <button class="btn btn-primary" onclick="exportData()" id="export-button">
+                            <div class="spinner-border spinner-border-sm" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                            <span>${t('settings.export')}</span>
+                        </button>
                     </div>
                     <div class="row mb-3">
                         <button class="btn btn-primary" onclick="importData()">${t('settings.import')}</button>

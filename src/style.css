@@ -39,3 +39,9 @@ h1 rt {
     font-size: 20px;
     text-transform: uppercase;
 }
+button:not(.spinning)>.spinner-border {
+    display:none;
+}
+button.spinning>span {
+    display:none;
+}
