@@ -118,7 +118,8 @@ const translations = {
         'acknowledgements.cc-by-license': 'CC-BY License',
         'acknowledgements.jscwlib': 'JavaScript library for Morse Code',
         'acknowledgements.cat-icon': 'Cat icon',
-        'info.incorrect': 'Incorrect!',
+        'info.incorrect': 'You typed ${typed} but the next character played was ${played}!',
+        'info.tooFast': 'You typed ${typed} before the next character was played!',
         'info.tooSlow': 'Too slow!',
         'info.lostFocus': 'Focus lost!',
     },
@@ -173,7 +174,8 @@ const translations = {
         'acknowledgements.cc-by-license': 'Licence CC-BY',
         'acknowledgements.jscwlib': 'Bibliothèque JavaScript pour le code Morse',
         'acknowledgements.cat-icon': 'Icône de chat',
-        'info.incorrect': 'Incorrect !',
+        'info.incorrect': 'Vous avez tapé ${typed}, mais le caractère suivant était ${played} !',
+        'info.tooFast': 'Vous avez tapé ${typed} avant que le caractère suivant ne soit joué !',
         'info.tooSlow': 'Trop lent !',
         'info.lostFocus': 'Focus perdu !',
     },
@@ -228,7 +230,8 @@ const translations = {
         'acknowledgements.cc-by-license': 'CC-BY ライセンス',
         'acknowledgements.jscwlib': 'モールス信号用JavaScriptライブラリ',
         'acknowledgements.cat-icon': '猫アイコン',
-        'info.incorrect': '不正確！',
+        'info.incorrect': 'あなたが入力したのは ${typed} ですが、次に再生された文字は ${played} です！',
+        'info.tooFast': '次の文字が再生される前に ${typed} を入力しました！',
         'info.tooSlow': '遅すぎます！',
         'info.lostFocus': 'フォーカスが外れました！',
     },
@@ -283,7 +286,8 @@ const translations = {
         'acknowledgements.cc-by-license': 'Licencia CC-BY',
         'acknowledgements.jscwlib': 'Biblioteca JavaScript para código Morse',
         'acknowledgements.cat-icon': 'Ícono de gato',
-        'info.incorrect': '¡Incorrecto!',
+        'info.incorrect': 'Has escrito ${typed}, pero el siguiente carácter jugado fue ${played}.',
+        'info.tooFast': 'Escribiste ${typed} antes de que se jugara el siguiente carácter.',
         'info.tooSlow': '¡Demasiado lento!',
         'info.lostFocus': '¡Se perdió el foco!',
     },
@@ -338,7 +342,8 @@ const translations = {
         'acknowledgements.cc-by-license': 'Llicència CC-BY',
         'acknowledgements.jscwlib': 'Biblioteca JavaScript per al codi Morse',
         'acknowledgements.cat-icon': 'Icona de gat',
-        'info.incorrect': 'Incorrecte!',
+        'info.incorrect': 'Has escrit ${typed}, però el següent caràcter jugat ha estat ${played}!',
+        'info.tooFast': 'Has escrit ${typed} abans que es jugués el següent caràcter!',
         'info.tooSlow': 'Massa lent!',
         'info.lostFocus': "S'ha perdut el focus!",
     },
@@ -734,7 +739,7 @@ function setLanguage(lang) {
 function setInfoMessage(message) {
     infoMessage = message;
     const infoElement = getElement('info', HTMLElement);
-    infoElement.innerText = message;
+    infoElement.innerHTML = message;
     if (message) {
         infoElement.parentElement?.classList?.remove('d-none');
     } else {
@@ -763,7 +768,7 @@ function render() {
         getElement('current-session', HTMLTextAreaElement).value = copiedText;
         if (infoMessage) {
             const infoElement = getElement('info', HTMLElement);
-            infoElement.innerText = infoMessage;
+            infoElement.innerHTML = infoMessage;
             infoElement.parentElement?.classList.remove('d-none');
         }
 
@@ -991,6 +996,20 @@ function fail(sent, userInput) {
 }
 
 /**
+ *  @param {string} character
+ *  @return {string}
+*/
+function characterNameWithMorse(character) {
+    if (character === ' ') {
+        return '<code>Space</code>';
+    } else {
+        const name = character.toUpperCase();
+        const morse = cwPlayer.alphabet[character].replaceAll('.', '·').replaceAll('-', '−');
+        return `<code>${name}</code> (<code>${morse}</code>)`;
+    }
+}
+
+/**
  *  @param {KeyboardEvent} event
 */
 function onKeyDown(event) {
@@ -1029,7 +1048,19 @@ function onKeyDown(event) {
         // incorrect
         // play sound, replay character, and end session
         fail(sent, userInput);
-        setInfoMessage(t('info.incorrect'));
+        // display info message
+        if (sent) {
+            const template = t('info.incorrect');
+            setInfoMessage(evaluateTemplate(template, {
+                played: characterNameWithMorse(sent.character),
+                typed: characterNameWithMorse(userInput),
+            }));
+        } else {
+            const template = t('info.tooFast');
+            setInfoMessage(evaluateTemplate(template, {
+                typed: characterNameWithMorse(userInput),
+            }));
+        }
     }
 }
 
