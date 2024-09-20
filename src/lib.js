@@ -342,7 +342,7 @@ const translations = {
         'settings.sessionDebounceTime.unit': 's.',
         'settings.sessionDebounceTime.details': 'segons',
         'settings.export': 'Exportar les dades',
-        'settings.import': 'Exportar les dades',
+        'settings.import': 'Importar les dades',
         'settings.delete': 'Eliminar les dades',
         'settings.delete.warning': "Estàs segur que vols eliminar totes les dades? Perdràs l'historial de pràctica i també les estadístiques.",
         'settings.delete.cancel': 'Tancar',
