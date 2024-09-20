@@ -694,14 +694,15 @@ function formatHistoryEntry(entry) {
         const visibleExpectedCharacter = expectedCharacter === ' ' ? '⎵' : expectedCharacter;
         mistake = `<span class="strike">${mistakenCharacter}</span>${visibleExpectedCharacter}`;
     }
+    const lang = activeLanguage;
     return `
     <tr>
         <td><time datetime="${entry.started}">${entry.started}</time></td>
         <td class="font-monospace text-uppercase">${entry.copiedText}${mistake}</td>
-        <td class="text-end">${entry.elapsed} s</td>
-        <td class="text-end">${entry.copiedCharacters}</td>
-        <td class="text-end">${entry.copiedGroups}</td>
-        <td class="text-end">${entry.score}</td>
+        <td class="text-end">${entry.elapsed.toLocaleString(lang)} s</td>
+        <td class="text-end">${entry.copiedCharacters.toLocaleString(lang)}</td>
+        <td class="text-end">${entry.copiedGroups.toLocaleString(lang)}</td>
+        <td class="text-end">${entry.score.toLocaleString(lang)}</td>
     </tr>`;
 }
 
