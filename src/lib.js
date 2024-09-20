@@ -42,6 +42,38 @@ const defaultSettings = {
     session_debounce_time: 1,
 };
 
+const defaultStats = {
+    updated: new Date(),
+    elapsed: {
+        lastSession: 0,
+        bestSession: 0,
+        currentDay: 0,
+        bestDay: 0,
+        total: 0,
+    },
+    copiedCharacters: {
+        lastSession: 0,
+        bestSession: 0,
+        currentDay: 0,
+        bestDay: 0,
+        total: 0,
+    },
+    copiedGroups: {
+        lastSession: 0,
+        bestSession: 0,
+        currentDay: 0,
+        bestDay: 0,
+        total: 0,
+    },
+    score: {
+        lastSession: 0,
+        bestSession: 0,
+        currentDay: 0,
+        bestDay: 0,
+        total: 0,
+    },
+};
+
 /** @type{import("./types").Settings} */
 const settings = (() => {
     try {
@@ -936,37 +968,7 @@ function readStats() {
         stats.updated = new Date(stats.updated);
         return stats;
     }
-    return {
-        updated: new Date(),
-        elapsed: {
-            lastSession: 0,
-            bestSession: 0,
-            currentDay: 0,
-            bestDay: 0,
-            total: 0,
-        },
-        copiedCharacters: {
-            lastSession: 0,
-            bestSession: 0,
-            currentDay: 0,
-            bestDay: 0,
-            total: 0,
-        },
-        copiedGroups: {
-            lastSession: 0,
-            bestSession: 0,
-            currentDay: 0,
-            bestDay: 0,
-            total: 0,
-        },
-        score: {
-            lastSession: 0,
-            bestSession: 0,
-            currentDay: 0,
-            bestDay: 0,
-            total: 0,
-        },
-    };
+    return Object.assign({}, defaultStats);
 }
 
 /**
@@ -1757,6 +1759,8 @@ function deleteData() {
     Object.assign(settings, defaultSettings);
     restoreSettings();
     saveSettings();
+    Object.assign(stats, defaultStats)
+    refreshStatistics(true);
     document.location.reload();
 }
 
