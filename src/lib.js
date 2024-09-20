@@ -126,6 +126,9 @@ const translations = {
         'info.tooSlow': 'Too slow!',
         'info.lostFocus': 'Focus lost!',
         'info.emptyCharset': 'Empty charset! You must select at least one character in the settings.',
+        'error.database.open': "Failed to load the database; please report on https://github.com/qsantos/morse.cat/issues",
+        'error.import.fileType': 'Incorrect file type! The export should be a JSON file.',
+        'error.import.parse': 'Failed to parse file: ',
     },
     fr: {
         languageName: 'French',
@@ -186,6 +189,9 @@ const translations = {
         'info.tooSlow': 'Trop lent !',
         'info.lostFocus': 'Focus perdu !',
         'info.emptyCharset': 'Jeu de caractères vide ! Vous devez sélectionner au moins un caractère dans les paramètres.',
+        'error.database.open': 'Échec du chargement de la base de données ; veuillez signaler sur https://github.com/qsantos/morse.cat/issues',
+        'error.import.fileType': "Type de fichier incorrect ! L'exportation doit être un fichier JSON.",
+        'error.import.parse': "Échec de l'analyse du fichier :",
     },
     ja: {
         languageName: '日本語',
@@ -246,6 +252,9 @@ const translations = {
         'info.tooSlow': '遅すぎます！',
         'info.lostFocus': 'フォーカスが外れました！',
         'info.emptyCharset': '空の文字セットです！設定で少なくとも1つの文字を選択する必要があります。',
+        'error.database.open': 'データベースの読み込みに失敗しました。https://github.com/qsantos/morse.cat/issues で報告してください。',
+        'error.import.fileType': 'ファイルタイプが間違っています！エクスポートはJSONファイルである必要があります。',
+        'error.import.parse': 'ファイルの解析に失敗しました: ',
     },
     es: {
         languageName: 'Español',
@@ -306,6 +315,9 @@ const translations = {
         'info.tooSlow': '¡Demasiado lento!',
         'info.lostFocus': '¡Se perdió el foco!',
         'info.emptyCharset': '¡Juego de caracteres vacío! Debes seleccionar al menos un carácter en la configuración.',
+        'error.database.open': 'Error al cargar la base de datos; informe en https://github.com/qsantos/morse.cat/issues',
+        'error.import.fileType': '¡Tipo de archivo incorrecto! La exportación debe ser un archivo JSON.',
+        'error.import.parse': 'Error al analizar el archivo: ',
     },
     ca: {
         languageName: 'Català',
@@ -366,6 +378,9 @@ const translations = {
         'info.tooSlow': 'Massa lent!',
         'info.lostFocus': "S'ha perdut el focus!",
         'info.emptyCharset': 'Joc de caràcters buit! Has de seleccionar almenys un caràcter a la configuració.',
+        'error.database.open': "No s'ha pogut carregar la base de dades; informeu a https://github.com/qsantos/morse.cat/issues",
+        'error.import.fileType': "Tipus de fitxer incorrecte! L'exportació ha de ser un fitxer JSON.",
+        'error.import.parse': "No s'ha pogut analitzar el fitxer: ",
     },
     zh: {
         languageName: '中文',
@@ -425,7 +440,10 @@ const translations = {
         'info.tooFast': '你输入了 ${typed}，但字符还没播放完！',
         'info.tooSlow': '太慢了！',
         'info.lostFocus': '焦点丢失！',
-        'info.emptyCharset': '字符集为空！请在设置中至少选择一个字符。'
+        'info.emptyCharset': '字符集为空！请在设置中至少选择一个字符。',
+        'error.database.open': '加载数据库失败；请在 https://github.com/qsantos/morse.cat/issues 上报告',
+        'error.import.fileType': '文件类型不正确！导出应为JSON文件。',
+        'error.import.parse': '文件解析失败：',
     },
     hi: {
         languageName: 'हिन्दी',
@@ -485,7 +503,10 @@ const translations = {
         'info.tooFast': 'आपने ${typed} टाइप किया, लेकिन अक्षर अभी तक पूरी तरह से बजा नहीं है!',
         'info.tooSlow': 'बहुत धीमा!',
         'info.lostFocus': 'ध्यान खो गया!',
-        'info.emptyCharset': 'कैरेक्टर सेट खाली है! कृपया सेटिंग्स में कम से कम एक कैरेक्टर चुनें।'
+        'info.emptyCharset': 'कैरेक्टर सेट खाली है! कृपया सेटिंग्स में कम से कम एक कैरेक्टर चुनें।',
+        'error.database.open': 'डेटाबेस लोड करने में विफल; कृपया https://github.com/qsantos/morse.cat/issues पर रिपोर्ट करें',
+        'error.import.fileType': 'गलत फ़ाइल प्रकार! निर्यात एक JSON फ़ाइल होनी चाहिए।',
+        'error.import.parse': 'फ़ाइल पार्स करने में विफल: ',
     },
     ar: {
         languageName: 'العربية',
@@ -545,7 +566,10 @@ const translations = {
         'info.tooFast': 'لقد كتبت ${typed}، ولكن الحرف لم ينتهِ تشغيله بعد!',
         'info.tooSlow': 'بطيء جدًا!',
         'info.lostFocus': 'فقدان التركيز!',
-        'info.emptyCharset': 'مجموعة الأحرف فارغة! الرجاء اختيار حرف واحد على الأقل في الإعدادات.'
+        'info.emptyCharset': 'مجموعة الأحرف فارغة! الرجاء اختيار حرف واحد على الأقل في الإعدادات.',
+        'error.database.open': 'فشل في تحميل قاعدة البيانات؛ الرجاء الإبلاغ على https://github.com/qsantos/morse.cat/issues',
+        'error.import.fileType': 'نوع الملف غير صحيح! يجب أن يكون التصدير ملف JSON.',
+        'error.import.parse': 'فشل في تحليل الملف: ',
     },
     bn: {
         languageName: 'বাংলা',
@@ -605,7 +629,10 @@ const translations = {
         'info.tooFast': 'আপনি ${typed} টাইপ করেছেন, কিন্তু অক্ষর এখনও শেষ হয়নি!',
         'info.tooSlow': 'খুব ধীর!',
         'info.lostFocus': 'ফোকাস হারানো গেছে!',
-        'info.emptyCharset': 'অক্ষর সেট খালি! অনুগ্রহ করে সেটিংস থেকে অন্তত একটি অক্ষর নির্বাচন করুন।'
+        'info.emptyCharset': 'অক্ষর সেট খালি! অনুগ্রহ করে সেটিংস থেকে অন্তত একটি অক্ষর নির্বাচন করুন।',
+        'error.database.open': 'ডাটাবেস লোড করতে ব্যর্থ; দয়া করে https://github.com/qsantos/morse.cat/issues এ রিপোর্ট করুন',
+        'error.import.fileType': 'ভুল ফাইল ধরন! এক্সপোর্টটি একটি JSON ফাইল হওয়া উচিত।',
+        'error.import.parse': 'ফাইল পার্স করতে ব্যর্থ: ',
     },
     pt: {
         languageName: 'Português',
@@ -665,7 +692,10 @@ const translations = {
         'info.tooFast': 'Você digitou ${typed}, mas o caractere ainda não terminou de tocar!',
         'info.tooSlow': 'Muito lento!',
         'info.lostFocus': 'Foco perdido!',
-        'info.emptyCharset': 'O conjunto de caracteres está vazio! Selecione pelo menos um caractere nas configurações.'
+        'info.emptyCharset': 'O conjunto de caracteres está vazio! Selecione pelo menos um caractere nas configurações.',
+        'error.database.open': 'Falha ao carregar o banco de dados; por favor, relate em https://github.com/qsantos/morse.cat/issues',
+        'error.import.fileType': 'Tipo de arquivo incorreto! A exportação deve ser um arquivo JSON.',
+        'error.import.parse': 'Falha ao analisar o arquivo: ',
     },
     ru: {
         languageName: 'Русский',
@@ -725,7 +755,10 @@ const translations = {
         'info.tooFast': 'Вы ввели ${typed}, но символ еще не завершен!',
         'info.tooSlow': 'Слишком медленно!',
         'info.lostFocus': 'Фокус потерян!',
-        'info.emptyCharset': 'Набор символов пуст! Пожалуйста, выберите хотя бы один символ в настройках.'
+        'info.emptyCharset': 'Набор символов пуст! Пожалуйста, выберите хотя бы один символ в настройках.',
+        'error.database.open': 'Не удалось загрузить базу данных; пожалуйста, сообщите об этом на https://github.com/qsantos/morse.cat/issues',
+        'error.import.fileType': 'Неверный тип файла! Экспорт должен быть в формате JSON.',
+        'error.import.parse': 'Не удалось разобрать файл: ',
     },
     ur: {
         languageName: 'اردو',
@@ -786,6 +819,9 @@ const translations = {
         'info.tooSlow': 'بہت سست!',
         'info.lostFocus': 'فوکس کھو دیا!',
         'info.emptyCharset': 'حروف سیٹ خالی ہے! براہ کرم ترتیبات میں کم از کم ایک حرف منتخب کریں۔',
+        'error.database.open': 'ڈیٹا بیس لوڈ کرنے میں ناکام؛ براہ کرم https://github.com/qsantos/morse.cat/issues پر رپورٹ کریں',
+        'error.import.fileType': 'غلط فائل کی قسم! ایکسپورٹ ایک JSON فائل ہونی چاہیے۔',
+        'error.import.parse': 'فائل پارس کرنے میں ناکام: ',
     },
 };
 
@@ -793,7 +829,7 @@ const translations = {
 function prepareDB(callback) {
     const request = indexedDB.open("morse.cat", 2);
     request.onerror = () => {
-        alert("Failed to open IndexedDB; history won't be saved");
+        alert(t('error.database.open'));
     }
     request.onupgradeneeded = (event) => {
         const db = request.result;
@@ -1614,7 +1650,7 @@ function importData() {
             return;
         }
         if (file.type != "application/json") {
-            alert('Incorrect file type!');
+            alert(t('error.import.fileType'));
             return;
         }
 
@@ -1630,7 +1666,7 @@ function importData() {
                 try {
                     j = JSON.parse(data);
                 } catch (e) {
-                    alert(`Failed to parse file: ${e}`);
+                    alert(`${t('error.import.parse')}${e}`);
                     button.classList.remove('spinning');
                     return;
                 }
