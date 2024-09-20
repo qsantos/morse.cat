@@ -129,7 +129,7 @@ const translations = {
         languageName: 'French',
         pageTitle: 'Aiguisez vos griffes et apprenez le code Morse !',
         description: 'Entraînez-vous au code Morse avec un feedback immédiat pour vous aider à progresser. Si vous connaissez déjà <a href="https://lcwo.net/">LCWO</a>, vous trouverez cet outil amusant et pratique pour continuer à améliorer vos compétences.',
-        spaceKey: 'Esppace',
+        spaceKey: 'Espace',
         'history.title': 'Historique',
         'history.started': 'Heure de début',
         'history.copiedText': 'Texte copié',
