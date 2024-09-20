@@ -353,7 +353,7 @@ const translations = {
 function prepareDB(callback) {
     const request = indexedDB.open("morse.cat", 2);
     request.onerror = () => {
-        alert("Failed to open IndexedDB; histroy won't be saved");
+        alert("Failed to open IndexedDB; history won't be saved");
     }
     request.onupgradeneeded = (event) => {
         const db = request.result;
