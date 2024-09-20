@@ -23,13 +23,6 @@ h1 rt {
     position:relative;
     top:-10px;
 }
-#statistics table {
-    text-align: right;
-}
-#statistics table th {
-    width: 140px;
-    height: 40px;
-}
 .strike {
     text-decoration: line-through;
     color: red;
