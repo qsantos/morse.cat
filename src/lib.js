@@ -792,7 +792,7 @@ function render() {
         startButton.disabled = true;
         setTimeout(function() {
             startButton.disabled = false;
-            startButton.focus();
+            startButton.focus({preventScroll: true});
         }, settings.session_debounce_time * 1000);
     });
 }
