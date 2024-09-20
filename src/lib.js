@@ -1302,7 +1302,7 @@ function refreshStatistics(modified) {
  *  @param {import("./types").Stat} stat - The stat to be increased
  *  @param {number} amount - The amount by which the stat should be increased
 */
-function increaseStat(stat, amount) {
+function updateStat(stat, amount) {
     stat.total += amount;
     stat.lastSession += amount;
     stat.currentDay += amount;
@@ -1359,12 +1359,12 @@ function incrementCopiedCharacters(sent) {
         received,
     });
 
-    increaseStat(stats.elapsed, newElapsed);
-    increaseStat(stats.copiedCharacters, 1);
+    updateStat(stats.elapsed, newElapsed);
+    updateStat(stats.copiedCharacters, 1);
     if (sent.character === ' ') {
-        increaseStat(stats.copiedGroups, 1);
+        updateStat(stats.copiedGroups, 1);
     }
-    increaseStat(stats.score, stats.copiedGroups.lastSession + 1);
+    updateStat(stats.score, stats.copiedGroups.lastSession + 1);
 
     refreshStatistics(true);
 }
