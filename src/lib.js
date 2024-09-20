@@ -337,8 +337,8 @@ const translations = {
         'settings.groupSize.unit': 'car.',
         'settings.groupSize.details': 'caràcters',
         'settings.lcwo.title': 'Lliçó <a href="https://lcwo.net/" title="Learn CW Online">LCWO</a>',
-        'settings.charset.title': 'Conjunt de caràcters',
-        'settings.sessionDebounceTime.title': 'Refredament post-sessió',
+        'settings.charset.title': 'Joc de caràcters',
+        'settings.sessionDebounceTime.title': "Temps d'espera després de la sessió",
         'settings.sessionDebounceTime.unit': 's.',
         'settings.sessionDebounceTime.details': 'segons',
         'settings.export': 'Exportar les dades',
@@ -355,7 +355,7 @@ const translations = {
         'info.tooFast': 'Has escrit ${typed} abans que es jugués el següent caràcter!',
         'info.tooSlow': 'Massa lent!',
         'info.lostFocus': "S'ha perdut el focus!",
-        'info.emptyCharset': 'Conjunt de caràcters buit! Has de seleccionar almenys un caràcter a la configuració.',
+        'info.emptyCharset': 'Joc de caràcters buit! Has de seleccionar almenys un caràcter a la configuració.',
     },
 };
 
