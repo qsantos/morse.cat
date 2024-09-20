@@ -123,6 +123,7 @@ const translations = {
         'info.tooFast': 'You typed ${typed} before the next character was played!',
         'info.tooSlow': 'Too slow!',
         'info.lostFocus': 'Focus lost!',
+        'info.emptyCharset': 'Empty charset! You must select at least one character in the settings.',
     },
     fr: {
         languageName: 'French',
@@ -162,7 +163,7 @@ const translations = {
         'settings.groupSize.unit': 'car.',
         'settings.groupSize.details': 'caractères',
         'settings.lcwo.title': 'Leçon <a href="https://lcwo.net/" title="Learn CW Online">LCWO</A>',
-        'settings.charset.title': 'Choisir les caractères',
+        'settings.charset.title': 'Jeu de caractères',
         'settings.sessionDebounceTime.title': 'Délai après session',
         'settings.sessionDebounceTime.unit': 's.',
         'settings.sessionDebounceTime.details': 'secondes',
@@ -180,6 +181,7 @@ const translations = {
         'info.tooFast': 'Vous avez tapé ${typed} avant que le caractère suivant ne soit joué !',
         'info.tooSlow': 'Trop lent !',
         'info.lostFocus': 'Focus perdu !',
+        'info.emptyCharset': 'Jeu de caractères vide ! Vous devez sélectionner au moins un caractère dans les paramètres.',
     },
     ja: {
         languageName: '日本語',
@@ -237,6 +239,7 @@ const translations = {
         'info.tooFast': '次の文字が再生される前に ${typed} を入力しました！',
         'info.tooSlow': '遅すぎます！',
         'info.lostFocus': 'フォーカスが外れました！',
+        'info.emptyCharset': '空の文字セットです！設定で少なくとも1つの文字を選択する必要があります。',
     },
     es: {
         languageName: 'Español',
@@ -276,7 +279,7 @@ const translations = {
         'settings.groupSize.unit': 'car.',
         'settings.groupSize.details': 'caracteres',
         'settings.lcwo.title': 'Lección <a href="https://lcwo.net/" title="Learn CW Online">LCWO</A>',
-        'settings.charset.title': 'Seleccionar los caracteres',
+        'settings.charset.title': 'Conjunto de caracteres',
         'settings.sessionDebounceTime.title': 'Enfriamiento post-sesión',
         'settings.sessionDebounceTime.unit': 's.',
         'settings.sessionDebounceTime.details': 'segundos',
@@ -294,6 +297,7 @@ const translations = {
         'info.tooFast': 'Escribiste ${typed} antes de que se jugara el siguiente carácter.',
         'info.tooSlow': '¡Demasiado lento!',
         'info.lostFocus': '¡Se perdió el foco!',
+        'info.emptyCharset': '¡Conjunto de caracteres vacío! Debes seleccionar al menos un carácter en la configuración.',
     },
     ca: {
         languageName: 'Català',
@@ -333,7 +337,7 @@ const translations = {
         'settings.groupSize.unit': 'car.',
         'settings.groupSize.details': 'caràcters',
         'settings.lcwo.title': 'Lliçó <a href="https://lcwo.net/" title="Learn CW Online">LCWO</A>',
-        'settings.charset.title': 'Seleccionar els caràcters',
+        'settings.charset.title': 'Conjunt de caràcters',
         'settings.sessionDebounceTime.title': 'Refredament post-sessió',
         'settings.sessionDebounceTime.unit': 's.',
         'settings.sessionDebounceTime.details': 'segons',
@@ -351,6 +355,7 @@ const translations = {
         'info.tooFast': 'Has escrit ${typed} abans que es jugués el següent caràcter!',
         'info.tooSlow': 'Massa lent!',
         'info.lostFocus': "S'ha perdut el focus!",
+        'info.emptyCharset': 'Conjunt de caràcters buit! Has de seleccionar almenys un caràcter a la configuració.',
     },
 };
 
@@ -895,7 +900,7 @@ function startSession() {
     const now = new Date();
 
     if (Array.from(settings.charset).filter((c) => c.trim() !== '').length === 0) {
-        setInfoMessage('Empty charset!');
+        setInfoMessage(t('info.emptyCharset'));
         return;
     }
     pushGroup();
