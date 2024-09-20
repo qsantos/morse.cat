@@ -70,7 +70,7 @@ const translations = {
     en: {
         languageName: 'English',
         pageTitle: 'Sharpen your claws and learn Morse code!',
-        description: 'Practice Morse code with instant feedback to guide your learning. If you\'re familiar with <a href="https://lcwo.net/">LCWO</a>,, you\'ll find this tool a fun and helpful way to keep building your skills.',
+        description: 'Practice Morse code with instant feedback to guide your learning. If you\'re familiar with <a href="https://lcwo.net/">LCWO</a>, you\'ll find this tool a fun and helpful way to keep building your skills.',
         spaceKey: 'Space',
         'history.title': 'History',
         'history.started': 'Start time',
