@@ -1741,7 +1741,8 @@ function importData() {
                                 progressBar.style.width = '100%';
                                 button.classList.remove('spinning');
                                 refreshStatistics(true);
-                                //document.location.reload();
+                                // NOTE: render(false) will mess with the offcanvas being open
+                                document.location.reload();
                             };
                             transaction.commit();
                         }
@@ -1761,6 +1762,7 @@ function deleteData() {
     saveSettings();
     Object.assign(stats, defaultStats)
     refreshStatistics(true);
+    // NOTE: render(false) will mess with the offcanvas being open
     document.location.reload();
 }
 
