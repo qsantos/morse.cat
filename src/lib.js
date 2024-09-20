@@ -1178,7 +1178,7 @@ function setLanguage(lang) {
     document.title = 'Morse Cat - ' + t('pageTitle');
     localStorage.setItem('language', lang);
     infoMessage = '';
-    render();
+    render(false);
 }
 
 /**
@@ -1205,7 +1205,10 @@ function evaluateTemplate(template, vars) {
     return f(...Object.values(vars))
 }
 
-function render() {
+/**
+ *  @param {boolean} debounceStartButton
+*/
+function render(debounceStartButton) {
     getLastSessions(10, (sessions) => {
         getElement('root', HTMLDivElement).innerHTML = evaluateTemplate(HTML_TEMPLATE, {
             lang: activeLanguage,
@@ -1220,12 +1223,13 @@ function render() {
             infoElement.parentElement?.classList.remove('d-none');
         }
 
-        const startButton = getElement('start-button', HTMLButtonElement);
-        startButton.disabled = true;
-        setTimeout(function() {
-            startButton.disabled = false;
-            startButton.focus({preventScroll: true});
-        }, settings.session_debounce_time * 1000);
+        if (debounceStartButton) {
+            const startButton = getElement('start-button', HTMLButtonElement);
+            startButton.disabled = true;
+            setTimeout(function() {
+                startButton.disabled = false;
+            }, settings.session_debounce_time * 1000);
+        }
     });
 }
 
@@ -1416,7 +1420,7 @@ function stopSession(sent, userInput) {
         score: stats.score.lastSession,
     });
 
-    render();
+    render(true);
 }
 
 /** Play a buzzer and then replay the correct character
