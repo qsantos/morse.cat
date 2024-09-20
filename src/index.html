@@ -5,7 +5,7 @@
         <title>Morse Cat</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" >
         <link rel="icon" href="cat.svg" />
-        <link rel="stylesheet" href="bootstrap.min.css" />
+        <link rel="stylesheet" href="bootstrap.min.css" id="bootstrap-css" />
         <link rel="stylesheet" href="style.css" />
         <script defer src="./bootstrap.bundle.min.js"></script>
         <script defer src="./jscwlib.js"></script>
@@ -16,7 +16,7 @@
         <script type="text/html" id="template">
             <nav class="navbar navbar-expand-lg">
                 <div class="container-fluid">
-                    <h1 id="main-header" class="navbar-brand">
+                    <h1 id="main-header" class="navbar-brand" dir="ltr">
                         <!-- Morse (−− −−− ·−· ··· ·) -->
                         <ruby><span class="first-letter">M</span><rp>(</rp><rt>−−</rt><rp>)</rp>o<rp>(</rp><rt>−−−</rt><rp>)</rp>r<rp>(</rp><rt>·−·</rt><rp>)</rp>s<rp>(</rp><rt>···</rt><rp>)</rp>e<rp>(</rp><rt>·</rt><rp>)</rp></ruby>
                         <!-- Cat (−·−· ·− −) -->
@@ -33,11 +33,11 @@
                         </li>
                         <li class="nav-item ms-2">
                             <select class="form-select" id="language-select" onchange="setLanguage(this.value)">
-                                <option value="ca">Català</option>
-                                <option value="en">English</option>
-                                <option value="fr">Français</option>
-                                <option value="ja">日本語</option>
-                                <option value="es">Español</option>
+                                <option value="ca" dir="ltr">Català</option>
+                                <option value="en" dir="ltr">English</option>
+                                <option value="fr" dir="ltr">Français</option>
+                                <option value="ja" dir="ltr">日本語</option>
+                                <option value="es" dir="ltr">Español</option>
                             </select>
                         </li>
                         <li class="nav-item ms-2">

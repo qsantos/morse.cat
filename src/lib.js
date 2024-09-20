@@ -69,6 +69,7 @@ const settings = (() => {
 const translations = {
     en: {
         languageName: 'English',
+        dir: 'ltr',
         pageTitle: 'Sharpen your claws and learn Morse code!',
         description: 'Practice Morse code with instant feedback to guide your learning. If you\'re familiar with <a href="https://lcwo.net/">LCWO</a>, you\'ll find this tool a fun and helpful way to keep building your skills.',
         spaceKey: 'Space',
@@ -128,6 +129,7 @@ const translations = {
     },
     fr: {
         languageName: 'French',
+        dir: 'ltr',
         pageTitle: 'Aiguisez vos griffes et apprenez le code Morse !',
         description: 'Entraînez-vous au code Morse avec un feedback immédiat pour vous aider à progresser. Si vous connaissez déjà <a href="https://lcwo.net/">LCWO</a>, vous trouverez cet outil amusant et pratique pour continuer à améliorer vos compétences.',
         spaceKey: 'Espace',
@@ -187,6 +189,7 @@ const translations = {
     },
     ja: {
         languageName: '日本語',
+        dir: 'ltr',
         pageTitle: '爪とぎしてモールス信号を学びましょう！',
         description: 'モールス符号の練習をしながら、即時フィードバックで学習をサポートします。<a href="https://lcwo.net/">LCWO</a>を知っているなら、このツールは楽しく役立つ方法でスキルを伸ばすのにぴったりです。',
         spaceKey: 'スペース',
@@ -246,6 +249,7 @@ const translations = {
     },
     es: {
         languageName: 'Español',
+        dir: 'ltr',
         pageTitle: '¡Afilen sus garras y aprendan el código Morse!',
         description: 'Practica código Morse con retroalimentación instantánea para guiar tu aprendizaje. Si ya conoces <a href="https://lcwo.net/">LCWO</a>, encontrarás que esta herramienta es divertida y útil para seguir mejorando tus habilidades.',
         spaceKey: 'Espacio',
@@ -305,6 +309,7 @@ const translations = {
     },
     ca: {
         languageName: 'Català',
+        dir: 'ltr',
         pageTitle: 'Esmola les urpes i aprèn codi Morse!',
         description: 'Practica codi Morse amb comentaris instantanis per guiar el teu aprenentatge. Si ja coneixes <a href="https://lcwo.net/">LCWO</a>, trobaràs que aquesta eina és divertida i útil per seguir millorant les teves habilitats.',
         spaceKey: 'Espai',
@@ -743,6 +748,13 @@ function getPreferredLanguage() {
 function setLanguage(lang) {
     document.documentElement.lang = lang;
     activeLanguage = lang;
+    const dir = t('dir');
+    document.documentElement.dir = dir;
+    if (dir == 'rtl') {
+        getElement('bootstrap-css', HTMLLinkElement).href = 'bootstrap.rtl.min.css';
+    } else {
+        getElement('bootstrap-css', HTMLLinkElement).href = 'bootstrap.min.css';
+    }
     document.title = 'Morse Cat - ' + t('pageTitle');
     localStorage.setItem('language', lang);
     infoMessage = '';
