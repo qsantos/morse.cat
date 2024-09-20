@@ -10,6 +10,9 @@ let db = null;
 /** @type {import("./types").SentCharacter[]} */
 const played = [];
 let copiedText = '';
+let copiedCharacters = 0;
+let copiedGroups = 0;
+let score = 0;
 let inSession = false;
 let sessionId = '';
 let infoMessage = '';
@@ -1304,7 +1307,7 @@ function refreshStatistics(modified) {
 */
 function updateStat(stat, amount) {
     stat.total += amount;
-    stat.lastSession += amount;
+    stat.lastSession = amount;
     stat.currentDay += amount;
     stat.bestSession = Math.max(stat.bestSession, stat.lastSession);
     stat.bestDay = Math.max(stat.bestDay, stat.currentDay);
@@ -1336,19 +1339,12 @@ function characterDuration(c, wpm) {
     return time;
 }
 
-/** Update the stats after a character was copied
+/** Update state after a character was successfully copied
  *  @param {import("./types").SentCharacter} sent - The copied character
 */
-function incrementCopiedCharacters(sent) {
-    copiedText += sent.character;
-    getElement('current-session', HTMLTextAreaElement).value = copiedText;
-
-    const now = new Date();
-    const elapsedSinceStart = Math.round((now.getTime() - sessionStart.getTime()) / 1000);
-    const newElapsed = elapsedSinceStart - stats.elapsed.lastSession;
-
+function recordCopiedCharacter(sent) {
     const received = {
-        time: now.toISOString(),
+        time: new Date().toISOString(),
         character: sent.character,
     };
 
@@ -1359,14 +1355,14 @@ function incrementCopiedCharacters(sent) {
         received,
     });
 
-    updateStat(stats.elapsed, newElapsed);
-    updateStat(stats.copiedCharacters, 1);
+    copiedText += sent.character;
+    copiedCharacters += 1;
     if (sent.character === ' ') {
-        updateStat(stats.copiedGroups, 1);
+        copiedGroups += 1;
     }
-    updateStat(stats.score, stats.copiedGroups.lastSession + 1);
+    score += copiedGroups + 1;
 
-    refreshStatistics(true);
+    getElement('current-session', HTMLTextAreaElement).value = copiedText;
 }
 
 function onFinished() {
@@ -1384,15 +1380,14 @@ function startSession() {
     pushGroup();
     played.length = 0;
     copiedText = '';
+    copiedCharacters = 0;
+    copiedGroups = 0;
+    score = 0;
     getElement('current-session', HTMLTextAreaElement).value = copiedText;
     inSession = true;
     sessionId = crypto.randomUUID(),
     sessionStart = now;
     sessionDurationUpdater = setInterval(refreshStatistics, 1000);
-    stats.elapsed.lastSession = 0;
-    stats.copiedCharacters.lastSession = 0;
-    stats.copiedGroups.lastSession = 0;
-    stats.score.lastSession = 0;
     cwPlayer.setWpm(settings.wpm);
     cwPlayer.setEff(settings.wpm);
     cwPlayer.setFreq(settings.tone);
@@ -1413,7 +1408,7 @@ function stopSession(sent, userInput) {
 
     const now = new Date();
 
-    let lastReceivedIndex = stats.copiedCharacters.lastSession;
+    let lastReceivedIndex = copiedCharacters;
     if (userInput) {
         // save incorrectly received character
         const received = {
@@ -1440,7 +1435,8 @@ function stopSession(sent, userInput) {
     clearInterval(sessionDurationUpdater);
     sessionDurationUpdater = 0;
 
-    saveSession({
+    const elapsed = Math.round((now.getTime() - sessionStart.getTime()) / 1000);
+    const session = {
         id: sessionId,
         started: sessionStart.toISOString(),
         finished: now.toISOString(),
@@ -1450,11 +1446,19 @@ function stopSession(sent, userInput) {
             mistakenCharacter: userInput,
         },
         settings,
-        elapsed: stats.elapsed.lastSession,
-        copiedCharacters: stats.copiedCharacters.lastSession,
-        copiedGroups: stats.copiedGroups.lastSession,
-        score: stats.score.lastSession,
-    });
+        elapsed,
+        copiedCharacters,
+        copiedGroups,
+        score,
+    }
+
+    saveSession(session);
+
+    updateStat(stats.elapsed, session.elapsed);
+    updateStat(stats.copiedCharacters, session.copiedCharacters);
+    updateStat(stats.copiedGroups, session.copiedGroups);
+    updateStat(stats.score, session.score);
+    refreshStatistics(true);
 
     render(true);
 }
@@ -1527,11 +1531,11 @@ function onKeyDown(event) {
     }
 
     // played[nextIndex] is undefined if nextIndex >= played.length
-    const sent = played[stats.copiedCharacters.lastSession];
+    const sent = played[copiedCharacters];
     const expected = sent?.character.toLowerCase();
     if (sent && userInput === expected) {
         // correct
-        incrementCopiedCharacters(sent);
+        recordCopiedCharacter(sent);
     } else {
         // incorrect
         // play sound, replay character, and end session
