@@ -72,6 +72,7 @@ const translations = {
         pageTitle: 'Sharpen your claws and learn Morse code!',
         description: 'Practice Morse code with instant feedback to guide your learning. If you\'re familiar with <a href="https://lcwo.net/">LCWO</a>, you\'ll find this tool a fun and helpful way to keep building your skills.',
         spaceKey: 'Space',
+        secondsSuffix: ' s',
         'history.title': 'History',
         'history.started': 'Start time',
         'history.copiedText': 'Copied Text',
@@ -130,6 +131,7 @@ const translations = {
         pageTitle: 'Aiguisez vos griffes et apprenez le code Morse !',
         description: 'Entraînez-vous au code Morse avec un feedback immédiat pour vous aider à progresser. Si vous connaissez déjà <a href="https://lcwo.net/">LCWO</a>, vous trouverez cet outil amusant et pratique pour continuer à améliorer vos compétences.',
         spaceKey: 'Espace',
+        secondsSuffix: ' s',
         'history.title': 'Historique',
         'history.started': 'Heure de début',
         'history.copiedText': 'Texte copié',
@@ -188,6 +190,7 @@ const translations = {
         pageTitle: '爪とぎしてモールス信号を学びましょう！',
         description: 'モールス符号の練習をしながら、即時フィードバックで学習をサポートします。<a href="https://lcwo.net/">LCWO</a>を知っているなら、このツールは楽しく役立つ方法でスキルを伸ばすのにぴったりです。',
         spaceKey: 'スペース',
+        secondsSuffix: '秒',
         'history.title': '履歴',
         'history.started': '開始時間',
         'history.copiedText': 'コピーしたテキスト',
@@ -246,6 +249,7 @@ const translations = {
         pageTitle: '¡Afilen sus garras y aprendan el código Morse!',
         description: 'Practica código Morse con retroalimentación instantánea para guiar tu aprendizaje. Si ya conoces <a href="https://lcwo.net/">LCWO</a>, encontrarás que esta herramienta es divertida y útil para seguir mejorando tus habilidades.',
         spaceKey: 'Espacio',
+        secondsSuffix: ' s',
         'history.title': 'Historial',
         'history.started': 'Hora de inicio',
         'history.copiedText': 'Texto copiado',
@@ -304,6 +308,7 @@ const translations = {
         pageTitle: 'Esmola les urpes i aprèn codi Morse!',
         description: 'Practica codi Morse amb comentaris instantanis per guiar el teu aprenentatge. Si ja coneixes <a href="https://lcwo.net/">LCWO</a>, trobaràs que aquesta eina és divertida i útil per seguir millorant les teves habilitats.',
         spaceKey: 'Espai',
+        secondsSuffix: ' s',
         'history.title': 'Historial',
         'history.started': "Hora d'inici",
         'history.copiedText': 'Text copiat',
@@ -699,7 +704,7 @@ function formatHistoryEntry(entry) {
     <tr>
         <td><time datetime="${entry.started}">${entry.started}</time></td>
         <td class="font-monospace text-uppercase">${entry.copiedText}${mistake}</td>
-        <td class="text-end">${entry.elapsed.toLocaleString(lang)} s</td>
+        <td class="text-end">${entry.elapsed.toLocaleString(lang)}${t('secondsSuffix')}</td>
         <td class="text-end">${entry.copiedCharacters.toLocaleString(lang)}</td>
         <td class="text-end">${entry.copiedGroups.toLocaleString(lang)}</td>
         <td class="text-end">${entry.score.toLocaleString(lang)}</td>
