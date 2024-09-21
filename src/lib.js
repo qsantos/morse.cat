@@ -877,9 +877,9 @@ function prepareDB(callback) {
             // @ts-ignore
             const transaction = event.target.transaction;
             const objectStore = transaction.objectStore("sessions");
-            const request2 = objectStore.getAll();
-            request2.onsuccess = () => {
-                for (const session of request2.result) {
+            const request = objectStore.getAll();
+            request.onsuccess = () => {
+                for (const session of request.result) {
                     session.copiedGroups = session.copiedWords;
                     delete session.copiedWords;
                     objectStore.put(session);
