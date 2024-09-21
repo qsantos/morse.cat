@@ -865,7 +865,7 @@ function prepareDB(callback) {
     const request = indexedDB.open("morse.cat", 2);
     request.onerror = () => {
         alert(t("error.database.open"));
-    }
+    };
     request.onupgradeneeded = (event) => {
         const db = request.result;
         if (event.oldVersion === 0) {
@@ -884,13 +884,13 @@ function prepareDB(callback) {
                     delete session["copiedWords"];
                     objectStore.put(session);
                 }
-            }
+            };
         }
     };
     request.onsuccess = () => {
         db = request.result;
         callback();
-    }
+    };
 }
 
 /**
@@ -946,7 +946,7 @@ function getLastSessions(count, callback) {
             sessions.reverse();
             callback(sessions);
         }
-    }
+    };
 }
 
 function pushGroup() {
@@ -1243,7 +1243,7 @@ function setInfoMessage(message) {
 */
 function evaluateTemplate(template, vars) {
     const f = new Function(...Object.keys(vars), `return \`${template}\``);
-    return f(...Object.values(vars))
+    return f(...Object.values(vars));
 }
 
 /**
