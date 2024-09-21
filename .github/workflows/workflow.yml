@@ -15,5 +15,5 @@ jobs:
         run: npm ci
       - name: Verify TypeScript code
         run: npx tsc
-      # - name: Lint TypeScript code
-      #   run: npx eslint src/lib.js
+      - name: Lint TypeScript code
+        run: npx @biomejs/biome check src/lib.js
