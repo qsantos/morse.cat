@@ -1267,7 +1267,7 @@ function render(debounceStartButton) {
         if (debounceStartButton) {
             const startButton = getElement('start-button', HTMLButtonElement);
             startButton.disabled = true;
-            setTimeout(function() {
+            setTimeout(() => {
                 startButton.disabled = false;
             }, settings.session_debounce_time * 1000);
         }
@@ -1653,7 +1653,7 @@ function exportData() {
 function importData() {
     const input = document.createElement('input');
     input.type = 'file';
-    input.oninput = function(event) {
+    input.oninput = (event) => {
         /** @type {HTMLInputElement | null} */
         // @ts-ignore
         const element = event.target;
@@ -1671,9 +1671,9 @@ function importData() {
         const progressBar = getElement('progress-bar', HTMLDivElement);
         progressBar.style.width = '0%';
 
-        file.text().then(function(data){
+        file.text().then((data) => {
             progressBar.style.width = '5%';
-            setTimeout(function() {
+            setTimeout(() => {
                 let j;
                 try {
                     j = JSON.parse(data);
@@ -1684,10 +1684,10 @@ function importData() {
                 }
                 const { sessions, characters, settings: newSettings } = j;
                 progressBar.style.width = '10%';
-                setTimeout(function() {
+                setTimeout(() => {
                     const total = sessions.length + characters.length;
                     progressBar.style.width = '15%';
-                    setTimeout(function() {
+                    setTimeout(() => {
                         if (!db) {
                             button.classList.remove('spinning');
                             return;
@@ -1700,7 +1700,7 @@ function importData() {
                         const transaction = db.transaction(['sessions']);
                         const objectStore = transaction.objectStore('sessions');
                         const request = objectStore.getAllKeys();
-                        transaction.oncomplete = function() {
+                        transaction.oncomplete = () => {
                             const sessionIds = new Set(request.result);
                             if (!db) {
                                 button.classList.remove('spinning');
@@ -1737,7 +1737,7 @@ function importData() {
                                     request.onsuccess = updateProgress;
                                 }
                             }
-                            transaction.oncomplete = function() {
+                            transaction.oncomplete = () => {
                                 progressBar.style.width = '100%';
                                 button.classList.remove('spinning');
                                 refreshStatistics(true);
