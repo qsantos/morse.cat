@@ -1641,12 +1641,18 @@ function exportData() {
     {
         const objectStore = transaction.objectStore("sessions");
         const request = objectStore.getAll();
-        request.onsuccess = () => { sessions = request.result; exportAsJsonWhenReady(); };
+        request.onsuccess = () => {
+            sessions = request.result;
+            exportAsJsonWhenReady();
+        };
     }
     {
         const objectStore = transaction.objectStore("characters");
         const request = objectStore.getAll();
-        request.onsuccess = () => { characters = request.result; exportAsJsonWhenReady(); };
+        request.onsuccess = () => {
+            characters = request.result;
+            exportAsJsonWhenReady();
+        };
     }
 }
 
@@ -1774,8 +1780,12 @@ function onCurrentSessionBlur() {
 }
 
 function main() {
-    cwPlayer.onLampOff = () => { getElement("nose", SVGElement).style.fill = "#E75A70"; };
-    cwPlayer.onLampOn = () => { getElement("nose", SVGElement).style.fill = "yellow"; };
+    cwPlayer.onLampOff = () => {
+        getElement("nose", SVGElement).style.fill = "#E75A70";
+    };
+    cwPlayer.onLampOn = () => {
+        getElement("nose", SVGElement).style.fill = "yellow";
+    };
     refreshStatistics();
     setLanguage(getPreferredLanguage());
 }
