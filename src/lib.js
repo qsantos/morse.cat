@@ -1397,7 +1397,7 @@ function startSession() {
     score = 0;
     getElement('current-session', HTMLTextAreaElement).value = copiedText;
     inSession = true;
-    sessionId = crypto.randomUUID(),
+    sessionId = crypto.randomUUID();
     sessionStart = now;
     sessionDurationUpdater = setInterval(refreshStatistics, 1000);
     cwPlayer.setWpm(settings.wpm);
