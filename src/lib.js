@@ -1177,7 +1177,6 @@ function formatHistoryEntry(entry) {
     </tr>`;
 }
 
-
 /** Type assertion that lang is a language key
  *  @param {any} lang - The candidate language key
  *  @return {keyof typeof translations | null} lang - The language key or null
