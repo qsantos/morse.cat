@@ -1701,11 +1701,9 @@ function importData() {
                             button.classList.remove("spinning");
                             return;
                         }
-                        {
-                            Object.assign(settings, newSettings);
-                            restoreSettings();
-                            saveSettings();
-                        }
+                        Object.assign(settings, newSettings);
+                        restoreSettings();
+                        saveSettings();
                         const transaction = db.transaction(["sessions"]);
                         const objectStore = transaction.objectStore("sessions");
                         const request = objectStore.getAllKeys();
