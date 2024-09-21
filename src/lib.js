@@ -161,7 +161,7 @@ const translations = {
         'info.tooSlow': 'Too slow!',
         'info.lostFocus': 'Focus lost!',
         'info.emptyCharset': 'Empty charset! You must select at least one character in the settings.',
-        'error.database.open': "Failed to load the database; please report on https://github.com/qsantos/morse.cat/issues",
+        'error.database.open': 'Failed to load the database; please report on https://github.com/qsantos/morse.cat/issues',
         'error.import.fileType': 'Incorrect file type! The export should be a JSON file.',
         'error.import.parse': 'Failed to parse file: ',
     },
