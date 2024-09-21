@@ -1634,7 +1634,7 @@ function exportData() {
         if (!sessions || !characters) {
             return;
         }
-        const data = JSON.stringify({sessions, characters, settings});
+        const data = JSON.stringify({ sessions, characters, settings });
         saveFile(new Blob([data]), "morse-cat-data.json");
         button.classList.remove("spinning");
     }
