@@ -1711,7 +1711,7 @@ function importData() {
                             function updateProgress() {
                                 processed += 1;
                                 if (processed % 1000 === 0) {
-                                    const progress = 15 + (processed / total * 85);
+                                    const progress = 15 + (processed / total) * 85;
                                     progressBar.style.width = `${progress}%`;
                                 }
                             }
