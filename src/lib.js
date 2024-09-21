@@ -868,7 +868,7 @@ function prepareDB(callback) {
     }
     request.onupgradeneeded = (event) => {
         const db = request.result;
-        if (event.oldVersion == 0) {
+        if (event.oldVersion === 0) {
             const sessionsStore = db.createObjectStore('sessions', { keyPath: 'id' });
             sessionsStore.createIndex('started', 'started');
             db.createObjectStore('characters', { keyPath: 'id' });
@@ -1211,7 +1211,7 @@ function setLanguage(lang) {
     activeLanguage = lang;
     const dir = t('dir');
     document.documentElement.dir = dir;
-    if (dir == 'rtl') {
+    if (dir === 'rtl') {
         getElement('bootstrap-css', HTMLLinkElement).href = 'bootstrap.rtl.min.css';
     } else {
         getElement('bootstrap-css', HTMLLinkElement).href = 'bootstrap.min.css';
@@ -1343,7 +1343,7 @@ function characterDuration(c, wpm) {
         // will count as a regular character of length 1 dit; when adding the
         // previous and next inter-character gap, this totals a gap of 7 dits,
         // which is the actual duration of the inter-group gap
-        const dits = element == "-" ? 3 : 1;
+        const dits = element === "-" ? 3 : 1;
         time += dotlen * dits;
     }
     // add duration of inter-element gaps
@@ -1661,7 +1661,7 @@ function importData() {
         if (!file) {
             return;
         }
-        if (file.type != "application/json") {
+        if (file.type !== "application/json") {
             alert(t('error.import.fileType'));
             return;
         }
@@ -1710,7 +1710,7 @@ function importData() {
                             let processed = 0;
                             function updateProgress() {
                                 processed += 1;
-                                if (processed % 1000 == 0) {
+                                if (processed % 1000 === 0) {
                                     const progress = 15 + (processed / total * 85);
                                     progressBar.style.width = progress + '%';
                                 }
