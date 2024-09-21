@@ -82,18 +82,18 @@ const settings = (() => {
         if (settings.hasOwnProperty("word_length")) {
             settings.min_group_size = settings.word_length;
             settings.max_group_size = settings.word_length;
-            delete settings["word_length"];
+            delete settings.word_length;
         }
         if (!settings.hasOwnProperty("session_debounce_time")) {
             settings.session_debounce_time = 1;
         }
         if (settings.hasOwnProperty("min_word_length")) {
             settings.min_group_size = settings.min_word_length;
-            delete settings["min_word_length"];
+            delete settings.min_word_length;
         }
         if (settings.hasOwnProperty("max_word_length")) {
             settings.max_group_size = settings.max_word_length;
-            delete settings["max_word_length"];
+            delete settings.max_word_length;
         }
         return settings;
     } catch (e) {
@@ -881,7 +881,7 @@ function prepareDB(callback) {
             request2.onsuccess = () => {
                 for (const session of request2.result) {
                     session.copiedGroups = session.copiedWords;
-                    delete session["copiedWords"];
+                    delete session.copiedWords;
                     objectStore.put(session);
                 }
             };
@@ -1279,7 +1279,7 @@ function refreshStatistics(modified) {
         // @ts-ignore
         stats.copiedGroups = stats.copiedWords;
         // @ts-ignore
-        delete stats["copiedWords"];
+        delete stats.copiedWords;
     }
     // update day stats
     const now = new Date();
