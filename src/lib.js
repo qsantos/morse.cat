@@ -1438,7 +1438,7 @@ function stopSession(sent, userInput) {
     }
     // save characters that were sent but not received at all
     for (const sent of played.slice(lastReceivedIndex)) {
-        saveCharacter({ sessionId, result: "Pending", sent })
+        saveCharacter({ sessionId, result: "Pending", sent });
     }
 
     cwPlayer.stop();
@@ -1462,7 +1462,7 @@ function stopSession(sent, userInput) {
         copiedCharacters,
         copiedGroups,
         score,
-    }
+    };
 
     saveSession(session);
     updateStats(session);
@@ -1614,7 +1614,7 @@ function saveFile(data, filename) {
     setTimeout(() => {
         window.URL.revokeObjectURL(url);
         document.body.removeChild(a);
-    }, 0)
+    }, 0);
 }
 
 function exportData() {
@@ -1745,13 +1745,13 @@ function importData() {
                                 document.location.reload();
                             };
                             transaction.commit();
-                        }
+                        };
                         transaction.commit();
                     }, 100);
                 }, 100);
             }, 100);
-        })
-    }
+        });
+    };
     input.click();
 }
 
@@ -1760,7 +1760,7 @@ function deleteData() {
     Object.assign(settings, defaultSettings);
     restoreSettings();
     saveSettings();
-    Object.assign(stats, defaultStats)
+    Object.assign(stats, defaultStats);
     refreshStatistics(true);
     // NOTE: render(false) will mess with the offcanvas being open
     document.location.reload();
