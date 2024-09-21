@@ -1671,7 +1671,7 @@ function importData() {
         const progressBar = getElement('progress-bar', HTMLDivElement);
         progressBar.style.width = '0%';
 
-        file.text().then(function (data){
+        file.text().then(function(data){
             progressBar.style.width = '5%';
             setTimeout(function() {
                 let j;
