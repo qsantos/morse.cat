@@ -895,7 +895,7 @@ function prepareDB(callback) {
 
 /**
  * @param {import("./types").HistoryEntry} session
-*/
+ */
 function saveSession(session) {
     if (!db) {
         return;
@@ -907,7 +907,7 @@ function saveSession(session) {
 
 /**
  * @param {import("./types").TransmittedCharacter} character
-*/
+ */
 function saveCharacter(character) {
     if (!db) {
         return;
@@ -923,7 +923,7 @@ function saveCharacter(character) {
 /**
  * @param {number} count
  * @param {(sessions: import("./types").HistoryEntry[]) => void} callback
-*/
+ */
 function getLastSessions(count, callback) {
     if (!db) {
         return;
@@ -960,7 +960,7 @@ function pushGroup() {
 
 /** Load the stats from the local storage
  *  @return { import("./types").Stats } - The stats
-*/
+ */
 function readStats() {
     const json = localStorage.getItem("stats");
     if (json) {
@@ -975,7 +975,7 @@ function readStats() {
  * @param {number} min
  * @param {number} max
  * @return {number}
-*/
+ */
 function randrange(min, max) {
     return Math.floor(Math.random() * (max - min)) + min;
 }
@@ -984,7 +984,7 @@ function randrange(min, max) {
  * @param {number} min
  * @param {number} max
  * @return {number}
-*/
+ */
 function randint(min, max) {
     return randrange(min, max + 1);
 }
@@ -992,7 +992,7 @@ function randint(min, max) {
 /** Provide a translation string for the given key
  *  @param {keyof typeof translations.en} key - The translation key
  *  @return {string} - The translated string
-*/
+ */
 function t(key) {
     const translated = translations[activeLanguage][key];
     if (translated) {
@@ -1007,7 +1007,7 @@ function t(key) {
  *  @param {string} id - The element’s id
  *  @param {new() => T} type - The type of HTML ELement
  *  @return {T} - The element
-*/
+ */
 function getElement(id, type) {
     const element = document.getElementById(id);
     if (!element) {
@@ -1038,7 +1038,7 @@ function saveSettings() {
 
 /** Update the current LCWO lesson depending on the characters in the charset
  *  @param {string} charset - The current charset
-*/
+ */
 function lcwoLessonFromCharset(charset) {
     const s = new Set(charset.toUpperCase());
     let i = 0;
@@ -1064,7 +1064,7 @@ function updateLCWOLessonFromCharset() {
  *  @param {Set<T>} setA - First set
  *  @param {Set<T>} setB - Second set
  *  @return {boolean} - Whether the first set contains the second
-*/
+ */
 function contains(setA, setB) {
     return [...setB].every((x) => setA.has(x));
 }
@@ -1074,7 +1074,7 @@ function contains(setA, setB) {
  *  @param {Set<T>} setA - First set
  *  @param {Set<T>} setB - Second set
  *  @return {boolean} - Whether the sets intersect
-*/
+ */
 function intersects(setA, setB) {
     return [...setB].some((x) => setA.has(x));
 }
@@ -1082,7 +1082,7 @@ function intersects(setA, setB) {
 /** Update the status of a toggle depending on the characters included in the charset
  *  @param {string} id - The element"s id
  *  @param {string} chars - The characters represented by the toggle
-*/
+ */
 function updateToggleFromCharset(id, chars) {
     const toggleChars = new Set(chars);
     const selectedChars = new Set(settings.charset.toUpperCase());
@@ -1123,7 +1123,7 @@ function onLCWOLessonInput() {
 /** Update the status of a toggle depending on the characters included in the charset
  *  @param {InputEvent} event - The event that changed the state of the toggle
  *  @param {string} chars - The characters represented by the toggle
-*/
+ */
 function onToggleChars(event, chars) {
     const s = new Set(chars);
     const charsetWithoutChars = [...settings.charset].filter((c) => !s.has(c.toUpperCase())).join("");
@@ -1156,7 +1156,7 @@ function restoreSettings() {
 /** Format an history entry
  *  @param {import("./types").HistoryEntry} entry - The entry to format
  *  @return {string} - The formatted entry
-*/
+ */
 function formatHistoryEntry(entry) {
     let mistake = "";
     if (entry.mistake) {
@@ -1181,7 +1181,7 @@ function formatHistoryEntry(entry) {
 /** Type assertion that lang is a language key
  *  @param {any} lang - The candidate language key
  *  @return {keyof typeof translations | null} lang - The language key or null
-*/
+ */
 function asLanguage(lang) {
     if (lang && translations.hasOwnProperty(lang)) {
         return lang;
@@ -1192,7 +1192,7 @@ function asLanguage(lang) {
 
 /** Detect the preferred language of the user
  *  @return {keyof typeof translations} lang - The preferred language
-*/
+ */
 function getPreferredLanguage() {
     /** @type {keyof typeof translations | null} */
     let lang = null;
@@ -1205,7 +1205,7 @@ function getPreferredLanguage() {
 
 /** Set the language of the page
  *  @param {keyof typeof translations} lang - The selected language
-*/
+ */
 function setLanguage(lang) {
     document.documentElement.lang = lang;
     activeLanguage = lang;
@@ -1224,7 +1224,7 @@ function setLanguage(lang) {
 
 /**
  *  @param {string} message
-*/
+ */
 function setInfoMessage(message) {
     infoMessage = message;
     const infoElement = getElement("info", HTMLElement);
@@ -1240,7 +1240,7 @@ function setInfoMessage(message) {
  *  @param {string} template
  *  @param {{[key: string]: any;}} vars
  *  @return {string}
-*/
+ */
 function evaluateTemplate(template, vars) {
     const f = new Function(...Object.keys(vars), `return \`${template}\``);
     return f(...Object.values(vars));
@@ -1248,7 +1248,7 @@ function evaluateTemplate(template, vars) {
 
 /**
  *  @param {boolean} debounceStartButton
-*/
+ */
 function render(debounceStartButton) {
     getLastSessions(10, (sessions) => {
         getElement("root", HTMLDivElement).innerHTML = evaluateTemplate(HTML_TEMPLATE, {
@@ -1276,7 +1276,7 @@ function render(debounceStartButton) {
 
 /** Refresh the stats as needed
  *  @param {boolean} [modified] - Where the stats recently modified?
-*/
+ */
 function refreshStatistics(modified) {
     // migration
     if (stats.hasOwnProperty("copiedWords")) {
@@ -1306,7 +1306,7 @@ function refreshStatistics(modified) {
 /** Increase a stat by a given amount
  *  @param {import("./types").Stat} stat - The stat to be increased
  *  @param {number} amount - The amount by which the stat should be increased
-*/
+ */
 function updateStat(stat, amount) {
     stat.total += amount;
     stat.lastSession = amount;
@@ -1317,7 +1317,7 @@ function updateStat(stat, amount) {
 
 /**
  *  @param {import("./types").HistoryEntry} session
-*/
+ */
 function updateStats(session) {
     updateStat(stats.elapsed, session.elapsed);
     updateStat(stats.copiedCharacters, session.copiedCharacters);
@@ -1329,7 +1329,7 @@ function updateStats(session) {
  *  @param {string} c - The character
  *  @param {number} [wpm] - Length of a dot in seconds
  *  @return {number} - Duration of the character, in seconds
-*/
+ */
 function characterDuration(c, wpm) {
     if (cwPlayer.alphabet === undefined) {
         throw new Error("characterDuration called before JSCWlib initialized");
@@ -1353,7 +1353,7 @@ function characterDuration(c, wpm) {
 
 /** Update state after a character was successfully copied
  *  @param {import("./types").SentCharacter} sent - The copied character
-*/
+ */
 function recordCopiedCharacter(sent) {
     const received = {
         time: new Date().toISOString(),
@@ -1412,7 +1412,7 @@ function startSession() {
 /** End the current session
  *  @param {import("./types").SentCharacter} [sent] - The character initially sent (if any)
  *  @param {string} [userInput] - What the user copied (if any)
-*/
+ */
 function stopSession(sent, userInput) {
     if (!inSession) {
         return;
@@ -1473,7 +1473,7 @@ function stopSession(sent, userInput) {
 
 /** Play a buzzer and then replay the correct character
  *  @param {string} [c] - The expected character (if any)
-*/
+ */
 function replayAfterMistake(c) {
     cwPlayer.onFinished = () => {
         cwPlayer.onFinished = undefined;
@@ -1489,7 +1489,7 @@ function replayAfterMistake(c) {
 /** Interrupt a session due to an user error
  *  @param {import("./types").SentCharacter} [sent] - The expected character (if any)
  *  @param {string} [userInput] - What the user copied (if any)
-*/
+ */
 function fail(sent, userInput) {
     stopSession(sent, userInput);
     replayAfterMistake(sent?.character);
@@ -1498,7 +1498,7 @@ function fail(sent, userInput) {
 /**
  *  @param {string} character
  *  @return {string}
-*/
+ */
 function characterNameWithMorse(character) {
     if (character === " ") {
         return `<code>${t("spaceKey")}</code>`;
@@ -1511,7 +1511,7 @@ function characterNameWithMorse(character) {
 
 /**
  *  @param {KeyboardEvent} event
-*/
+ */
 function onKeyDown(event) {
     const userInput = event.key.toLowerCase();
 
@@ -1566,7 +1566,7 @@ function onKeyDown(event) {
 
 /** Event handler for when a character has been fully played
  *  @param {{c: string}} c - The character played
-*/
+ */
 cwPlayer.onCharacterPlay = (c) => {
     if (!inSession) {
         return;
@@ -1595,7 +1595,7 @@ cwPlayer.onCharacterPlay = (c) => {
 /** Let the user save some data as a file
  *  @param {Blob} data
  *  @param {string} filename
-*/
+ */
 function saveFile(data, filename) {
     // @ts-ignore
     if (window.navigator.msSaveOrOpenBlob) {
