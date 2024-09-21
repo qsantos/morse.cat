@@ -951,10 +951,7 @@ function getLastSessions(count, callback) {
 
 function pushGroup() {
     const groupLength = randint(settings.min_group_size, settings.max_group_size);
-    const group = Array.from(
-        { length: groupLength },
-        () => settings.charset[Math.floor(Math.random() * settings.charset.length)],
-    ).join("");
+    const group = Array.from({ length: groupLength }, () => settings.charset[Math.floor(Math.random() * settings.charset.length)]).join("");
     cwPlayer.setText(` ${group}`);
 }
 
@@ -1452,10 +1449,13 @@ function stopSession(sent, userInput) {
         started: sessionStart.toISOString(),
         finished: now.toISOString(),
         copiedText,
-        mistake: !sent || !userInput ? null : {
-            expectedCharacter: sent.character,
-            mistakenCharacter: userInput,
-        },
+        mistake:
+            !sent || !userInput
+                ? null
+                : {
+                      expectedCharacter: sent.character,
+                      mistakenCharacter: userInput,
+                  },
         settings,
         elapsed,
         copiedCharacters,
@@ -1550,15 +1550,19 @@ function onKeyDown(event) {
         // display info message
         if (sent) {
             const template = t("info.incorrect");
-            setInfoMessage(evaluateTemplate(template, {
-                played: characterNameWithMorse(sent.character),
-                typed: characterNameWithMorse(userInput),
-            }));
+            setInfoMessage(
+                evaluateTemplate(template, {
+                    played: characterNameWithMorse(sent.character),
+                    typed: characterNameWithMorse(userInput),
+                }),
+            );
         } else {
             const template = t("info.tooFast");
-            setInfoMessage(evaluateTemplate(template, {
-                typed: characterNameWithMorse(userInput),
-            }));
+            setInfoMessage(
+                evaluateTemplate(template, {
+                    typed: characterNameWithMorse(userInput),
+                }),
+            );
         }
     }
 }
