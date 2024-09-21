@@ -1022,13 +1022,13 @@ function getElement(id, type) {
 function onSettingsChange() {
     // eslint-disable-next-line no-use-before-define
     stopSession();
-    settings.wpm = parseFloat(getElement('settings-wpm', HTMLInputElement).value);
-    settings.tone = parseFloat(getElement('settings-tone', HTMLInputElement).value);
-    settings.error_tone = parseFloat(getElement('settings-error-tone', HTMLInputElement).value);
-    settings.min_group_size = parseInt(getElement('settings-group-length-min', HTMLInputElement).value, 10);
-    settings.max_group_size = parseInt(getElement('settings-group-length-max', HTMLInputElement).value, 10);
+    settings.wpm = Number.parseFloat(getElement('settings-wpm', HTMLInputElement).value);
+    settings.tone = Number.parseFloat(getElement('settings-tone', HTMLInputElement).value);
+    settings.error_tone = Number.parseFloat(getElement('settings-error-tone', HTMLInputElement).value);
+    settings.min_group_size = Number.parseInt(getElement('settings-group-length-min', HTMLInputElement).value, 10);
+    settings.max_group_size = Number.parseInt(getElement('settings-group-length-max', HTMLInputElement).value, 10);
     settings.charset = getElement('settings-charset', HTMLTextAreaElement).value;
-    settings.session_debounce_time = parseFloat(getElement('settings-session-debounce-time', HTMLInputElement).value);
+    settings.session_debounce_time = Number.parseFloat(getElement('settings-session-debounce-time', HTMLInputElement).value);
     saveSettings();
 }
 
@@ -1111,7 +1111,7 @@ function onCustomCharsetInput() {
 }
 
 function onLCWOLessonInput() {
-    const lcwoLesson = parseInt(getElement('settings-lcwo-lesson', HTMLSelectElement).value, 10) || 0;
+    const lcwoLesson = Number.parseInt(getElement('settings-lcwo-lesson', HTMLSelectElement).value, 10) || 0;
     if (lcwoLesson === 0) {
         return;
     }
