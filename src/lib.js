@@ -1216,7 +1216,7 @@ function setLanguage(lang) {
     } else {
         getElement('bootstrap-css', HTMLLinkElement).href = 'bootstrap.min.css';
     }
-    document.title = 'Morse Cat - ' + t('pageTitle');
+    document.title = `Morse Cat - ${t('pageTitle')}`;
     localStorage.setItem('language', lang);
     infoMessage = '';
     render(false);
@@ -1242,7 +1242,7 @@ function setInfoMessage(message) {
  *  @return {string}
 */
 function evaluateTemplate(template, vars) {
-    const f = new Function(...Object.keys(vars), 'return `' + template + '`');
+    const f = new Function(...Object.keys(vars), `return \`${template}\``);
     return f(...Object.values(vars))
 }
 
@@ -1712,7 +1712,7 @@ function importData() {
                                 processed += 1;
                                 if (processed % 1000 === 0) {
                                     const progress = 15 + (processed / total * 85);
-                                    progressBar.style.width = progress + '%';
+                                    progressBar.style.width = `${progress}%`;
                                 }
                             }
                             // TODO: to avoid the slight pause after 15%, the loops
