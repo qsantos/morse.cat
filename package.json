@@ -1,8 +1,6 @@
 {
   "devDependencies": {
-    "@biomejs/biome": "^1.9.2"
-  },
-  "dependencies": {
+    "@biomejs/biome": "^1.9.2",
     "jshint": "^2.13.6",
     "typescript": "^5.0.4"
   }
