@@ -1774,8 +1774,8 @@ function onCurrentSessionBlur() {
 }
 
 function main() {
-    cwPlayer.onLampOff = () => getElement('nose', SVGElement).style.fill = '#E75A70';
-    cwPlayer.onLampOn = () => getElement('nose', SVGElement).style.fill = 'yellow';
+    cwPlayer.onLampOff = () => { getElement('nose', SVGElement).style.fill = '#E75A70'; };
+    cwPlayer.onLampOn = () => { getElement('nose', SVGElement).style.fill = 'yellow'; };
     refreshStatistics();
     setLanguage(getPreferredLanguage());
 }
