@@ -106,7 +106,7 @@ const translations = {
         languageName: 'English',
         dir: 'ltr',
         pageTitle: 'Sharpen your claws and learn Morse code!',
-        description: 'Practice Morse code with instant feedback to guide your learning. If you\'re familiar with <a href="https://lcwo.net/">LCWO</a>, you\'ll find this tool a fun and helpful way to keep building your skills.',
+        description: 'Practice Morse code with instant feedback to guide your learning. If you’re familiar with <a href="https://lcwo.net/">LCWO</a>, you’ll find this tool a fun and helpful way to keep building your skills.',
         spaceKey: 'Space',
         secondsSuffix: ' s',
         start: 'Start',
@@ -187,7 +187,7 @@ const translations = {
         'stats.score': 'Score',
         'stats.lastSession': 'Dernière Session',
         'stats.bestSession': 'Meilleure Session',
-        'stats.currentDay': "Aujourd'hui",
+        'stats.currentDay': 'Aujourd’hui',
         'stats.bestDay': 'Meilleur jour',
         'stats.total': 'Total',
         'settings.title': 'Paramètres',
@@ -197,7 +197,7 @@ const translations = {
         'settings.tone.title': 'Ton',
         'settings.tone.unit': 'Hz',
         'settings.tone.details': 'Hertz',
-        'settings.errorTone.title': "Ton d'erreur",
+        'settings.errorTone.title': 'Ton d’erreur',
         'settings.errorTone.unit': 'Hz',
         'settings.errorTone.details': 'Hertz',
         'settings.minGroupSize.title': 'Taille min. des groupes',
@@ -225,8 +225,8 @@ const translations = {
         'info.lostFocus': 'Focus perdu !',
         'info.emptyCharset': 'Jeu de caractères vide ! Vous devez sélectionner au moins un caractère dans les paramètres.',
         'error.database.open': 'Échec du chargement de la base de données ; veuillez signaler sur https://github.com/qsantos/morse.cat/issues',
-        'error.import.fileType': "Type de fichier incorrect ! L'exportation doit être un fichier JSON.",
-        'error.import.parse': "Échec de l'analyse du fichier :",
+        'error.import.fileType': 'Type de fichier incorrect ! L’exportation doit être un fichier JSON.',
+        'error.import.parse': 'Échec de l’analyse du fichier :',
     },
     ja: {
         languageName: '日本語',
@@ -363,7 +363,7 @@ const translations = {
         secondsSuffix: ' s',
         start: 'Iniciar',
         'history.title': 'Historial',
-        'history.started': "Hora d'inici",
+        'history.started': 'Hora d’inici',
         'history.copiedText': 'Text copiat',
         'history.elapsed': 'Durada',
         'history.characters': 'Caràcters',
@@ -386,7 +386,7 @@ const translations = {
         'settings.tone.title': 'To',
         'settings.tone.unit': 'Hz',
         'settings.tone.details': 'Hertz',
-        'settings.errorTone.title': "To d'error",
+        'settings.errorTone.title': 'To d’error',
         'settings.errorTone.unit': 'Hz',
         'settings.errorTone.details': 'Hertz',
         'settings.minGroupSize.title': 'Mida mín. dels grups',
@@ -395,13 +395,13 @@ const translations = {
         'settings.groupSize.details': 'caràcters',
         'settings.lcwo.title': 'Lliçó <a href="https://lcwo.net/" title="Learn CW Online">LCWO</a>',
         'settings.charset.title': 'Personalitzar el joc de caràcters',
-        'settings.sessionDebounceTime.title': "Temps d'espera després de la sessió",
+        'settings.sessionDebounceTime.title': 'Temps d’espera després de la sessió',
         'settings.sessionDebounceTime.unit': 's.',
         'settings.sessionDebounceTime.details': 'segons',
         'settings.export': 'Exportar les dades',
         'settings.import': 'Importar les dades',
         'settings.delete': 'Eliminar les dades',
-        'settings.delete.warning': "Estàs segur que vols eliminar totes les dades? Perdràs l'historial de pràctica i també les estadístiques.",
+        'settings.delete.warning': 'Estàs segur que vols eliminar totes les dades? Perdràs l’historial de pràctica i també les estadístiques.',
         'settings.delete.cancel': 'Tancar',
         'acknowledgements.title': 'Agraïments',
         'acknowledgements.mit-license': 'Llicència MIT',
@@ -411,11 +411,11 @@ const translations = {
         'info.incorrect': 'Has escrit ${typed}, però el següent caràcter jugat ha estat ${played}!',
         'info.tooFast': 'Has escrit ${typed} abans que es jugués el següent caràcter!',
         'info.tooSlow': 'Massa lent!',
-        'info.lostFocus': "S'ha perdut el focus!",
+        'info.lostFocus': 'S’ha perdut el focus!',
         'info.emptyCharset': 'Joc de caràcters buit! Has de seleccionar almenys un caràcter a la configuració.',
-        'error.database.open': "No s'ha pogut carregar la base de dades; informeu a https://github.com/qsantos/morse.cat/issues",
-        'error.import.fileType': "Tipus de fitxer incorrecte! L'exportació ha de ser un fitxer JSON.",
-        'error.import.parse': "No s'ha pogut analitzar el fitxer: ",
+        'error.database.open': 'No s’ha pogut carregar la base de dades; informeu a https://github.com/qsantos/morse.cat/issues',
+        'error.import.fileType': 'Tipus de fitxer incorrecte! L’exportació ha de ser un fitxer JSON.',
+        'error.import.parse': 'No s’ha pogut analitzar el fitxer: ',
     },
     zh: {
         languageName: '中文',
@@ -1004,7 +1004,7 @@ function t(key) {
 
 /** Get an HTML element by id and throw if it does not exist
  *  @template T
- *  @param {string} id - The element's id
+ *  @param {string} id - The element’s id
  *  @param {new() => T} type - The type of HTML ELement
  *  @return {T} - The element
 */
