@@ -1270,10 +1270,7 @@ function render(debounceStartButton) {
     });
 }
 
-/** Refresh the stats as needed
- *  @param {boolean} [modified] - Where the stats recently modified?
- */
-function refreshStatistics(modified) {
+function refreshStatistics() {
     // migration
     if (stats.hasOwnProperty("copiedWords")) {
         // @ts-ignore
@@ -1291,12 +1288,9 @@ function refreshStatistics(modified) {
         stats.copiedCharacters.currentDay = 0;
         stats.copiedGroups.currentDay = 0;
         stats.score.currentDay = 0;
-        modified = true;
     }
-    if (modified) {
-        stats.updated = now;
-        localStorage.setItem("stats", JSON.stringify(stats));
-    }
+    stats.updated = now;
+    localStorage.setItem("stats", JSON.stringify(stats));
 }
 
 /** Increase a stat by a given amount
@@ -1465,7 +1459,7 @@ function stopSession(sent, userInput) {
 
     saveSession(session);
     updateStats(session);
-    refreshStatistics(true);
+    refreshStatistics();
 
     render(true);
 }
@@ -1747,7 +1741,7 @@ function importData() {
                             transaction.oncomplete = () => {
                                 progressBar.style.width = "100%";
                                 button.classList.remove("spinning");
-                                refreshStatistics(true);
+                                refreshStatistics();
                                 // NOTE: render(false) will mess with the offcanvas being open
                                 document.location.reload();
                             };
@@ -1768,7 +1762,7 @@ function deleteData() {
     restoreSettings();
     saveSettings();
     Object.assign(stats, defaultStats);
-    refreshStatistics(true);
+    refreshStatistics();
     // NOTE: render(false) will mess with the offcanvas being open
     document.location.reload();
 }
