@@ -1265,6 +1265,7 @@ function render(debounceStartButton) {
             startButton.disabled = true;
             setTimeout(() => {
                 startButton.disabled = false;
+                startButton.focus();
             }, settings.session_debounce_time * 1000);
         }
     });
