@@ -30,8 +30,6 @@ let dbReady = false;
 const cwPlayer = new jscw();
 cwPlayer.q = 13;
 
-const stats = readStats();
-
 const defaultSettings = {
     wpm: 20,
     tone: 600,
@@ -73,6 +71,8 @@ const defaultStats = {
         total: 0,
     },
 };
+
+const stats = readStats();
 
 /** @type{import("./types").Settings} */
 const settings = (() => {
