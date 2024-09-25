@@ -2,5 +2,9 @@
   "devDependencies": {
     "@biomejs/biome": "^1.9.2",
     "typescript": "^5.0.4"
+  },
+  "scripts": {
+      "lint": "npx tsc && npx @biomejs/biome check src/lib.js",
+      "format": "npx @biomejs/biome format --write src/lib.js"
   }
 }
