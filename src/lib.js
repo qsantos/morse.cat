@@ -1260,12 +1260,12 @@ function render(debounceStartButton) {
             infoElement.parentElement?.classList.remove("d-none");
         }
 
+        const startButton = getElement("start-button", HTMLButtonElement);
+        startButton.focus();
         if (debounceStartButton) {
-            const startButton = getElement("start-button", HTMLButtonElement);
-            startButton.disabled = true;
+            startButton.classList.add("disabled");
             setTimeout(() => {
-                startButton.disabled = false;
-                startButton.focus();
+                startButton.classList.remove("disabled");
             }, settings.session_debounce_time * 1000);
         }
     });
@@ -1374,6 +1374,10 @@ function onFinished() {
 }
 
 function startSession() {
+    if (getElement("start-button", HTMLButtonElement).classList.contains("disabled")) {
+        return;
+    }
+
     const now = new Date();
 
     if (Array.from(settings.charset).filter((c) => c.trim() !== "").length === 0) {
