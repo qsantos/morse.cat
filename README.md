@@ -13,6 +13,17 @@ This is the JavaScript library that powers [LCWO](https://lcwo.net/).
 # Lint
 
 ```
-$ npx eslint src/lib.js
-$ npx tsc
+$ npm run lint
+```
+
+# Build
+
+```
+$ :
+```
+
+# Run
+
+```
+$ x-www-browser src/index.html
 ```
