@@ -1,10 +1,12 @@
 # Morse Cat <img src="src/cat.svg" height="32">
 
 [Morse Cat <img src="src/cat.svg" height="16">](https://morse.cat) is yet another Morse code training tool.
-The one difference is that Morse Cat <img src="src/cat.svg" height="16"> gives immediate feedback to the user.
-Morse Cat <img src="src/cat.svg" height="16"> also tries to reinforce deliberate practise with a fun scoring system.
+But this one is special.
+And not just because it’s relying on the appeal of cats to draw your attention.
+It is special because it gives you immediate feedback when you make a mistake.
 
-Morse Cat <img src="src/cat.svg" height="16"> is based on [jscwlib](https://fkurz.net/ham/jscwlib.html), the JavaScript library that powers [LCWO](https://lcwo.net/).
+This project relies on on [jscwlib](https://fkurz.net/ham/jscwlib.html) to actually produce sounds.
+This is the JavaScript library that powers [LCWO](https://lcwo.net/).
 
 <img src="src/cat.svg" height="16">
 
