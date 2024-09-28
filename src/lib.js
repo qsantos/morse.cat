@@ -1390,7 +1390,6 @@ function startSession() {
     copiedCharacters = 0;
     copiedGroups = 0;
     score = 0;
-    getElement("current-session", HTMLTextAreaElement).value = copiedText;
     inSession = true;
     sessionId = crypto.randomUUID();
     sessionStart = now;
@@ -1401,7 +1400,10 @@ function startSession() {
     cwPlayer.onFinished = onFinished;
     cwPlayer.play();
     setInfoMessage("");
-    getElement("current-session", HTMLTextAreaElement).focus();
+    const textarea = getElement("current-session", HTMLTextAreaElement);
+    textarea.removeAttribute("readonly");
+    textarea.value = "";
+    textarea.focus();
 }
 
 /** End the current session
@@ -1462,6 +1464,7 @@ function stopSession(sent, userInput) {
         score,
     };
 
+    getElement("current-session", HTMLTextAreaElement).setAttribute("readonly", "");
     saveSession(session);
     updateStats(session);
     refreshStatistics();
