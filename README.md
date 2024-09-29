@@ -8,6 +8,8 @@ It is special because it gives you immediate feedback when you make a mistake.
 This project relies on on [jscwlib](https://fkurz.net/ham/jscwlib.html) to actually produce sounds.
 This is the JavaScript library that powers [LCWO](https://lcwo.net/).
 
+Supported languages: English, French, Japanese, Spanish, Catalan, Mandarin, Hindi, Arabic (RTL), Bengali, Portuguese, Russian, Urdu (RTL).
+
 <img src="src/cat.svg" height="16">
 
 # Lint
