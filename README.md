@@ -12,6 +12,16 @@ Supported languages: English, French, Japanese, Spanish, Catalan, Mandarin, Hind
 
 <img src="src/cat.svg" height="16">
 
+# Install dependencies
+
+There are no runtime dependencies, but for development dependencies, do:
+
+```
+$ npm ci
+$ ls node_modules
+@biomejs  typescript
+```
+
 # Lint
 
 ```
