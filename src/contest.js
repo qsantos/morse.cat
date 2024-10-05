@@ -11,5 +11,10 @@ function cq() {
     cwPlayer.setWpm(30);
     cwPlayer.setEff(30);
     cwPlayer.setFreq(600);
+    let played = [""];
+    cwPlayer.onCharacterPlay = (c) => {
+        played.push(c.c);
+        document.getElementById("log").innerHTML = played.join("").toUpperCase();
+    };
     cwPlayer.play();
 }
