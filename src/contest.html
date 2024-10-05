@@ -8,6 +8,7 @@
         <link rel="stylesheet" href="bootstrap.min.css" id="bootstrap-css" />
         <link rel="stylesheet" href="style.css" />
         <script defer src="./bootstrap.bundle.min.js"></script>
+        <script defer src="./jscwlib.js"></script>
         <script defer src="contest.js"></script>
         <style>
         #log {
@@ -69,7 +70,9 @@
                         data-bs-toggle="tooltip"
                         data-bs-placement="bottom"
                         data-bs-custom-class="custom-tooltip"
-                        data-bs-title="Send ‘CQCQ’ to get others’ attention">
+                        data-bs-title="Send ‘CQCQ’ to get others’ attention"
+                        onclick="cq();"
+                >
                     Call CQ
                 </button>
                 <button type="button" class="btn btn-outline-primary"
