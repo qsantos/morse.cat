@@ -37,3 +37,8 @@ function sendMorse(sender, message) {
 function cq() {
     sendMorse('You', 'CQCQ TEST G4FON');
 }
+
+function repeatCallSign() {
+    const callSign = document.getElementById("contest-call-sign").value;
+    sendMorse('You', callSign);
+}
