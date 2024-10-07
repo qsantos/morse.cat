@@ -1,11 +1,11 @@
 const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
 const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
 
-function cq() {
+function sendMorse(sender, message) {
     // Set up cwPlayer
     const cwPlayer = new jscw();
     cwPlayer.q = 13;
-    cwPlayer.setText('CQCQ TEST G4FON');
+    cwPlayer.setText(message);
     cwPlayer.setWpm(30);
     cwPlayer.setEff(30);
     cwPlayer.setFreq(600);
@@ -18,7 +18,7 @@ function cq() {
     // Sender label
     const callSign = document.getElementById("contest-call-sign").value;
     const callSignLabel = document.createElement("SPAN");
-    callSignLabel.innerHTML = `${callSign}: `;
+    callSignLabel.innerHTML = `${sender}: `;
     logEntry.appendChild(callSignLabel);
 
     // Decoded Morse
@@ -32,4 +32,9 @@ function cq() {
 
     // Start
     cwPlayer.play();
+}
+
+function cq() {
+    const callSign = document.getElementById("contest-call-sign").value;
+    sendMorse(callSign, 'CQCQ TEST G4FON');
 }
