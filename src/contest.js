@@ -39,10 +39,12 @@ function cq() {
 }
 
 function repeatCallSign() {
-    const callSign = document.getElementById("their-call-sign").value;
-    sendMorse('You', callSign);
+    const theirCallSign = document.getElementById("their-call-sign").value;
+    sendMorse('You', theirCallSign);
 }
 
 function sendReport() {
-    sendMorse('You', `599 001`);
+    const yourReport = document.getElementById("your-report").value;
+    const yourNumber = document.getElementById("your-number").value;
+    sendMorse('You', `${yourReport} ${yourNumber}`);
 }
