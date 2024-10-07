@@ -16,7 +16,7 @@ function sendMorse(sender, message) {
     log.appendChild(logEntry);
 
     // Sender label
-    const callSign = document.getElementById("contest-call-sign").value;
+    const callSign = document.getElementById("their-call-sign").value;
     const callSignLabel = document.createElement("SPAN");
     callSignLabel.innerHTML = `${sender}: `;
     logEntry.appendChild(callSignLabel);
@@ -39,7 +39,7 @@ function cq() {
 }
 
 function repeatCallSign() {
-    const callSign = document.getElementById("contest-call-sign").value;
+    const callSign = document.getElementById("their-call-sign").value;
     sendMorse('You', callSign);
 }
 
