@@ -42,3 +42,7 @@ function repeatCallSign() {
     const callSign = document.getElementById("contest-call-sign").value;
     sendMorse('You', callSign);
 }
+
+function sendReport() {
+    sendMorse('You', `599 001`);
+}
