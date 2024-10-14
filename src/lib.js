@@ -1243,6 +1243,14 @@ function evaluateTemplate(template, vars) {
 }
 
 /**
+ *  @param {Event} event
+ */
+function ignoreInputs(event) {
+    event.preventDefault();
+    event.stopPropagation();
+}
+
+/**
  *  @param {boolean} debounceStartButton
  */
 function render(debounceStartButton) {
@@ -1252,8 +1260,9 @@ function render(debounceStartButton) {
             history: [...sessions.map(formatHistoryEntry)].reverse().join(""),
         });
         restoreSettings();
+        const currentSession = getElement("current-session", HTMLTextAreaElement);
         getElement("language-select", HTMLSelectElement).value = activeLanguage;
-        getElement("current-session", HTMLTextAreaElement).value = copiedText;
+        currentSession.value = copiedText;
         if (infoMessage) {
             const infoElement = getElement("info", HTMLElement);
             infoElement.innerHTML = infoMessage;
@@ -1261,12 +1270,21 @@ function render(debounceStartButton) {
         }
 
         const startButton = getElement("start-button", HTMLButtonElement);
-        startButton.focus();
         if (debounceStartButton) {
-            startButton.classList.add("disabled");
+            // capture all input
+            currentSession.focus();
+            currentSession.addEventListener("input", ignoreInputs);
+            startButton.disabled = true;
+            // schedule end of debounce
             setTimeout(() => {
-                startButton.classList.remove("disabled");
+                // restore inputs
+                currentSession.removeEventListener("input", ignoreInputs);
+                startButton.disabled = false;
+                // focus on start button again
+                startButton.focus();
             }, settings.session_debounce_time * 1000);
+        } else {
+            startButton.focus();
         }
     });
 }
