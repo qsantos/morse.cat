@@ -1685,10 +1685,17 @@ function exportData() {
     }
 }
 
+/**
+ *  @param {number} delay
+ */
+async function sleep(delay) {
+    return new Promise((resolve) => setTimeout(resolve, delay));
+}
+
 function importData() {
     const input = document.createElement("input");
     input.type = "file";
-    input.oninput = (event) => {
+    input.oninput = async (event) => {
         /** @type {HTMLInputElement | null} */
         // @ts-ignore
         const element = event.target;
@@ -1706,84 +1713,80 @@ function importData() {
         const progressBar = getElement("progress-bar", HTMLDivElement);
         progressBar.style.width = "0%";
 
-        file.text().then((data) => {
-            progressBar.style.width = "5%";
-            setTimeout(() => {
-                let j;
-                try {
-                    j = JSON.parse(data);
-                } catch (e) {
-                    alert(`${t("error.import.parse")}${e}`);
-                    button.classList.remove("spinning");
-                    return;
+        const data = await file.text();
+        progressBar.style.width = "5%";
+        await sleep(100);
+        let j;
+        try {
+            j = JSON.parse(data);
+        } catch (e) {
+            alert(`${t("error.import.parse")}${e}`);
+            button.classList.remove("spinning");
+            return;
+        }
+        const { sessions, characters, settings: newSettings } = j;
+        progressBar.style.width = "10%";
+        await sleep(100);
+        const total = sessions.length + characters.length;
+        progressBar.style.width = "15%";
+        await sleep(100);
+        if (!db) {
+            button.classList.remove("spinning");
+            return;
+        }
+        Object.assign(settings, newSettings);
+        restoreSettings();
+        saveSettings();
+        const transaction = db.transaction(["sessions"]);
+        const objectStore = transaction.objectStore("sessions");
+        const request = objectStore.getAllKeys();
+        transaction.oncomplete = () => {
+            const sessionIds = new Set(request.result);
+            if (!db) {
+                button.classList.remove("spinning");
+                return;
+            }
+            const transaction = db.transaction(["sessions", "characters"], "readwrite");
+            let processed = 0;
+            function updateProgress() {
+                processed += 1;
+                if (processed % 1000 === 0) {
+                    const progress = 15 + (processed / total) * 85;
+                    progressBar.style.width = `${progress}%`;
                 }
-                const { sessions, characters, settings: newSettings } = j;
-                progressBar.style.width = "10%";
-                setTimeout(() => {
-                    const total = sessions.length + characters.length;
-                    progressBar.style.width = "15%";
-                    setTimeout(() => {
-                        if (!db) {
-                            button.classList.remove("spinning");
-                            return;
-                        }
-                        Object.assign(settings, newSettings);
-                        restoreSettings();
-                        saveSettings();
-                        const transaction = db.transaction(["sessions"]);
-                        const objectStore = transaction.objectStore("sessions");
-                        const request = objectStore.getAllKeys();
-                        transaction.oncomplete = () => {
-                            const sessionIds = new Set(request.result);
-                            if (!db) {
-                                button.classList.remove("spinning");
-                                return;
-                            }
-                            const transaction = db.transaction(["sessions", "characters"], "readwrite");
-                            let processed = 0;
-                            function updateProgress() {
-                                processed += 1;
-                                if (processed % 1000 === 0) {
-                                    const progress = 15 + (processed / total) * 85;
-                                    progressBar.style.width = `${progress}%`;
-                                }
-                            }
-                            // TODO: to avoid the slight pause after 15%, the loops
-                            // below (and in particular the ones for characters)
-                            // should be broken in chunks and scheduled with
-                            // setTimeout; note that the commit should only happen
-                            // once all the elements have been scheduled for put
-                            {
-                                const objectStore = transaction.objectStore("sessions");
-                                for (const session of sessions) {
-                                    if (!sessionIds.has(session.id)) {
-                                        updateStats(session);
-                                        const request = objectStore.put(session);
-                                        request.onsuccess = updateProgress;
-                                    }
-                                }
-                            }
-                            {
-                                const objectStore = transaction.objectStore("characters");
-                                for (const character of characters) {
-                                    const request = objectStore.put(character);
-                                    request.onsuccess = updateProgress;
-                                }
-                            }
-                            transaction.oncomplete = () => {
-                                progressBar.style.width = "100%";
-                                button.classList.remove("spinning");
-                                refreshStatistics();
-                                // NOTE: render(false) will mess with the offcanvas being open
-                                document.location.reload();
-                            };
-                            transaction.commit();
-                        };
-                        transaction.commit();
-                    }, 100);
-                }, 100);
-            }, 100);
-        });
+            }
+            // TODO: to avoid the slight pause after 15%, the loops
+            // below (and in particular the ones for characters)
+            // should be broken in chunks and scheduled with
+            // setTimeout; note that the commit should only happen
+            // once all the elements have been scheduled for put
+            {
+                const objectStore = transaction.objectStore("sessions");
+                for (const session of sessions) {
+                    if (!sessionIds.has(session.id)) {
+                        updateStats(session);
+                        const request = objectStore.put(session);
+                        request.onsuccess = updateProgress;
+                    }
+                }
+            }
+            {
+                const objectStore = transaction.objectStore("characters");
+                for (const character of characters) {
+                    const request = objectStore.put(character);
+                    request.onsuccess = updateProgress;
+                }
+            }
+            transaction.oncomplete = () => {
+                progressBar.style.width = "100%";
+                button.classList.remove("spinning");
+                refreshStatistics();
+                // NOTE: render(false) will mess with the offcanvas being open
+                document.location.reload();
+            };
+            transaction.commit();
+        };
+        transaction.commit();
     };
     input.click();
 }
