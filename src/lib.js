@@ -23,9 +23,6 @@ let sessionDurationUpdater = 0;
 /** @type {keyof typeof translations} */
 let activeLanguage = "en";
 
-let domReady = false;
-let dbReady = false;
-
 // @ts-ignore
 const cwPlayer = new jscw();
 cwPlayer.q = 13;
@@ -1819,19 +1816,16 @@ function main() {
     setLanguage(getPreferredLanguage());
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-    if (dbReady) {
-        main();
-    } else {
-        domReady = true;
-    }
-});
-prepareDB()
-    .then(() => {
-        if (domReady) {
-            main();
+//** @return {Promise<undefined>}
+function whenDomReady() {
+    return new Promise((resolve) => {
+        if (document.readyState === "loading") {
+            document.addEventListener("DOMContentLoaded", resolve);
         } else {
-            dbReady = true;
+            // the document is already loaded (complete or interactive)
+            resolve(undefined);
         }
-    })
-    .catch(alert);
+    });
+}
+
+Promise.all([whenDomReady(), prepareDB()]).then(main).catch(alert);
