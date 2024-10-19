@@ -35,6 +35,7 @@ function sendMorse(sender, message) {
 }
 
 function cq() {
+    document.getElementById("their-call-sign").focus();
     sendMorse('You', 'CQCQ TEST G4FON');
 }
 
