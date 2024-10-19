@@ -1816,11 +1816,13 @@ function main() {
     setLanguage(getPreferredLanguage());
 }
 
-//** @return {Promise<undefined>}
+/**
+ *  @return {Promise<undefined>}
+ */
 function whenDomReady() {
     return new Promise((resolve) => {
         if (document.readyState === "loading") {
-            document.addEventListener("DOMContentLoaded", resolve);
+            document.addEventListener("DOMContentLoaded", () => resolve);
         } else {
             // the document is already loaded (complete or interactive)
             resolve(undefined);
