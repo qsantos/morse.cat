@@ -1620,6 +1620,16 @@ cwPlayer.onCharacterPlay = (c) => {
     }
 };
 
+/**
+ *  @param {Blob} blob
+ *  @return {Promise<Blob>}
+ */
+async function compressBlob(blob) {
+    const cs = new CompressionStream("gzip");
+    const compressedStream = blob.stream().pipeThrough(cs);
+    return await new Response(compressedStream).blob();
+}
+
 // inspired from https://stackoverflow.com/a/48968694/4457767
 /** Let the user save some data as a file
  *  @param {Blob} data
@@ -1659,12 +1669,14 @@ function exportData() {
     let sessions = null;
     /** @type {import("./types").TransmittedCharacter[] | null} */
     let characters = null;
-    function exportAsJsonWhenReady() {
+    async function exportAsJsonWhenReady() {
         if (!sessions || !characters) {
             return;
         }
         const data = JSON.stringify({ sessions, characters, settings });
-        saveFile(new Blob([data]), "morse-cat-data.json");
+        const blob = new Blob([data]);
+        const compressed = await compressBlob(blob);
+        saveFile(compressed, "morse-cat-data.json.gz");
         button.classList.remove("spinning");
     }
     {
