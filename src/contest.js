@@ -35,8 +35,9 @@ function sendMorse(sender, message) {
 }
 
 function cq() {
+    const yourCallSign = document.getElementById("your-call-sign").value
     document.getElementById("their-call-sign").focus();
-    sendMorse('You', 'CQCQ TEST G4FON');
+    sendMorse('You', `CQCQ TEST ${yourCallSign}`);
 }
 
 function repeatCallSign() {
@@ -50,7 +51,16 @@ function sendReport() {
     sendMorse('You', `${yourReport} ${yourNumber}`);
 }
 
-function callSignKeyDown(event) {
+function yourCallSignKeyDown(event) {
+    if (event.key == "Enter") {
+        const yourCallSign = document.getElementById("your-call-sign").value
+        if (yourCallSign) {
+            cq();
+        }
+    }
+}
+
+function theirCallSignKeyDown(event) {
     if (event.key == "Enter") {
         repeatCallSign();
     }
