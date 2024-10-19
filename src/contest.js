@@ -48,3 +48,9 @@ function sendReport() {
     const yourNumber = document.getElementById("your-number").value;
     sendMorse('You', `${yourReport} ${yourNumber}`);
 }
+
+function callSignKeyDown(event) {
+    if (event.key == "Enter") {
+        repeatCallSign();
+    }
+}
