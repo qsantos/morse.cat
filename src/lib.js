@@ -860,37 +860,39 @@ const translations = {
     },
 };
 
-/** @param {() => void} callback */
-function prepareDB(callback) {
-    const request = indexedDB.open("morse.cat", 2);
-    request.onerror = () => {
-        alert(t("error.database.open"));
-    };
-    request.onupgradeneeded = (event) => {
-        const db = request.result;
-        if (event.oldVersion === 0) {
-            const sessionsStore = db.createObjectStore("sessions", { keyPath: "id" });
-            sessionsStore.createIndex("started", "started");
-            db.createObjectStore("characters", { keyPath: "id" });
-        }
-        if (event.oldVersion <= 1) {
-            // @ts-ignore
-            const transaction = event.target.transaction;
-            const objectStore = transaction.objectStore("sessions");
-            const request = objectStore.getAll();
-            request.onsuccess = () => {
-                for (const session of request.result) {
-                    session.copiedGroups = session.copiedWords;
-                    delete session.copiedWords;
-                    objectStore.put(session);
-                }
-            };
-        }
-    };
-    request.onsuccess = () => {
-        db = request.result;
-        callback();
-    };
+/** @return {Promise<undefined>} */
+function prepareDB() {
+    return new Promise((resolve, reject) => {
+        const request = indexedDB.open("morse.cat", 2);
+        request.onerror = () => {
+            reject(t("error.database.open"));
+        };
+        request.onupgradeneeded = (event) => {
+            const db = request.result;
+            if (event.oldVersion === 0) {
+                const sessionsStore = db.createObjectStore("sessions", { keyPath: "id" });
+                sessionsStore.createIndex("started", "started");
+                db.createObjectStore("characters", { keyPath: "id" });
+            }
+            if (event.oldVersion <= 1) {
+                // @ts-ignore
+                const transaction = event.target.transaction;
+                const objectStore = transaction.objectStore("sessions");
+                const request = objectStore.getAll();
+                request.onsuccess = () => {
+                    for (const session of request.result) {
+                        session.copiedGroups = session.copiedWords;
+                        delete session.copiedWords;
+                        objectStore.put(session);
+                    }
+                };
+            }
+        };
+        request.onsuccess = () => {
+            db = request.result;
+            resolve(undefined);
+        };
+    });
 }
 
 /**
@@ -1818,10 +1820,12 @@ document.addEventListener("DOMContentLoaded", () => {
         domReady = true;
     }
 });
-prepareDB(() => {
-    if (domReady) {
-        main();
-    } else {
-        dbReady = true;
-    }
-});
+prepareDB()
+    .then(() => {
+        if (domReady) {
+            main();
+        } else {
+            dbReady = true;
+        }
+    })
+    .catch(alert);
