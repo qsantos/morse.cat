@@ -924,31 +924,35 @@ function saveCharacter(character) {
 
 /**
  * @param {number} count
- * @param {(sessions: import("./types").HistoryEntry[]) => void} callback
+ * @return {Promise<import("./types").HistoryEntry[]>}
  */
-function getLastSessions(count, callback) {
-    if (!db) {
-        return;
-    }
-    // IndexedBD must be a joke
-    const transaction = db.transaction("sessions");
-    const objectStore = transaction.objectStore("sessions");
-    const index = objectStore.index("started");
-    const request = index.openCursor(null, "prev");
-    /** @type{import("./types").HistoryEntry[]} */
-    const sessions = [];
-    request.onsuccess = () => {
-        const result = request.result;
-        if (result) {
-            sessions.push(result.value);
+function getLastSessions(count) {
+    return new Promise((resolve, reject) => {
+        if (!db) {
+            reject("db is null");
+            return;
         }
-        if (result && sessions.length < count) {
-            result.continue();
-        } else {
-            sessions.reverse();
-            callback(sessions);
-        }
-    };
+        // IndexedBD must be a joke
+        const transaction = db.transaction("sessions");
+        const objectStore = transaction.objectStore("sessions");
+        const index = objectStore.index("started");
+        const request = index.openCursor(null, "prev");
+        /** @type{import("./types").HistoryEntry[]} */
+        const sessions = [];
+        request.onsuccess = () => {
+            const result = request.result;
+            if (result) {
+                sessions.push(result.value);
+            }
+            if (result && sessions.length < count) {
+                result.continue();
+            } else {
+                sessions.reverse();
+                resolve(sessions);
+            }
+        };
+        request.onerror = reject;
+    });
 }
 
 function pushGroup() {
@@ -1256,39 +1260,41 @@ function ignoreInputs(event) {
  *  @param {boolean} debounceStartButton
  */
 function render(debounceStartButton) {
-    getLastSessions(10, (sessions) => {
-        getElement("root", HTMLDivElement).innerHTML = evaluateTemplate(HTML_TEMPLATE, {
-            lang: activeLanguage,
-            history: [...sessions.map(formatHistoryEntry)].reverse().join(""),
-        });
-        restoreSettings();
-        const currentSession = getElement("current-session", HTMLTextAreaElement);
-        getElement("language-select", HTMLSelectElement).value = activeLanguage;
-        currentSession.value = copiedText;
-        if (infoMessage) {
-            const infoElement = getElement("info", HTMLElement);
-            infoElement.innerHTML = infoMessage;
-            infoElement.parentElement?.classList.remove("d-none");
-        }
+    getLastSessions(10)
+        .then((sessions) => {
+            getElement("root", HTMLDivElement).innerHTML = evaluateTemplate(HTML_TEMPLATE, {
+                lang: activeLanguage,
+                history: [...sessions.map(formatHistoryEntry)].reverse().join(""),
+            });
+            restoreSettings();
+            const currentSession = getElement("current-session", HTMLTextAreaElement);
+            getElement("language-select", HTMLSelectElement).value = activeLanguage;
+            currentSession.value = copiedText;
+            if (infoMessage) {
+                const infoElement = getElement("info", HTMLElement);
+                infoElement.innerHTML = infoMessage;
+                infoElement.parentElement?.classList.remove("d-none");
+            }
 
-        const startButton = getElement("start-button", HTMLButtonElement);
-        if (debounceStartButton) {
-            // capture all input
-            currentSession.focus();
-            currentSession.addEventListener("input", ignoreInputs);
-            startButton.disabled = true;
-            // schedule end of debounce
-            setTimeout(() => {
-                // restore inputs
-                currentSession.removeEventListener("input", ignoreInputs);
-                startButton.disabled = false;
-                // focus on start button again
+            const startButton = getElement("start-button", HTMLButtonElement);
+            if (debounceStartButton) {
+                // capture all input
+                currentSession.focus();
+                currentSession.addEventListener("input", ignoreInputs);
+                startButton.disabled = true;
+                // schedule end of debounce
+                setTimeout(() => {
+                    // restore inputs
+                    currentSession.removeEventListener("input", ignoreInputs);
+                    startButton.disabled = false;
+                    // focus on start button again
+                    startButton.focus();
+                }, settings.session_debounce_time * 1000);
+            } else {
                 startButton.focus();
-            }, settings.session_debounce_time * 1000);
-        } else {
-            startButton.focus();
-        }
-    });
+            }
+        })
+        .catch(alert);
 }
 
 function refreshStatistics() {
