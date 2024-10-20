@@ -5,6 +5,55 @@ let theirRealCallSign = null;
 let youSending = false;
 
 /**
+ * @param {number} min
+ * @param {number} max
+ * @return {number}
+ */
+function randrange(min, max) {
+    return Math.floor(Math.random() * (max - min)) + min;
+}
+
+/**
+ * @param {number} min
+ * @param {number} max
+ * @return {number}
+ */
+function randint(min, max) {
+    return randrange(min, max + 1);
+}
+
+/**
+ * @template { { [key: number]: any, length: number } } T
+ * @param {T} charset
+ * @return {T[number]}
+ */
+function choice(charset) {
+    return charset[randrange(0, charset.length)];
+}
+
+/**
+ * @template { { [key: number]: any, length: number } } T
+ * @param {T} charset
+ * @param {number} count
+ * @return {T[number][]}
+ */
+function choices(charset, count) {
+    return Array.from({ length: count }, () => choice(charset));
+}
+
+function randomCallSign() {
+    const charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const prefixLength = randint(1, 2);
+    const suffixLength = randint(1, 3);
+
+    const prefix = choices(charset, prefixLength).join("");
+    const numeral = choice("0123456789");
+    const suffix = choices(charset, suffixLength).join("");
+
+    return prefix + numeral + suffix;
+}
+
+/**
  *  @param {number} delay
  */
 async function sleep(delay) {
@@ -74,7 +123,7 @@ async function cq() {
     }
     await sleep(1000);
 
-    const callSign = 'X1ABC';
+    const callSign = randomCallSign();
     await theySend(`${callSign}`);
     // only set this after sending the call sign to prevent the user from guessing
     theirRealCallSign = callSign;
