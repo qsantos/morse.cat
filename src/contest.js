@@ -50,36 +50,44 @@ function sendMorse(sender, message) {
     });
 }
 
+async function youSend(message) {
+    await sendMorse('You', message);
+}
+
+async function theySend(message) {
+    await sendMorse('Them', message);
+}
+
 async function cq() {
     document.getElementById("their-call-sign").focus();
 
     const yourCallSign = document.getElementById("your-call-sign").value
-    await sendMorse('You', `CQCQ TEST ${yourCallSign}`);
+    await youSend(`CQCQ TEST ${yourCallSign}`);
     await sleep(1000);
 
     const callSign = 'X1ABC';
-    await sendMorse('Them', `${callSign}`);
+    await theySend(`${callSign}`);
     // only set this after sending the call sign to prevent the user from guessing
     theirRealCallSign = callSign;
 }
 
 async function repeatCallSign() {
     const theirCallSign = document.getElementById("their-call-sign").value;
-    await sendMorse('You', theirCallSign);
+    await youSend(theirCallSign);
     if (theirCallSign === theirRealCallSign) {
         document.getElementById("their-report").focus();
         await sleep(1000);
-        await sendMorse('Them', '599 042');
+        await theySend('599 042');
     } else {
         await sleep(1000);
-        await sendMorse('Them', `${theirRealCallSign}`);
+        await theySend(`${theirRealCallSign}`);
     }
 }
 
 function sendReport() {
     const yourReport = document.getElementById("your-report").value;
     const yourNumber = document.getElementById("your-number").value;
-    sendMorse('You', `${yourReport} ${yourNumber}`);
+    youSend(`${yourReport} ${yourNumber}`);
 }
 
 function yourCallSignKeyDown(event) {
