@@ -1,6 +1,13 @@
 const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
 const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
 
+/**
+ *  @param {number} delay
+ */
+async function sleep(delay) {
+    return new Promise((resolve) => setTimeout(resolve, delay));
+}
+
 function sendMorse(sender, message) {
     return new Promise((accept) => {
         // Set up cwPlayer
@@ -41,10 +48,12 @@ function sendMorse(sender, message) {
     });
 }
 
-function cq() {
+async function cq() {
     const yourCallSign = document.getElementById("your-call-sign").value
     document.getElementById("their-call-sign").focus();
-    sendMorse('You', `CQCQ TEST ${yourCallSign}`);
+    await sendMorse('You', `CQCQ TEST ${yourCallSign}`);
+    await sleep(1000);
+    await sendMorse('Them', 'X1ABC');
 }
 
 function repeatCallSign() {
