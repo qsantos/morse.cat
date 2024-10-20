@@ -954,7 +954,7 @@ function getLastSessions(count) {
 
 function pushGroup() {
     const groupLength = randint(settings.min_group_size, settings.max_group_size);
-    const group = Array.from({ length: groupLength }, () => choice(settings.charset)).join("");
+    const group = choices(settings.charset, groupLength).join("");
     cwPlayer.setText(` ${group}`);
 }
 
@@ -996,6 +996,16 @@ function randint(min, max) {
  */
 function choice(charset) {
     return charset[randrange(0, charset.length)];
+}
+
+/**
+ * @template { { [key: number]: any, length: number } } T
+ * @param {T} charset
+ * @param {number} count
+ * @return {T[number][]}
+ */
+function choices(charset, count) {
+    return Array.from({ length: count }, () => choice(charset));
 }
 
 /** Provide a translation string for the given key
