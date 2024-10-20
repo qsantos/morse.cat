@@ -51,8 +51,9 @@ function sendMorse(sender, message) {
 }
 
 async function cq() {
-    const yourCallSign = document.getElementById("your-call-sign").value
     document.getElementById("their-call-sign").focus();
+
+    const yourCallSign = document.getElementById("your-call-sign").value
     await sendMorse('You', `CQCQ TEST ${yourCallSign}`);
     await sleep(1000);
 
@@ -66,6 +67,7 @@ async function repeatCallSign() {
     const theirCallSign = document.getElementById("their-call-sign").value;
     await sendMorse('You', theirCallSign);
     if (theirCallSign === theirRealCallSign) {
+        document.getElementById("their-report").focus();
         await sleep(1000);
         await sendMorse('Them', '599 042');
     }
