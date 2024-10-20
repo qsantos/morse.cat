@@ -89,7 +89,7 @@
                         data-bs-placement="bottom"
                         data-bs-custom-class="custom-tooltip"
                         data-bs-title="Once you’ve got their report (e.g. ‘599 42’), send yours: 599 XX where XX is a counter"
-                        onclick="sendReport();"
+                        onclick="sendReportAndNumber();"
                 >
                     Send your report and number
                 </button>
@@ -143,7 +143,7 @@
             </div>
             <div class="col-sm-3">
                 <div class="form-floating">
-                    <input type="text" class="form-control" id="their-number">
+                    <input type="text" class="form-control" id="their-number" onkeydown="theirNumberKeyDown(event)">
                     <label for="their-number">Their number (e.g. 042)</label>
                 </div>
             </div>

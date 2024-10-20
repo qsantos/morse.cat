@@ -144,7 +144,7 @@ async function repeatCallSign() {
     }
 }
 
-async function sendReport() {
+async function sendReportAndNumber() {
     const yourReport = document.getElementById("your-report").value;
     const yourNumber = document.getElementById("your-number").value;
     if (!await youSend(`${yourReport} ${yourNumber}`)) {
@@ -164,5 +164,11 @@ function yourCallSignKeyDown(event) {
 function theirCallSignKeyDown(event) {
     if (event.key == "Enter") {
         repeatCallSign();
+    }
+}
+
+function theirNumberKeyDown(event) {
+    if (event.key == "Enter") {
+        sendReportAndNumber();
     }
 }
