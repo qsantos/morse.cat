@@ -150,6 +150,7 @@ async function sendReportAndNumber() {
     if (!await youSend(`${yourReport} ${yourNumber}`)) {
         return;
     }
+    await theySend('TU GL');
 }
 
 function yourCallSignKeyDown(event) {
