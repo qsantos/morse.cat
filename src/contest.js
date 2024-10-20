@@ -2,6 +2,7 @@ const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]
 const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
 
 let theirRealCallSign = null;
+let youSending = false;
 
 /**
  *  @param {number} delay
@@ -51,7 +52,13 @@ function sendMorse(sender, message) {
 }
 
 async function youSend(message) {
+    if (youSending) {
+        return false;
+    }
+    youSending = true;
     await sendMorse('You', message);
+    youSending = false;
+    return true;
 }
 
 async function theySend(message) {
@@ -62,7 +69,9 @@ async function cq() {
     document.getElementById("their-call-sign").focus();
 
     const yourCallSign = document.getElementById("your-call-sign").value
-    await youSend(`CQCQ TEST ${yourCallSign}`);
+    if (!await youSend(`CQCQ TEST ${yourCallSign}`)) {
+        return;
+    }
     await sleep(1000);
 
     const callSign = 'X1ABC';
@@ -73,7 +82,9 @@ async function cq() {
 
 async function repeatCallSign() {
     const theirCallSign = document.getElementById("their-call-sign").value;
-    await youSend(theirCallSign);
+    if (!await youSend(theirCallSign)) {
+        return;
+    }
     if (theirCallSign === theirRealCallSign) {
         document.getElementById("their-report").focus();
         await sleep(1000);
@@ -84,10 +95,12 @@ async function repeatCallSign() {
     }
 }
 
-function sendReport() {
+async function sendReport() {
     const yourReport = document.getElementById("your-report").value;
     const yourNumber = document.getElementById("your-number").value;
-    youSend(`${yourReport} ${yourNumber}`);
+    if (!await youSend(`${yourReport} ${yourNumber}`)) {
+        return;
+    }
 }
 
 function yourCallSignKeyDown(event) {
