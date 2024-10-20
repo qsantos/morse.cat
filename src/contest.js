@@ -70,6 +70,9 @@ async function repeatCallSign() {
         document.getElementById("their-report").focus();
         await sleep(1000);
         await sendMorse('Them', '599 042');
+    } else {
+        await sleep(1000);
+        await sendMorse('Them', `${theirRealCallSign}`);
     }
 }
 
