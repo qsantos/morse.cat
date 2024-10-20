@@ -56,8 +56,10 @@ async function cq() {
     await sendMorse('You', `CQCQ TEST ${yourCallSign}`);
     await sleep(1000);
 
-    theirRealCallSign = 'X1ABC';
-    await sendMorse('Them', `${theirRealCallSign}`);
+    const callSign = 'X1ABC';
+    await sendMorse('Them', `${callSign}`);
+    // only set this after sending the call sign to prevent the user from guessing
+    theirRealCallSign = callSign;
 }
 
 async function repeatCallSign() {
