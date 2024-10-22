@@ -180,6 +180,12 @@ function theirCallSignKeyDown(event) {
     }
 }
 
+function theirReportKeyDown(event) {
+    if (event.key == "Enter") {
+        document.getElementById("their-number").focus();
+    }
+}
+
 function theirNumberKeyDown(event) {
     if (event.key == "Enter") {
         sendReportAndNumber();
