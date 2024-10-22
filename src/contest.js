@@ -150,6 +150,18 @@ async function sendReportAndNumber() {
     if (!await youSend(`${yourReport} ${yourNumber}`)) {
         return;
     }
+    const theirCallSign = document.getElementById("their-call-sign").value;
+    const theirReport = document.getElementById("their-report").value;
+    const theirNumber = document.getElementById("their-number").value;
+    const contactLogEntry = document.createElement('TR');
+    contactLogEntry.innerHTML = `
+        <td>${yourNumber}</td>
+        <td>12:34</td>
+        <td>${theirCallSign}</td>
+        <td>${yourReport}</td>
+        <td>${theirReport} ${theirNumber}</td>
+`;
+    document.getElementById("contact-log").appendChild(contactLogEntry);
     await theySend('TU GL');
 }
 
