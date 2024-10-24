@@ -169,25 +169,31 @@ async function repeatCallSign() {
 }
 
 async function sendReportAndNumber() {
-    const yourReport = document.getElementById("your-report").value;
-    const yourNumber = document.getElementById("your-number").value;
-    if (!await youSend(`${yourReport} ${yourNumber}`)) {
+    const yourReport = document.getElementById("your-report");
+    const yourNumber = document.getElementById("your-number");
+    const theirCallSign = document.getElementById("their-call-sign");
+    const theirReport = document.getElementById("their-report");
+    const theirNumber = document.getElementById("their-number");
+    // Complete exchange
+    if (!await youSend(`${yourReport.value} ${yourNumber.value}`)) {
         return;
     }
-    const theirCallSign = document.getElementById("their-call-sign").value;
-    const theirReport = document.getElementById("their-report").value;
-    const theirNumber = document.getElementById("their-number").value;
+    // Log contact
     const time = new Date().toISOString();
     const contactLogEntry = document.createElement('TR');
     contactLogEntry.innerHTML = `
-        <td>${yourNumber}</td>
+        <td>${yourNumber.value}</td>
         <td><time datetime="${time}" title="${time}">${time.slice(11, 16)}</time></td>
-        <td>${theirCallSign}</td>
-        <td>${yourReport}</td>
-        <td>${theirReport} ${theirNumber}</td>
+        <td>${theirCallSign.value}</td>
+        <td>${yourReport.value}</td>
+        <td>${theirReport.value} ${theirNumber.value}</td>
 `;
     document.getElementById("contact-log").appendChild(contactLogEntry);
     await theySend('TU GL');
+    // Reset inputs
+    theirCallSign.value = '';
+    theirNumber.value = '';
+    theirCallSign.focus();
 }
 
 function yourCallSignKeyDown(event) {
