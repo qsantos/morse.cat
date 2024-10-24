@@ -135,9 +135,9 @@ async function repeatCallSign() {
         return;
     }
     if (theirCallSign === theirRealCallSign) {
-        document.getElementById("their-report").focus();
         await sleep(1000);
         await theySend('599 042');
+        document.getElementById("their-report").focus();
     } else if (theirRealCallSign) {
         await sleep(1000);
         await theySend(`${theirRealCallSign}`);
