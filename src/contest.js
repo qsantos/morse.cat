@@ -153,10 +153,11 @@ async function sendReportAndNumber() {
     const theirCallSign = document.getElementById("their-call-sign").value;
     const theirReport = document.getElementById("their-report").value;
     const theirNumber = document.getElementById("their-number").value;
+    const time = new Date().toISOString();
     const contactLogEntry = document.createElement('TR');
     contactLogEntry.innerHTML = `
         <td>${yourNumber}</td>
-        <td>12:34</td>
+        <td><time datetime="${time}" title="${time}">${time.slice(11, 16)}</time></td>
         <td>${theirCallSign}</td>
         <td>${yourReport}</td>
         <td>${theirReport} ${theirNumber}</td>
