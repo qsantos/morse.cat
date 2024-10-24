@@ -140,7 +140,7 @@ async function repeatCallSign() {
         document.getElementById("their-report").focus();
     } else if (theirRealCallSign) {
         await sleep(1000);
-        await theySend(`${theirRealCallSign}`);
+        await theySend(`DE ${theirRealCallSign} 599 042`);
     }
 }
 
