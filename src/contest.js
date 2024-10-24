@@ -1,6 +1,7 @@
 const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
 const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
 
+let yourRealNumber = 1;
 let theirRealCallSign = null;
 let theirRealNumber = null;
 let youSending = false;
@@ -202,6 +203,9 @@ async function sendReportAndNumber() {
     theirCallSign.value = '';
     theirNumber.value = '';
     theirCallSign.focus();
+    // Increment your number
+    yourRealNumber += 1;
+    yourNumber.value = formatNumber(yourRealNumber);
 }
 
 function yourCallSignKeyDown(event) {
