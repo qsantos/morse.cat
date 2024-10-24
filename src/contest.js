@@ -2,6 +2,7 @@ const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]
 const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
 
 let theirRealCallSign = null;
+let theirRealNumber = null;
 let youSending = false;
 
 /**
@@ -29,6 +30,28 @@ function randint(min, max) {
  */
 function choice(charset) {
     return charset[randrange(0, charset.length)];
+}
+
+/**
+ * @param {number} mu
+ * @param {number} sigma
+ * @return {number}
+ */
+function gauss(mu, sigma) {
+    // TODO: compute, cache and use the one with sin()
+    const x2pi = Math.random() * 2.0 * Math.PI;
+    const g2rad = Math.sqrt(-2.0 * Math.log(Math.random()));
+    const z = Math.cos(x2pi) * g2rad;
+    return mu + z * sigma;
+}
+
+/**
+ * @param {number} mu
+ * @param {number} sigma
+ * @return {number}
+ */
+function lognormvariate(mu, sigma) {
+  return Math.exp(gauss(mu, sigma));
 }
 
 /**
@@ -127,6 +150,7 @@ async function cq() {
     await theySend(`${callSign}`);
     // only set this after sending the call sign to prevent the user from guessing
     theirRealCallSign = callSign;
+    theirRealNumber = Math.floor(lognormvariate(3, 1.2));
 }
 
 async function repeatCallSign() {
@@ -136,11 +160,11 @@ async function repeatCallSign() {
     }
     if (theirCallSign === theirRealCallSign) {
         await sleep(1000);
-        await theySend('599 042');
+        await theySend(`599 ${theirRealNumber}`);
         document.getElementById("their-report").focus();
     } else if (theirRealCallSign) {
         await sleep(1000);
-        await theySend(`DE ${theirRealCallSign} 599 042`);
+        await theySend(`DE ${theirRealCallSign} 599 ${theirRealNumber}`);
     }
 }
 
