@@ -77,6 +77,14 @@ function randomCallSign() {
 }
 
 /**
+ * @param {number} number
+ * @return {string}
+ */
+function formatNumber(number) {
+    return String(number).padStart(3, '0');
+}
+
+/**
  *  @param {number} delay
  */
 async function sleep(delay) {
@@ -158,13 +166,13 @@ async function repeatCallSign() {
     if (!await youSend(theirCallSign)) {
         return;
     }
+    await sleep(1000);
+    const paddedNumber = formatNumber(theirRealNumber);
     if (theirCallSign === theirRealCallSign) {
-        await sleep(1000);
-        await theySend(`599 ${theirRealNumber}`);
+        await theySend(`599 ${paddedNumber}`);
         document.getElementById("their-number").focus();
     } else if (theirRealCallSign) {
-        await sleep(1000);
-        await theySend(`DE ${theirRealCallSign} 599 ${theirRealNumber}`);
+        await theySend(`DE ${theirRealCallSign} 599 ${paddedNumber}`);
     }
 }
 
