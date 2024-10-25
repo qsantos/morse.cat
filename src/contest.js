@@ -154,6 +154,14 @@ async function theySend(message) {
     await sendMorse('Them', message);
 }
 
+async function initiateContact() {
+    const callSign = randomCallSign();
+    await theySend(`${callSign}`);
+    // only set this after sending the call sign to prevent the user from guessing
+    theirRealCallSign = callSign;
+    theirRealNumber = Math.floor(lognormvariate(3, 1.2));
+}
+
 async function cq() {
     document.getElementById("their-call-sign").focus();
     const yourCallSign = document.getElementById("your-call-sign").value
@@ -161,12 +169,7 @@ async function cq() {
         return;
     }
     await sleep(1000);
-
-    const callSign = randomCallSign();
-    await theySend(`${callSign}`);
-    // only set this after sending the call sign to prevent the user from guessing
-    theirRealCallSign = callSign;
-    theirRealNumber = Math.floor(lognormvariate(3, 1.2));
+    await initiateContact();
 }
 
 async function repeatCallSign() {
@@ -227,6 +230,8 @@ async function sendReportAndNumber() {
     // Increment your number
     yourRealNumber += 1;
     yourNumber.value = formatNumber(yourRealNumber);
+    await sleep(1000);
+    await initiateContact();
 }
 
 function yourCallSignKeyDown(event) {
