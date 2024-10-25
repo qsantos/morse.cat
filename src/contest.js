@@ -195,7 +195,8 @@ async function sendReportAndNumber() {
         <td><time datetime="${time}" title="${time}">${time.slice(11, 16)}</time></td>
         <td>${theirCallSign.value}</td>
         <td>${yourReport.value}</td>
-        <td>${theirReport.value} ${theirNumber.value}</td>
+        <td>${theirReport.value}</td>
+        <td>${theirNumber.value}</td>
 `;
     document.getElementById("contact-log").appendChild(contactLogEntry);
     await theySend('TU GL');
