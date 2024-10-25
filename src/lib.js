@@ -15,7 +15,10 @@ let copiedGroups = 0;
 let score = 0;
 let inSession = false;
 let sessionId = "";
+/** @type {keyof typeof translations.en | ""} */
 let infoMessage = "";
+/** @type {{[key: string]: string} | undefined} */
+let infoMessageParams = undefined;
 /** @type {Date} */
 let sessionStart;
 let sessionDurationUpdater = 0;
@@ -1236,22 +1239,33 @@ function setLanguage(lang) {
     }
     document.title = `Morse Cat - ${t("pageTitle")}`;
     localStorage.setItem("language", lang);
-    infoMessage = "";
     render(false);
 }
 
-/**
- *  @param {string} message
- */
-function setInfoMessage(message) {
-    infoMessage = message;
+function renderInfoMessage() {
     const infoElement = getElement("info", HTMLElement);
-    infoElement.innerHTML = message;
-    if (message) {
+    if (infoMessage) {
+        const template = t(infoMessage);
+        if (infoMessageParams) {
+            infoElement.innerHTML = evaluateTemplate(template, infoMessageParams);
+        } else {
+            infoElement.innerHTML = template;
+        }
         infoElement.parentElement?.classList?.remove("d-none");
     } else {
+        infoElement.innerHTML = "";
         infoElement.parentElement?.classList?.add("d-none");
     }
+}
+
+/**
+ * @param {keyof typeof translations.en | ""} message
+ * @param {{[key: string]: string}=} params
+ */
+function setInfoMessage(message, params) {
+    infoMessage = message;
+    infoMessageParams = params;
+    renderInfoMessage();
 }
 
 /**
@@ -1286,11 +1300,7 @@ async function render(debounceStartButton) {
         const currentSession = getElement("current-session", HTMLTextAreaElement);
         getElement("language-select", HTMLSelectElement).value = activeLanguage;
         currentSession.value = copiedText;
-        if (infoMessage) {
-            const infoElement = getElement("info", HTMLElement);
-            infoElement.innerHTML = infoMessage;
-            infoElement.parentElement?.classList.remove("d-none");
-        }
+        renderInfoMessage();
 
         const startButton = getElement("start-button", HTMLButtonElement);
         if (debounceStartButton) {
@@ -1424,7 +1434,7 @@ function startSession() {
     const now = new Date();
 
     if (Array.from(settings.charset).filter((c) => c.trim() !== "").length === 0) {
-        setInfoMessage(t("info.emptyCharset"));
+        setInfoMessage("info.emptyCharset");
         return;
     }
     pushGroup();
@@ -1594,20 +1604,14 @@ function onKeyDown(event) {
         fail(sent, userInput);
         // display info message
         if (sent) {
-            const template = t("info.incorrect");
-            setInfoMessage(
-                evaluateTemplate(template, {
-                    played: characterNameWithMorse(sent.character),
-                    typed: characterNameWithMorse(userInput),
-                }),
-            );
+            setInfoMessage("info.incorrect", {
+                played: characterNameWithMorse(sent.character),
+                typed: characterNameWithMorse(userInput),
+            });
         } else {
-            const template = t("info.tooFast");
-            setInfoMessage(
-                evaluateTemplate(template, {
-                    typed: characterNameWithMorse(userInput),
-                }),
-            );
+            setInfoMessage("info.tooFast", {
+                typed: characterNameWithMorse(userInput),
+            });
         }
     }
 }
@@ -1635,7 +1639,7 @@ cwPlayer.onCharacterPlay = (c) => {
     // detect when user has stopped copying
     if (played.length - copiedText.length > 5) {
         fail();
-        setInfoMessage(t("info.tooSlow"));
+        setInfoMessage("info.tooSlow");
     }
 };
 
@@ -1854,7 +1858,7 @@ function deleteData() {
 
 function onCurrentSessionBlur() {
     if (inSession) {
-        setInfoMessage(t("info.lostFocus"));
+        setInfoMessage("info.lostFocus");
         stopSession();
     }
 }
