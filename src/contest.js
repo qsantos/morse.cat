@@ -86,6 +86,14 @@ function formatNumber(number) {
 }
 
 /**
+ * @param {string} number
+ * @return {string}
+ */
+function normalizeNumber(number) {
+    return formatNumber(parseInt(number));
+}
+
+/**
  *  @param {number} delay
  */
 async function sleep(delay) {
@@ -177,6 +185,19 @@ async function repeatCallSign() {
     }
 }
 
+/**
+ * @param {string} provided
+ * @param {string} expected
+ * @return {string}
+ */
+function correctify(provided, expected) {
+    if (provided === expected) {
+        return provided;
+    } else {
+        return `<span class="strike">${provided}</span> ${expected}`;
+    }
+}
+
 async function sendReportAndNumber() {
     const yourReport = document.getElementById("your-report");
     const yourNumber = document.getElementById("your-number");
@@ -193,10 +214,10 @@ async function sendReportAndNumber() {
     contactLogEntry.innerHTML = `
         <td>${yourNumber.value}</td>
         <td><time datetime="${time}" title="${time}">${time.slice(11, 16)}</time></td>
-        <td>${theirCallSign.value}</td>
+        <td>${correctify(theirCallSign.value, theirRealCallSign)}</td>
         <td>${yourReport.value}</td>
-        <td>${theirReport.value}</td>
-        <td>${theirNumber.value}</td>
+        <td>${correctify(normalizeNumber(theirReport.value), "599")}</td>
+        <td>${correctify(normalizeNumber(theirNumber.value), formatNumber(theirRealNumber))}</td>
 `;
     document.getElementById("contact-log").appendChild(contactLogEntry);
     await theySend('TU GL');
