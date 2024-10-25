@@ -156,7 +156,6 @@ async function theySend(message) {
 
 async function cq() {
     document.getElementById("their-call-sign").focus();
-
     const yourCallSign = document.getElementById("your-call-sign").value
     if (!await youSend(`CQCQ TEST ${yourCallSign}`)) {
         return;
@@ -231,28 +230,25 @@ async function sendReportAndNumber() {
 }
 
 function yourCallSignKeyDown(event) {
-    if (event.key == "Enter") {
-        const yourCallSign = document.getElementById("your-call-sign").value
-        if (yourCallSign) {
-            cq();
-        }
+    if (event.key == "Enter" && event.target.value) {
+        cq();
     }
 }
 
 function theirCallSignKeyDown(event) {
-    if (event.key == "Enter") {
+    if (event.key == "Enter" && event.target.value) {
         repeatCallSign();
     }
 }
 
 function theirReportKeyDown(event) {
-    if (event.key == "Enter") {
+    if (event.key == "Enter" && event.target.value) {
         document.getElementById("their-number").focus();
     }
 }
 
 function theirNumberKeyDown(event) {
-    if (event.key == "Enter") {
+    if (event.key == "Enter" && event.target.value) {
         sendReportAndNumber();
     }
 }
