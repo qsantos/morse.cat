@@ -121,6 +121,9 @@ function sendMorse(sender, message) {
         callSignLabel.innerHTML = `${sender}: `;
         logEntry.appendChild(callSignLabel);
 
+        // Scroll to bottom of decoded Morse log
+        logEntry.scrollIntoView();
+
         // Decoded Morse
         const decodedMorse = document.createElement("SPAN");
         logEntry.appendChild(decodedMorse);
