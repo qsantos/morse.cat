@@ -7,8 +7,8 @@ let theirRealNumber = null;
 let youSending = false;
 
 /**
- * @param {number} min
- * @param {number} max
+ * @param {number} min -- inclusive
+ * @param {number} max -- exclusive
  * @return {number}
  */
 function randrange(min, max) {
@@ -16,8 +16,8 @@ function randrange(min, max) {
 }
 
 /**
- * @param {number} min
- * @param {number} max
+ * @param {number} min -- inclusive
+ * @param {number} max -- inclusive
  * @return {number}
  */
 function randint(min, max) {
@@ -26,16 +26,16 @@ function randint(min, max) {
 
 /**
  * @template { { [key: number]: any, length: number } } T
- * @param {T} charset
- * @return {T[number]}
+ * @param {T} charset -- array of characters
+ * @return {T[number]} -- random character
  */
 function choice(charset) {
     return charset[randrange(0, charset.length)];
 }
 
 /**
- * @param {number} mu
- * @param {number} sigma
+ * @param {number} mu -- mean
+ * @param {number} sigma -- standard deviation
  * @return {number}
  */
 function gauss(mu, sigma) {
@@ -47,8 +47,8 @@ function gauss(mu, sigma) {
 }
 
 /**
- * @param {number} mu
- * @param {number} sigma
+ * @param {number} mu -- mean
+ * @param {number} sigma -- standard deviation
  * @return {number}
  */
 function lognormvariate(mu, sigma) {
@@ -57,14 +57,17 @@ function lognormvariate(mu, sigma) {
 
 /**
  * @template { { [key: number]: any, length: number } } T
- * @param {T} charset
- * @param {number} count
- * @return {T[number][]}
+ * @param {T} charset -- array of characters
+ * @param {number} count -- number of characters to choose
+ * @return {T[number][]} -- random characters
  */
 function choices(charset, count) {
     return Array.from({ length: count }, () => choice(charset));
 }
 
+/**
+ * @return {string} -- random call sign
+ */
 function randomCallSign() {
     const charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     const prefixLength = randint(1, 2);
@@ -78,28 +81,33 @@ function randomCallSign() {
 }
 
 /**
- * @param {number} number
- * @return {string}
+ * @param {number} number -- number to format
+ * @return {string} -- formatted number
  */
 function formatNumber(number) {
     return String(number).padStart(3, '0');
 }
 
 /**
- * @param {string} number
- * @return {string}
+ * @param {string} number -- number to normalize
+ * @return {string} -- normalized number
  */
 function normalizeNumber(number) {
     return formatNumber(parseInt(number));
 }
 
 /**
- *  @param {number} delay
+ *  @param {number} delay -- milliseconds
  */
 async function sleep(delay) {
     return new Promise((resolve) => setTimeout(resolve, delay));
 }
 
+/**
+ * @param {string} sender -- call sign of sender
+ * @param {string} message -- message to send
+ * @return {Promise<void>} -- resolved when message is sent
+ */
 function sendMorse(sender, message) {
     return new Promise((accept) => {
         // Set up cwPlayer
@@ -143,6 +151,10 @@ function sendMorse(sender, message) {
     });
 }
 
+/**
+ * @param {string} message -- message to send
+ * @return {Promise<void>} -- resolved when message is sent
+ */
 async function youSend(message) {
     if (youSending) {
         return false;
@@ -153,10 +165,17 @@ async function youSend(message) {
     return true;
 }
 
+/**
+ * @param {string} message -- message to send
+ * @return {Promise<void>} -- resolved when message is sent
+ */
 async function theySend(message) {
     await sendMorse('Them', message);
 }
 
+/**
+ * @return {Promise<void>} -- resolved when contact is initiated
+ */
 async function initiateContact() {
     const callSign = randomCallSign();
     await theySend(`${callSign}`);
@@ -165,6 +184,9 @@ async function initiateContact() {
     theirRealNumber = Math.floor(lognormvariate(3, 1.2));
 }
 
+/**
+ * @return {Promise<void>} -- resolved when contact is initiated
+ */
 async function cq() {
     document.getElementById("their-call-sign").focus();
     const yourCallSign = document.getElementById("your-call-sign").value
@@ -175,6 +197,9 @@ async function cq() {
     await initiateContact();
 }
 
+/**
+ * @return {Promise<void>} -- resolved when contact is initiated
+ */
 async function repeatCallSign() {
     const theirCallSign = document.getElementById("their-call-sign").value;
     if (!await youSend(theirCallSign)) {
@@ -203,6 +228,9 @@ function correctify(provided, expected) {
     }
 }
 
+/**
+ * @return {Promise<void>} -- resolved when contact is initiated
+ */
 async function sendReportAndNumber() {
     const yourReport = document.getElementById("your-report");
     const yourNumber = document.getElementById("your-number");
@@ -237,24 +265,36 @@ async function sendReportAndNumber() {
     await initiateContact();
 }
 
+/**
+ * @param {KeyboardEvent} event -- key down event
+ */
 function yourCallSignKeyDown(event) {
     if (event.key == "Enter" && event.target.value) {
         cq();
     }
 }
 
+/**
+ * @param {KeyboardEvent} event -- key down event
+ */
 function theirCallSignKeyDown(event) {
     if (event.key == "Enter" && event.target.value) {
         repeatCallSign();
     }
 }
 
+/**
+ * @param {KeyboardEvent} event -- key down event
+ */
 function theirReportKeyDown(event) {
     if (event.key == "Enter" && event.target.value) {
         document.getElementById("their-number").focus();
     }
 }
 
+/**
+ * @param {KeyboardEvent} event -- key down event
+ */
 function theirNumberKeyDown(event) {
     if (event.key == "Enter" && event.target.value) {
         sendReportAndNumber();
