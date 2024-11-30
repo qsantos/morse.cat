@@ -8,6 +8,7 @@ export type Stat = {
 
 export type Stats = {
     updated: Date,
+    lastSessionStarted: string,
     elapsed: Stat,
     copiedCharacters: Stat,
     copiedGroups: Stat,
