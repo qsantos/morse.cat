@@ -1741,6 +1741,7 @@ async function sleep(delay) {
 function importData() {
     const input = document.createElement("input");
     input.type = "file";
+    input.accept = ".json.gz";
     input.oninput = async (event) => {
         /** @type {HTMLInputElement | null} */
         // @ts-ignore
