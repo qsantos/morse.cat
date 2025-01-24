@@ -1164,7 +1164,7 @@ function onToggleChars(event, chars) {
     updateLCWOLessonFromCharset();
 }
 
-function restoreSettings() {
+function applySettingsToDom() {
     getElement("settings-wpm", HTMLInputElement).value = settings.wpm.toString();
     getElement("settings-tone", HTMLInputElement).value = settings.tone.toString();
     getElement("settings-error-tone", HTMLInputElement).value = settings.error_tone.toString();
@@ -1298,7 +1298,7 @@ async function render(debounceStartButton) {
             lang: activeLanguage,
             history: [...sessions.map(formatHistoryEntry)].reverse().join(""),
         });
-        restoreSettings();
+        applySettingsToDom();
         const currentSession = getElement("current-session", HTMLTextAreaElement);
         getElement("language-select", HTMLSelectElement).value = activeLanguage;
         currentSession.value = copiedText;
@@ -1805,7 +1805,7 @@ function importData() {
             return;
         }
         Object.assign(settings, newSettings);
-        restoreSettings();
+        applySettingsToDom();
         saveSettings();
         const transaction = db.transaction(["sessions"]);
         const objectStore = transaction.objectStore("sessions");
@@ -1864,7 +1864,7 @@ function importData() {
 function deleteData() {
     indexedDB.deleteDatabase("morse.cat");
     Object.assign(settings, defaultSettings);
-    restoreSettings();
+    applySettingsToDom();
     saveSettings();
     Object.assign(stats, defaultStats);
     refreshStatistics();
