@@ -79,23 +79,6 @@ const stats = readStats();
 const settings = (() => {
     try {
         const settings = JSON.parse(localStorage.getItem("settings") || "");
-        // migrations
-        if (settings.hasOwnProperty("word_length")) {
-            settings.min_group_size = settings.word_length;
-            settings.max_group_size = settings.word_length;
-            delete settings.word_length;
-        }
-        if (!settings.hasOwnProperty("session_debounce_time")) {
-            settings.session_debounce_time = 1;
-        }
-        if (settings.hasOwnProperty("min_word_length")) {
-            settings.min_group_size = settings.min_word_length;
-            delete settings.min_word_length;
-        }
-        if (settings.hasOwnProperty("max_word_length")) {
-            settings.max_group_size = settings.max_word_length;
-            delete settings.max_word_length;
-        }
         return settings;
     } catch (e) {
         return Object.assign({}, defaultSettings);
@@ -1327,13 +1310,6 @@ async function render(debounceStartButton) {
 }
 
 function refreshStatistics() {
-    // migration
-    if (stats.hasOwnProperty("copiedWords")) {
-        // @ts-ignore
-        stats.copiedGroups = stats.copiedWords;
-        // @ts-ignore
-        delete stats.copiedWords;
-    }
     // update day stats
     const now = new Date();
     const today = new Date(now);
