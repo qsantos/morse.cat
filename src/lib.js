@@ -1815,7 +1815,7 @@ async function importDataOnInput(event) {
     applySettingsToDom();
     saveSettings();
 
-    // Import sessions and characters into IndexedDB
+    // Import sessions into IndexedDB
     const transaction = db.transaction(["sessions", "characters"], "readwrite");
     const objectStore = transaction.objectStore("sessions");
     const sessionIds = new Set(await asyncGetAllKeys(objectStore));
@@ -1834,27 +1834,28 @@ async function importDataOnInput(event) {
     }
     sessions.sort(sessionCompare);
 
-    let processed = 0;
-    const total = sessions.length + characters.length;
-    function updateProgress() {
-        processed += 1;
-        if (processed % 1000 === 0) {
-            const progress = 5 + (processed / total) * 95;
-            progressBar.style.width = `${progress}%`;
-        }
-    }
-    // TODO: to avoid the slight pause after 15%, the loops
-    // below (and in particular the ones for characters)
-    // should be broken in chunks and scheduled with
-    // setTimeout
+    // NOTE: the time needed to dispatch and process session PUTs is negligible
+    // compared to character PUTs, so no point in bothering with updating the
+    // progress bar
     const sessionStore = transaction.objectStore("sessions");
     for (const session of sessions) {
         if (!sessionIds.has(session.id)) {
             updateStats(session);
-            const request = sessionStore.put(session);
-            request.onsuccess = updateProgress;
+            sessionStore.put(session);
         }
     }
+
+    // Import characters into IndexedDB
+    let processed = 0;
+    function updateProgress() {
+        processed += 1;
+        if (processed % 1000 === 0) {
+            const progress = 5 + (processed / characters.length) * 95;
+            progressBar.style.width = `${progress}%`;
+        }
+    }
+    // TODO: to avoid the slight pause after 15%, the loop below should be
+    // broken in chunks and scheduled with setTimeout
     const characterStore = transaction.objectStore("characters");
     for (const character of characters) {
         const request = characterStore.put(character);
