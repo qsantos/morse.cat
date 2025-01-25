@@ -1803,9 +1803,9 @@ function importData() {
         Object.assign(settings, newSettings);
         applySettingsToDom();
         saveSettings();
-        const transaction = db.transaction(["sessions"]);
+        const transaction = db.transaction(["sessions", "characters"], "readwrite");
         const objectStore = transaction.objectStore("sessions");
-        const request = objectStore.getAllKeys();
+        const sessionIds = new Set(await asyncGetAllKeys(objectStore));
 
         // Sort sessions by started date to correctly update best day stats
         //
@@ -1821,51 +1821,42 @@ function importData() {
         }
         sessions.sort(sessionCompare);
 
-        transaction.oncomplete = () => {
-            const sessionIds = new Set(request.result);
-            if (!db) {
-                button.classList.remove("spinning");
-                return;
+        let processed = 0;
+        function updateProgress() {
+            processed += 1;
+            if (processed % 1000 === 0) {
+                const progress = 15 + (processed / total) * 85;
+                progressBar.style.width = `${progress}%`;
             }
-            const transaction = db.transaction(["sessions", "characters"], "readwrite");
-            let processed = 0;
-            function updateProgress() {
-                processed += 1;
-                if (processed % 1000 === 0) {
-                    const progress = 15 + (processed / total) * 85;
-                    progressBar.style.width = `${progress}%`;
-                }
-            }
-            // TODO: to avoid the slight pause after 15%, the loops
-            // below (and in particular the ones for characters)
-            // should be broken in chunks and scheduled with
-            // setTimeout; note that the commit should only happen
-            // once all the elements have been scheduled for put
-            {
-                const objectStore = transaction.objectStore("sessions");
-                for (const session of sessions) {
-                    if (!sessionIds.has(session.id)) {
-                        updateStats(session);
-                        const request = objectStore.put(session);
-                        request.onsuccess = updateProgress;
-                    }
-                }
-            }
-            {
-                const objectStore = transaction.objectStore("characters");
-                for (const character of characters) {
-                    const request = objectStore.put(character);
+        }
+        // TODO: to avoid the slight pause after 15%, the loops
+        // below (and in particular the ones for characters)
+        // should be broken in chunks and scheduled with
+        // setTimeout; note that the commit should only happen
+        // once all the elements have been scheduled for put
+        {
+            const objectStore = transaction.objectStore("sessions");
+            for (const session of sessions) {
+                if (!sessionIds.has(session.id)) {
+                    updateStats(session);
+                    const request = objectStore.put(session);
                     request.onsuccess = updateProgress;
                 }
             }
-            transaction.oncomplete = () => {
-                progressBar.style.width = "100%";
-                button.classList.remove("spinning");
-                saveStats();
-                // NOTE: render(false) will mess with the offcanvas being open
-                document.location.reload();
-            };
-            transaction.commit();
+        }
+        {
+            const objectStore = transaction.objectStore("characters");
+            for (const character of characters) {
+                const request = objectStore.put(character);
+                request.onsuccess = updateProgress;
+            }
+        }
+        transaction.oncomplete = () => {
+            progressBar.style.width = "100%";
+            button.classList.remove("spinning");
+            saveStats();
+            // NOTE: render(false) will mess with the offcanvas being open
+            document.location.reload();
         };
         transaction.commit();
     };
