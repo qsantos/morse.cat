@@ -1308,13 +1308,14 @@ async function render(debounceStartButton) {
     }
 }
 
-function refreshStatistics() {
-    // update day stats
-    const now = new Date();
+/** Detect whether a new day started, and reset the daily stats if so
+ *
+ * @param {Date} now - The current time
+ */
+function detectNewDay(now) {
     const today = new Date(now);
     today.setHours(0, 0, 0);
     if (stats.updated < today) {
-        // reset on new day
         stats.elapsed.currentDay = 0;
         stats.copiedCharacters.currentDay = 0;
         stats.copiedGroups.currentDay = 0;
@@ -1510,7 +1511,7 @@ function stopSession(sent, userInput) {
     getElement("current-session", HTMLTextAreaElement).setAttribute("readonly", "");
     saveSession(session);
     updateStats(session);
-    refreshStatistics();
+    detectNewDay(now);
     saveStats();
 
     render(true);
@@ -1826,7 +1827,7 @@ function importData() {
             transaction.oncomplete = () => {
                 progressBar.style.width = "100%";
                 button.classList.remove("spinning");
-                refreshStatistics();
+                detectNewDay(new Date());
                 saveStats();
                 // NOTE: render(false) will mess with the offcanvas being open
                 document.location.reload();
@@ -1859,7 +1860,7 @@ function main() {
     cwPlayer.onLampOn = () => {
         getElement("nose", SVGElement).style.fill = "yellow";
     };
-    refreshStatistics();
+    detectNewDay(new Date());
     setLanguage(getPreferredLanguage());
 }
 
