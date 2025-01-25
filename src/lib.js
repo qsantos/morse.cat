@@ -1877,10 +1877,18 @@ async function importDataOnInput(event) {
     const existingSessions = await asyncGetAll(sessionStore);
     const existingSessionIds = new Set(existingSessions.map((session) => session.id));
 
-    // Only keep new sessions
+    // Filter out sessions that are already in the database
     inplaceFilter(newSessions, (session) => !existingSessionIds.has(session.id));
 
-    // Sort sessions by started date to correctly update best day stats
+    // Import new sessions
+    // NOTE: the time needed to dispatch and process session PUTs is negligible
+    // compared to character PUTs, so no point in bothering with updating the
+    // progress bar
+    for (const newSession of newSessions) {
+        sessionStore.put(newSession);
+    }
+
+    // Sort sessions by started date to correctly update stats
     /**
      * @param {import("./types").HistoryEntry} a
      * @param {import("./types").HistoryEntry} b
@@ -1888,39 +1896,13 @@ async function importDataOnInput(event) {
     function sessionCompare(a, b) {
         return a.started.localeCompare(b.started);
     }
-    newSessions.sort(sessionCompare);
-    existingSessions.sort(sessionCompare);
+    const sessions = existingSessions.concat(newSessions);
+    sessions.sort(sessionCompare);
 
-    // Reset stats
+    // Recompute stats
     Object.assign(stats, defaultStats);
-
-    // NOTE: the time needed to dispatch and process session PUTs is negligible
-    // compared to character PUTs, so no point in bothering with updating the
-    // progress bar
-    let newSessionsIndex = 0;
-    let existingSessionsIndex = 0;
-    while (newSessionsIndex < newSessions.length && existingSessionsIndex < existingSessions.length) {
-        const newSession = newSessions[newSessionsIndex];
-        const existingSession = /** @type {import("./types").HistoryEntry} */ (existingSessions[existingSessionsIndex]);
-        if (newSession.started < existingSession.started) {
-            updateStats(newSession);
-            sessionStore.put(newSession);
-            newSessionsIndex += 1;
-        } else {
-            updateStats(existingSession);
-            existingSessionsIndex += 1;
-        }
-    }
-    while (newSessionsIndex < newSessions.length) {
-        const newSession = newSessions[newSessionsIndex];
-        updateStats(newSession);
-        sessionStore.put(newSession);
-        newSessionsIndex += 1;
-    }
-    while (existingSessionsIndex < existingSessions.length) {
-        const existingSession = /** @type {import("./types").HistoryEntry} */ (existingSessions[existingSessionsIndex]);
-        updateStats(existingSession);
-        existingSessionsIndex += 1;
+    for (const session of sessions) {
+        updateStats(session);
     }
 
     // Filter out characters that are already in the database
