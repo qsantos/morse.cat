@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+# Usage: ln -sf ../../pre-commit .git/hooks
+
+# Exit at first error
+set -Eeu
+
+# To handle partially committed files, we must copy the staged changes to a
+# separate location
+# See also https://stackoverflow.com/a/36793330
+TEMPDIR=$(mktemp -d)
+trap "rm -rf $TEMPDIR" EXIT SIGHUP SIGINT SIGQUIT SIGTERM
+git checkout-index --prefix=$TEMPDIR/ -af
+
+# prevent committing any file with a "NOCOMMIT" marker
+if git diff --cached --diff-filter=AM -- ':!pre-commit' | grep -C3 'NOCOMMIT' --color; then
+    echo "Commit contains NOCOMMIT markers. Aborting commit."
+    exit 1
+fi
+
+# lint
+if ! git diff --cached --name-only --diff-filter=AM --quiet -- src/lib.js; then
+    npm run lint
+fi
