@@ -1350,6 +1350,7 @@ function updateStat(stat, amount, updateLastSession, updateToday) {
  *  @param {import("./types").HistoryEntry} session
  */
 function updateStats(session) {
+    detectNewDay(new Date(session.started));
     const updateLastSession = session.started > stats.lastSessionStarted;
     if (updateLastSession) {
         stats.lastSessionStarted = session.started;
@@ -1508,7 +1509,6 @@ function stopSession(sent, userInput) {
 
     getElement("current-session", HTMLTextAreaElement).setAttribute("readonly", "");
     saveSession(session);
-    detectNewDay(sessionStart);
     updateStats(session);
     saveStats();
 
@@ -1824,7 +1824,6 @@ function importData() {
                 const objectStore = transaction.objectStore("sessions");
                 for (const session of sessions) {
                     if (!sessionIds.has(session.id)) {
-                        detectNewDay(new Date(session.started));
                         updateStats(session);
                         const request = objectStore.put(session);
                         request.onsuccess = updateProgress;
