@@ -1773,6 +1773,32 @@ function inplaceFilter(array, predicate) {
     array.length = i;
 }
 
+/** Dispatch many PUT requests without blocking the main thread
+ *
+ * @param {IDBObjectStore} objectStore
+ * @param {any[]} puts
+ * @param {() => void} callback
+ */
+function nonBlockingPuts(objectStore, puts, callback) {
+    // NOTE: IndexedDB’s transaction auto-commits when there are no outstanding
+    // requests. However, it does something weird if you try to add new
+    // requests to the transaction asynchronously. To make it work properly, we
+    // need to add new requests in the callback of a previous request.
+    let pendingRequests = 0;
+    function dispatchRequest() {
+        while (pendingRequests < 100 && puts.length !== 0) {
+            const request = objectStore.put(puts.pop());
+            request.onsuccess = () => {
+                pendingRequests -= 1;
+                dispatchRequest();
+                callback();
+            };
+            pendingRequests += 1;
+        }
+    }
+    dispatchRequest();
+}
+
 /** Import data from a file, when the user has selected one
  *
  * @param {Event} event
@@ -1818,9 +1844,12 @@ async function importDataOnInput(event) {
         button.classList.remove("spinning");
         return;
     }
+
+    // Update progress bar
     progressBar.style.width = "5%";
     // Yield control to the main thread to let the progress bar animation render
     await sleep(100);
+    // NOTE: do not await during the IndexedDB transaction, or weird things happen
 
     // Extract sessions, characters, and settings
     const { sessions, characters, settings: newSettings } = j;
@@ -1832,6 +1861,13 @@ async function importDataOnInput(event) {
 
     // Import sessions into IndexedDB
     const transaction = db.transaction(["sessions", "characters"], "readwrite");
+    transaction.oncomplete = () => {
+        progressBar.style.width = "100%";
+        button.classList.remove("spinning");
+        saveStats();
+        // NOTE: render(false) will mess with the offcanvas being open
+        document.location.reload();
+    };
     const objectStore = transaction.objectStore("sessions");
     const sessionIds = new Set(await asyncGetAllKeys(objectStore));
 
@@ -1866,28 +1902,13 @@ async function importDataOnInput(event) {
     inplaceFilter(characters, (character) => !sessionIds.has(character.sessionId));
 
     // Import characters into IndexedDB
-    let processed = 0;
-    function updateProgress() {
-        processed += 1;
-        if (processed % 1000 === 0) {
-            const progress = 5 + (processed / characters.length) * 95;
-            progressBar.style.width = `${progress}%`;
-        }
-    }
-    // TODO: to avoid the slight pause after 15%, the loop below should be
-    // broken in chunks and scheduled with setTimeout
     const characterStore = transaction.objectStore("characters");
-    for (const character of characters) {
-        const request = characterStore.put(character);
-        request.onsuccess = updateProgress;
-    }
-    transaction.oncomplete = () => {
-        progressBar.style.width = "100%";
-        button.classList.remove("spinning");
-        saveStats();
-        // NOTE: render(false) will mess with the offcanvas being open
-        document.location.reload();
-    };
+    const toProcess = characters.length;
+    let processed = 0;
+    nonBlockingPuts(characterStore, characters, () => {
+        processed += 1;
+        progressBar.style.width = `${5 + (processed / toProcess) * 95}%`;
+    });
 }
 
 function deleteData() {
