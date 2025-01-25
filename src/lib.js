@@ -1877,6 +1877,9 @@ async function importDataOnInput(event) {
     /** @type {import("./types").HistoryEntry[] | null} */
     const existingSessions = await asyncGetAll(sessionStore);
 
+    // Only keep new sessions
+    inplaceFilter(newSessions, (session) => !sessionIds.has(session.id));
+
     // Sort sessions by started date to correctly update best day stats
     /**
      * @param {import("./types").HistoryEntry} a
