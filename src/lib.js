@@ -1852,7 +1852,7 @@ async function importDataOnInput(event) {
     // NOTE: do not await during the IndexedDB transaction, or weird things happen
 
     // Extract sessions, characters, and settings
-    const { sessions, characters, settings: newSettings } = j;
+    const { sessions: newSessions, characters, settings: newSettings } = j;
 
     // Load settings
     Object.assign(settings, newSettings);
@@ -1868,14 +1868,13 @@ async function importDataOnInput(event) {
         // NOTE: render(false) will mess with the offcanvas being open
         document.location.reload();
     };
-    const objectStore = transaction.objectStore("sessions");
-    const sessionIds = new Set(await asyncGetAllKeys(objectStore));
+    const sessionStore = transaction.objectStore("sessions");
+    const sessionIds = new Set(await asyncGetAllKeys(sessionStore));
+
+    /** @type {import("./types").HistoryEntry[] | null} */
+    const existingSessions = await asyncGetAll(sessionStore);
 
     // Sort sessions by started date to correctly update best day stats
-    //
-    // NOTE: this assumes that the new data being imported has no common
-    // day with the existing data; this won’t handle all cases, but at
-    // least will cover the basic case of import from scratch
     /**
      * @param {import("./types").HistoryEntry} a
      * @param {import("./types").HistoryEntry} b
@@ -1883,17 +1882,34 @@ async function importDataOnInput(event) {
     function sessionCompare(a, b) {
         return a.started.localeCompare(b.started);
     }
-    sessions.sort(sessionCompare);
+    newSessions.sort(sessionCompare);
+    existingSessions.sort(sessionCompare);
+
+    // Reset stats
+    Object.assign(stats, defaultStats);
 
     // NOTE: the time needed to dispatch and process session PUTs is negligible
     // compared to character PUTs, so no point in bothering with updating the
     // progress bar
-    const sessionStore = transaction.objectStore("sessions");
-    for (const session of sessions) {
-        if (!sessionIds.has(session.id)) {
-            updateStats(session);
-            sessionStore.put(session);
+    let newSessionsIndex = 0;
+    let existingSessionsIndex = 0;
+    while (newSessionsIndex < newSessions.length && existingSessionsIndex < existingSessions.length) {
+        const newSession = newSessions[newSessionsIndex];
+        const existingSession = /** @type {import("./types").HistoryEntry} */ (existingSessions[existingSessionsIndex]);
+        if (newSession.started < existingSession.started) {
+            updateStats(newSession);
+            sessionStore.put(newSession);
+            newSessionsIndex += 1;
+        } else {
+            updateStats(existingSession);
+            existingSessionsIndex += 1;
         }
+    }
+    while (newSessionsIndex < newSessions.length) {
+        const newSession = newSessions[newSessionsIndex];
+        updateStats(newSession);
+        sessionStore.put(newSession);
+        newSessionsIndex += 1;
     }
 
     // Filter out characters that are already in the database
