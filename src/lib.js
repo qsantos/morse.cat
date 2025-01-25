@@ -1864,6 +1864,11 @@ async function importDataOnInput(event) {
         }
     }
 
+    // Filter out characters that are already in the database
+    // NOTE: since we are using a transaction, if a session has been
+    // imported, so should all its associated characters
+    inplaceFilter(characters, (character) => !sessionIds.has(character.sessionId));
+
     // Import characters into IndexedDB
     let processed = 0;
     function updateProgress() {
@@ -1877,12 +1882,8 @@ async function importDataOnInput(event) {
     // broken in chunks and scheduled with setTimeout
     const characterStore = transaction.objectStore("characters");
     for (const character of characters) {
-        // NOTE: since we are using a transaction, if a session has been
-        // imported, so should all its associated characters
-        if (!sessionIds.has(character.sessionId)) {
-            const request = characterStore.put(character);
-            request.onsuccess = updateProgress;
-        }
+        const request = characterStore.put(character);
+        request.onsuccess = updateProgress;
     }
     transaction.oncomplete = () => {
         progressBar.style.width = "100%";
