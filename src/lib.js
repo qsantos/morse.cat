@@ -1763,17 +1763,23 @@ function importData() {
  * @param {Event} event
  */
 async function importDataOnInput(event) {
+    if (!db) {
+        return;
+    }
+
     const element = /** @type {HTMLInputElement | null} */ (event.target);
     const file = element?.files?.[0];
     if (!file) {
         return;
     }
 
+    // Start progress bar
     const button = getElement("import-button", HTMLButtonElement);
     button.classList.add("spinning");
     const progressBar = getElement("progress-bar", HTMLDivElement);
     progressBar.style.width = "0%";
 
+    // Read and decompress data from file
     let data;
     if (file.type === "application/json") {
         data = await file.text();
@@ -1788,6 +1794,7 @@ async function importDataOnInput(event) {
         return;
     }
 
+    // Parse JSON data
     progressBar.style.width = "5%";
     await sleep(100);
     let j;
@@ -1798,19 +1805,23 @@ async function importDataOnInput(event) {
         button.classList.remove("spinning");
         return;
     }
+
+    // Extract sessions, characters, and settings
     const { sessions, characters, settings: newSettings } = j;
     progressBar.style.width = "10%";
     await sleep(100);
+
+    // Measure total work that needs to be done
     const total = sessions.length + characters.length;
     progressBar.style.width = "15%";
     await sleep(100);
-    if (!db) {
-        button.classList.remove("spinning");
-        return;
-    }
+
+    // Load settings
     Object.assign(settings, newSettings);
     applySettingsToDom();
     saveSettings();
+
+    // Import sessions and characters into IndexedDB
     const transaction = db.transaction(["sessions", "characters"], "readwrite");
     const objectStore = transaction.objectStore("sessions");
     const sessionIds = new Set(await asyncGetAllKeys(objectStore));
