@@ -47,6 +47,7 @@ const defaultStats = {
         bestSession: 0,
         currentDay: 0,
         bestDay: 0,
+        bestDayDate: "-",
         total: 0,
     },
     copiedCharacters: {
@@ -54,6 +55,7 @@ const defaultStats = {
         bestSession: 0,
         currentDay: 0,
         bestDay: 0,
+        bestDayDate: "-",
         total: 0,
     },
     copiedGroups: {
@@ -61,6 +63,7 @@ const defaultStats = {
         bestSession: 0,
         currentDay: 0,
         bestDay: 0,
+        bestDayDate: "-",
         total: 0,
     },
     score: {
@@ -68,6 +71,7 @@ const defaultStats = {
         bestSession: 0,
         currentDay: 0,
         bestDay: 0,
+        bestDayDate: "-",
         total: 0,
     },
 };
@@ -1369,14 +1373,18 @@ function saveStats() {
  *  @param {import("./types").Stat} stat - The stat to be increased
  *  @param {number} amount - The amount by which the stat should be increased
  *  @param {boolean} updateLastSession - Whether the last session should be updated
+ *  @param {Date} now - The current time
  */
-function updateStat(stat, amount, updateLastSession) {
+function updateStat(stat, amount, updateLastSession, now) {
     stat.total += amount;
     if (updateLastSession) {
         stat.lastSession = amount;
     }
     stat.currentDay += amount;
-    stat.bestDay = Math.max(stat.bestDay, stat.currentDay);
+    if (stat.currentDay > stat.bestDay) {
+        stat.bestDay = stat.currentDay;
+        stat.bestDayDate = now.toISOString().slice(0, 10);
+    }
     stat.bestSession = Math.max(stat.bestSession, amount);
 }
 
@@ -1384,15 +1392,16 @@ function updateStat(stat, amount, updateLastSession) {
  *  @param {import("./types").HistoryEntry} session
  */
 function updateStats(session) {
-    detectNewDay(new Date(session.started));
+    const now = new Date(session.started);
+    detectNewDay(now);
     const updateLastSession = session.started > stats.lastSessionStarted;
     if (updateLastSession) {
         stats.lastSessionStarted = session.started;
     }
-    updateStat(stats.elapsed, session.elapsed, updateLastSession);
-    updateStat(stats.copiedCharacters, session.copiedCharacters, updateLastSession);
-    updateStat(stats.copiedGroups, session.copiedGroups, updateLastSession);
-    updateStat(stats.score, session.score, updateLastSession);
+    updateStat(stats.elapsed, session.elapsed, updateLastSession, now);
+    updateStat(stats.copiedCharacters, session.copiedCharacters, updateLastSession, now);
+    updateStat(stats.copiedGroups, session.copiedGroups, updateLastSession, now);
+    updateStat(stats.score, session.score, updateLastSession, now);
 }
 
 /** Compute the duration of a character with the current settings

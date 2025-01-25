@@ -3,6 +3,7 @@ export type Stat = {
     bestSession: number,
     currentDay: number,
     bestDay: number,
+    bestDayDate: string,
     total: number,
 };
 
