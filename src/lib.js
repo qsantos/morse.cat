@@ -1758,6 +1758,25 @@ function importData() {
     input.click();
 }
 
+/** Filter an array in place
+ *
+ * @template T
+ * @param {T[]} array
+ * @param {(element: T) => boolean} predicate
+ */
+function inplaceFilter(array, predicate) {
+    let i = 0;
+    for (let j = 0; j < array.length; j++) {
+        // @ts-ignore
+        if (predicate(array[j])) {
+            // @ts-ignore
+            array[i] = array[j];
+            i += 1;
+        }
+    }
+    array.length = i;
+}
+
 /** Import data from a file, when the user has selected one
  *
  * @param {Event} event
