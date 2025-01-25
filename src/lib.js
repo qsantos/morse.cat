@@ -1718,8 +1718,9 @@ function exportData() {
 
 /**
  *  @param {number} delay
+ *  @return {Promise<void>}
  */
-async function sleep(delay) {
+function sleep(delay) {
     return new Promise((resolve) => setTimeout(resolve, delay));
 }
 
