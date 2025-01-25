@@ -1872,10 +1872,10 @@ async function importDataOnInput(event) {
         document.location.reload();
     };
     const sessionStore = transaction.objectStore("sessions");
-    const existingSessionIds = new Set(await asyncGetAllKeys(sessionStore));
 
     /** @type {import("./types").HistoryEntry[] | null} */
     const existingSessions = await asyncGetAll(sessionStore);
+    const existingSessionIds = new Set(existingSessions.map((session) => session.id));
 
     // Only keep new sessions
     inplaceFilter(newSessions, (session) => !existingSessionIds.has(session.id));
