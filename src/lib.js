@@ -1321,6 +1321,9 @@ function refreshStatistics() {
         stats.score.currentDay = 0;
     }
     stats.updated = now;
+}
+
+function saveStats() {
     localStorage.setItem("stats", JSON.stringify(stats));
 }
 
@@ -1508,6 +1511,7 @@ function stopSession(sent, userInput) {
     saveSession(session);
     updateStats(session);
     refreshStatistics();
+    saveStats();
 
     render(true);
 }
@@ -1823,6 +1827,7 @@ function importData() {
                 progressBar.style.width = "100%";
                 button.classList.remove("spinning");
                 refreshStatistics();
+                saveStats();
                 // NOTE: render(false) will mess with the offcanvas being open
                 document.location.reload();
             };
