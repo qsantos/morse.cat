@@ -1872,7 +1872,7 @@ function main() {
     cwPlayer.onLampOn = () => {
         getElement("nose", SVGElement).style.fill = "yellow";
     };
-    detectNewDay(new Date());
+    detectNewDay(new Date()); // clears “Today” row in stats on first page load of the day
     setLanguage(getPreferredLanguage());
 }
 
