@@ -1754,107 +1754,113 @@ function importData() {
     const input = document.createElement("input");
     input.type = "file";
     input.accept = ".json.gz";
-    input.oninput = async (event) => {
-        const element = /** @type {HTMLInputElement | null} */ (event.target);
-        const file = element?.files?.[0];
-        if (!file) {
-            return;
-        }
+    input.oninput = importDataOnInput;
+    input.click();
+}
 
-        const button = getElement("import-button", HTMLButtonElement);
-        button.classList.add("spinning");
-        const progressBar = getElement("progress-bar", HTMLDivElement);
-        progressBar.style.width = "0%";
+/** Import data from a file, when the user has selected one
+ *
+ * @param {Event} event
+ */
+async function importDataOnInput(event) {
+    const element = /** @type {HTMLInputElement | null} */ (event.target);
+    const file = element?.files?.[0];
+    if (!file) {
+        return;
+    }
 
-        let data;
-        if (file.type === "application/json") {
-            data = await file.text();
-        } else if (file.type === "application/gzip") {
-            // decompress
-            const stream = await file.stream();
-            const blob = await decompressStream(stream);
-            data = await blob.text();
-        } else {
-            alert(t("error.import.fileType"));
-            button.classList.remove("spinning");
-            return;
-        }
+    const button = getElement("import-button", HTMLButtonElement);
+    button.classList.add("spinning");
+    const progressBar = getElement("progress-bar", HTMLDivElement);
+    progressBar.style.width = "0%";
 
-        progressBar.style.width = "5%";
-        await sleep(100);
-        let j;
-        try {
-            j = JSON.parse(data);
-        } catch (e) {
-            alert(`${t("error.import.parse")}${e}`);
-            button.classList.remove("spinning");
-            return;
-        }
-        const { sessions, characters, settings: newSettings } = j;
-        progressBar.style.width = "10%";
-        await sleep(100);
-        const total = sessions.length + characters.length;
-        progressBar.style.width = "15%";
-        await sleep(100);
-        if (!db) {
-            button.classList.remove("spinning");
-            return;
-        }
-        Object.assign(settings, newSettings);
-        applySettingsToDom();
-        saveSettings();
-        const transaction = db.transaction(["sessions", "characters"], "readwrite");
-        const objectStore = transaction.objectStore("sessions");
-        const sessionIds = new Set(await asyncGetAllKeys(objectStore));
+    let data;
+    if (file.type === "application/json") {
+        data = await file.text();
+    } else if (file.type === "application/gzip") {
+        // decompress
+        const stream = await file.stream();
+        const blob = await decompressStream(stream);
+        data = await blob.text();
+    } else {
+        alert(t("error.import.fileType"));
+        button.classList.remove("spinning");
+        return;
+    }
 
-        // Sort sessions by started date to correctly update best day stats
-        //
-        // NOTE: this assumes that the new data being imported has no common
-        // day with the existing data; this won’t handle all cases, but at
-        // least will cover the basic case of import from scratch
-        /**
-         * @param {import("./types").HistoryEntry} a
-         * @param {import("./types").HistoryEntry} b
-         */
-        function sessionCompare(a, b) {
-            return a.started.localeCompare(b.started);
-        }
-        sessions.sort(sessionCompare);
+    progressBar.style.width = "5%";
+    await sleep(100);
+    let j;
+    try {
+        j = JSON.parse(data);
+    } catch (e) {
+        alert(`${t("error.import.parse")}${e}`);
+        button.classList.remove("spinning");
+        return;
+    }
+    const { sessions, characters, settings: newSettings } = j;
+    progressBar.style.width = "10%";
+    await sleep(100);
+    const total = sessions.length + characters.length;
+    progressBar.style.width = "15%";
+    await sleep(100);
+    if (!db) {
+        button.classList.remove("spinning");
+        return;
+    }
+    Object.assign(settings, newSettings);
+    applySettingsToDom();
+    saveSettings();
+    const transaction = db.transaction(["sessions", "characters"], "readwrite");
+    const objectStore = transaction.objectStore("sessions");
+    const sessionIds = new Set(await asyncGetAllKeys(objectStore));
 
-        let processed = 0;
-        function updateProgress() {
-            processed += 1;
-            if (processed % 1000 === 0) {
-                const progress = 15 + (processed / total) * 85;
-                progressBar.style.width = `${progress}%`;
-            }
+    // Sort sessions by started date to correctly update best day stats
+    //
+    // NOTE: this assumes that the new data being imported has no common
+    // day with the existing data; this won’t handle all cases, but at
+    // least will cover the basic case of import from scratch
+    /**
+     * @param {import("./types").HistoryEntry} a
+     * @param {import("./types").HistoryEntry} b
+     */
+    function sessionCompare(a, b) {
+        return a.started.localeCompare(b.started);
+    }
+    sessions.sort(sessionCompare);
+
+    let processed = 0;
+    function updateProgress() {
+        processed += 1;
+        if (processed % 1000 === 0) {
+            const progress = 15 + (processed / total) * 85;
+            progressBar.style.width = `${progress}%`;
         }
-        // TODO: to avoid the slight pause after 15%, the loops
-        // below (and in particular the ones for characters)
-        // should be broken in chunks and scheduled with
-        // setTimeout
-        const sessionStore = transaction.objectStore("sessions");
-        for (const session of sessions) {
-            if (!sessionIds.has(session.id)) {
-                updateStats(session);
-                const request = sessionStore.put(session);
-                request.onsuccess = updateProgress;
-            }
-        }
-        const characterStore = transaction.objectStore("characters");
-        for (const character of characters) {
-            const request = characterStore.put(character);
+    }
+    // TODO: to avoid the slight pause after 15%, the loops
+    // below (and in particular the ones for characters)
+    // should be broken in chunks and scheduled with
+    // setTimeout
+    const sessionStore = transaction.objectStore("sessions");
+    for (const session of sessions) {
+        if (!sessionIds.has(session.id)) {
+            updateStats(session);
+            const request = sessionStore.put(session);
             request.onsuccess = updateProgress;
         }
-        transaction.oncomplete = () => {
-            progressBar.style.width = "100%";
-            button.classList.remove("spinning");
-            saveStats();
-            // NOTE: render(false) will mess with the offcanvas being open
-            document.location.reload();
-        };
+    }
+    const characterStore = transaction.objectStore("characters");
+    for (const character of characters) {
+        const request = characterStore.put(character);
+        request.onsuccess = updateProgress;
+    }
+    transaction.oncomplete = () => {
+        progressBar.style.width = "100%";
+        button.classList.remove("spinning");
+        saveStats();
+        // NOTE: render(false) will mess with the offcanvas being open
+        document.location.reload();
     };
-    input.click();
 }
 
 function deleteData() {
