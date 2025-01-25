@@ -915,7 +915,7 @@ function getLastSessions(count) {
             reject("db is null");
             return;
         }
-        // IndexedBD must be a joke
+        // IndexedDB must be a joke
         const transaction = db.transaction("sessions");
         const objectStore = transaction.objectStore("sessions");
         const index = objectStore.index("started");
@@ -1010,7 +1010,7 @@ function t(key) {
 /** Get an HTML element by id and throw if it does not exist
  *  @template T
  *  @param {string} id - The element’s id
- *  @param {new() => T} type - The type of HTML ELement
+ *  @param {new() => T} type - The type of HTML Element
  *  @return {T} - The element
  */
 function getElement(id, type) {
