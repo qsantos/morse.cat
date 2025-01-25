@@ -1833,22 +1833,18 @@ function importData() {
         // below (and in particular the ones for characters)
         // should be broken in chunks and scheduled with
         // setTimeout
-        {
-            const objectStore = transaction.objectStore("sessions");
-            for (const session of sessions) {
-                if (!sessionIds.has(session.id)) {
-                    updateStats(session);
-                    const request = objectStore.put(session);
-                    request.onsuccess = updateProgress;
-                }
-            }
-        }
-        {
-            const objectStore = transaction.objectStore("characters");
-            for (const character of characters) {
-                const request = objectStore.put(character);
+        const sessionStore = transaction.objectStore("sessions");
+        for (const session of sessions) {
+            if (!sessionIds.has(session.id)) {
+                updateStats(session);
+                const request = sessionStore.put(session);
                 request.onsuccess = updateProgress;
             }
+        }
+        const characterStore = transaction.objectStore("characters");
+        for (const character of characters) {
+            const request = characterStore.put(character);
+            request.onsuccess = updateProgress;
         }
         transaction.oncomplete = () => {
             progressBar.style.width = "100%";
