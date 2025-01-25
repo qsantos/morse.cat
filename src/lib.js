@@ -40,7 +40,7 @@ const defaultSettings = {
 };
 
 const defaultStats = {
-    updated: new Date(),
+    updated: new Date(0),
     lastSessionStarted: "",
     elapsed: {
         lastSession: 0,
@@ -1341,8 +1341,6 @@ function updateStat(stat, amount, updateLastSession, updateToday) {
     }
     if (updateToday) {
         stat.currentDay += amount;
-        // TODO: does not work when importing, since best day can be different
-        // from current day; also, order of sessions is not guaranteed
         stat.bestDay = Math.max(stat.bestDay, stat.currentDay);
     }
     stat.bestSession = Math.max(stat.bestSession, amount);
@@ -1787,6 +1785,21 @@ function importData() {
         const transaction = db.transaction(["sessions"]);
         const objectStore = transaction.objectStore("sessions");
         const request = objectStore.getAllKeys();
+
+        // Sort sessions by started date to correctly update best day stats
+        //
+        // NOTE: this assumes that the new data being imported has no common
+        // day with the existing data; this won’t handle all cases, but at
+        // least will cover the basic case of import from scratch
+        /**
+         * @param {import("./types").HistoryEntry} a
+         * @param {import("./types").HistoryEntry} b
+         */
+        function sessionCompare(a, b) {
+            return a.started.localeCompare(b.started);
+        }
+        sessions.sort(sessionCompare);
+
         transaction.oncomplete = () => {
             const sessionIds = new Set(request.result);
             if (!db) {
@@ -1812,6 +1825,7 @@ function importData() {
                 for (const session of sessions) {
                     if (!sessionIds.has(session.id)) {
                         updateStats(session);
+                        detectNewDay(new Date(session.finished));
                         const request = objectStore.put(session);
                         request.onsuccess = updateProgress;
                     }
@@ -1827,7 +1841,6 @@ function importData() {
             transaction.oncomplete = () => {
                 progressBar.style.width = "100%";
                 button.classList.remove("spinning");
-                detectNewDay(new Date());
                 saveStats();
                 // NOTE: render(false) will mess with the offcanvas being open
                 document.location.reload();
