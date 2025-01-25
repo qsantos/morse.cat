@@ -1508,8 +1508,8 @@ function stopSession(sent, userInput) {
 
     getElement("current-session", HTMLTextAreaElement).setAttribute("readonly", "");
     saveSession(session);
+    detectNewDay(sessionStart);
     updateStats(session);
-    detectNewDay(now);
     saveStats();
 
     render(true);
@@ -1824,8 +1824,8 @@ function importData() {
                 const objectStore = transaction.objectStore("sessions");
                 for (const session of sessions) {
                     if (!sessionIds.has(session.id)) {
+                        detectNewDay(new Date(session.started));
                         updateStats(session);
-                        detectNewDay(new Date(session.finished));
                         const request = objectStore.put(session);
                         request.onsuccess = updateProgress;
                     }
