@@ -1733,9 +1733,7 @@ function importData() {
     input.type = "file";
     input.accept = ".json.gz";
     input.oninput = async (event) => {
-        /** @type {HTMLInputElement | null} */
-        // @ts-ignore
-        const element = event.target;
+        const element = /** @type {HTMLInputElement | null} */ (event.target);
         const file = element?.files?.[0];
         if (!file) {
             return;
