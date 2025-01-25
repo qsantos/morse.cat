@@ -1917,6 +1917,11 @@ async function importDataOnInput(event) {
         sessionStore.put(newSession);
         newSessionsIndex += 1;
     }
+    while (existingSessionsIndex < existingSessions.length) {
+        const existingSession = /** @type {import("./types").HistoryEntry} */ (existingSessions[existingSessionsIndex]);
+        updateStats(existingSession);
+        existingSessionsIndex += 1;
+    }
 
     // Filter out characters that are already in the database
     // NOTE: since we are using a transaction, if a session has been
