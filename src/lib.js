@@ -905,6 +905,21 @@ function saveCharacter(character) {
     objectStore.add(character);
 }
 
+/** Async version of objectStore.getAll()
+ *
+ * @param {IDBObjectStore} objectStore
+ * @return {Promise<any[]>}
+ */
+function asyncGetAll(objectStore) {
+    return new Promise((resolve, reject) => {
+        const request = objectStore.getAll();
+        request.onsuccess = () => {
+            resolve(request.result);
+        };
+        request.onerror = reject;
+    });
+}
+
 /**
  * @param {number} count
  * @return {Promise<import("./types").HistoryEntry[]>}
