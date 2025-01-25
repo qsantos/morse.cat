@@ -931,6 +931,21 @@ function asyncGetAll(objectStore) {
     });
 }
 
+/** Async version of objectStore.getAllKeys()
+ *
+ * @param {IDBObjectStore} objectStore
+ * @return {Promise<any[]>}
+ */
+function asyncGetAllKeys(objectStore) {
+    return new Promise((resolve, reject) => {
+        const request = objectStore.getAllKeys();
+        request.onsuccess = () => {
+            resolve(request.result);
+        };
+        request.onerror = reject;
+    });
+}
+
 /**
  * @param {number} count
  * @return {Promise<import("./types").HistoryEntry[]>}
