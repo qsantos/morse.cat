@@ -1332,17 +1332,14 @@ function saveStats() {
  *  @param {import("./types").Stat} stat - The stat to be increased
  *  @param {number} amount - The amount by which the stat should be increased
  *  @param {boolean} updateLastSession - Whether the last session should be updated
- *  @param {boolean} updateToday - Whether the current day should be updated
  */
-function updateStat(stat, amount, updateLastSession, updateToday) {
+function updateStat(stat, amount, updateLastSession) {
     stat.total += amount;
     if (updateLastSession) {
         stat.lastSession = amount;
     }
-    if (updateToday) {
-        stat.currentDay += amount;
-        stat.bestDay = Math.max(stat.bestDay, stat.currentDay);
-    }
+    stat.currentDay += amount;
+    stat.bestDay = Math.max(stat.bestDay, stat.currentDay);
     stat.bestSession = Math.max(stat.bestSession, amount);
 }
 
@@ -1355,11 +1352,10 @@ function updateStats(session) {
     if (updateLastSession) {
         stats.lastSessionStarted = session.started;
     }
-    const updateToday = session.started.slice(0, 10) === stats.updated.toISOString().slice(0, 10);
-    updateStat(stats.elapsed, session.elapsed, updateLastSession, updateToday);
-    updateStat(stats.copiedCharacters, session.copiedCharacters, updateLastSession, updateToday);
-    updateStat(stats.copiedGroups, session.copiedGroups, updateLastSession, updateToday);
-    updateStat(stats.score, session.score, updateLastSession, updateToday);
+    updateStat(stats.elapsed, session.elapsed, updateLastSession);
+    updateStat(stats.copiedCharacters, session.copiedCharacters, updateLastSession);
+    updateStat(stats.copiedGroups, session.copiedGroups, updateLastSession);
+    updateStat(stats.score, session.score, updateLastSession);
 }
 
 /** Compute the duration of a character with the current settings
