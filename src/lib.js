@@ -1872,13 +1872,13 @@ async function importDataOnInput(event) {
         document.location.reload();
     };
     const sessionStore = transaction.objectStore("sessions");
-    const sessionIds = new Set(await asyncGetAllKeys(sessionStore));
+    const existingSessionIds = new Set(await asyncGetAllKeys(sessionStore));
 
     /** @type {import("./types").HistoryEntry[] | null} */
     const existingSessions = await asyncGetAll(sessionStore);
 
     // Only keep new sessions
-    inplaceFilter(newSessions, (session) => !sessionIds.has(session.id));
+    inplaceFilter(newSessions, (session) => !existingSessionIds.has(session.id));
 
     // Sort sessions by started date to correctly update best day stats
     /**
@@ -1926,7 +1926,7 @@ async function importDataOnInput(event) {
     // Filter out characters that are already in the database
     // NOTE: since we are using a transaction, if a session has been
     // imported, so should all its associated characters
-    inplaceFilter(characters, (character) => !sessionIds.has(character.sessionId));
+    inplaceFilter(characters, (character) => !existingSessionIds.has(character.sessionId));
 
     // Import characters into IndexedDB
     const characterStore = transaction.objectStore("characters");
