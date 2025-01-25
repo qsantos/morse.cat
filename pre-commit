@@ -11,6 +11,11 @@ TEMPDIR=$(mktemp -d)
 trap "rm -rf $TEMPDIR" EXIT SIGHUP SIGINT SIGQUIT SIGTERM
 git checkout-index --prefix=$TEMPDIR/ -af
 
+# keep using the same node_modules/ directory, not a new one in the temporary
+# directory this avoids re-parsing everything from scratch every time we run
+# the script
+GIT_ROOT=$(git rev-parse --show-toplevel)
+
 # prevent committing any file with a "NOCOMMIT" marker
 if git diff --cached --diff-filter=AM -- ':!pre-commit' | grep -C3 'NOCOMMIT' --color; then
     echo "Commit contains NOCOMMIT markers. Aborting commit."
@@ -19,5 +24,5 @@ fi
 
 # lint
 if ! git diff --cached --name-only --diff-filter=AM --quiet -- src/lib.js; then
-    npm run lint
+    (cd $TEMPDIR; ln -sf $GIT_ROOT/node_modules node_modules; npm run lint)
 fi
