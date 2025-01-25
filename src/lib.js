@@ -1690,45 +1690,30 @@ function saveFile(data, filename) {
     }, 0);
 }
 
-function exportData() {
+async function exportData() {
     if (!db) {
         return;
     }
 
+    // show spinner
     const button = getElement("export-button", HTMLButtonElement);
     button.classList.add("spinning");
 
+    // get data from IndexedDB
     const transaction = db.transaction(["sessions", "characters"]);
-    /** @type {import("./types").HistoryEntry[] | null} */
-    let sessions = null;
-    /** @type {import("./types").TransmittedCharacter[] | null} */
-    let characters = null;
-    async function exportAsJsonWhenReady() {
-        if (!sessions || !characters) {
-            return;
-        }
-        const data = JSON.stringify({ sessions, characters, settings });
-        const blob = new Blob([data]);
-        const compressed = await compressBlob(blob);
-        saveFile(compressed, "morse-cat-data.json.gz");
-        button.classList.remove("spinning");
-    }
-    {
-        const objectStore = transaction.objectStore("sessions");
-        const request = objectStore.getAll();
-        request.onsuccess = () => {
-            sessions = request.result;
-            exportAsJsonWhenReady();
-        };
-    }
-    {
-        const objectStore = transaction.objectStore("characters");
-        const request = objectStore.getAll();
-        request.onsuccess = () => {
-            characters = request.result;
-            exportAsJsonWhenReady();
-        };
-    }
+    /** @type {import("./types").HistoryEntry[]} */
+    const sessions = await asyncGetAll(transaction.objectStore("sessions"));
+    /** @type {import("./types").TransmittedCharacter[]} */
+    const characters = await asyncGetAll(transaction.objectStore("characters"));
+
+    // export to compressed JSON file
+    const data = JSON.stringify({ sessions, characters, settings });
+    const blob = new Blob([data]);
+    const compressed = await compressBlob(blob);
+    saveFile(compressed, "morse-cat-data.json.gz");
+
+    // hide spinner
+    button.classList.remove("spinning");
 }
 
 /**
