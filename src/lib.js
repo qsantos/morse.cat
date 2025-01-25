@@ -1795,8 +1795,6 @@ async function importDataOnInput(event) {
     }
 
     // Parse JSON data
-    progressBar.style.width = "5%";
-    await sleep(100);
     let j;
     try {
         j = JSON.parse(data);
@@ -1805,16 +1803,12 @@ async function importDataOnInput(event) {
         button.classList.remove("spinning");
         return;
     }
+    progressBar.style.width = "5%";
+    // Yield control to the main thread to let the progress bar animation render
+    await sleep(100);
 
     // Extract sessions, characters, and settings
     const { sessions, characters, settings: newSettings } = j;
-    progressBar.style.width = "10%";
-    await sleep(100);
-
-    // Measure total work that needs to be done
-    const total = sessions.length + characters.length;
-    progressBar.style.width = "15%";
-    await sleep(100);
 
     // Load settings
     Object.assign(settings, newSettings);
@@ -1841,10 +1835,11 @@ async function importDataOnInput(event) {
     sessions.sort(sessionCompare);
 
     let processed = 0;
+    const total = sessions.length + characters.length;
     function updateProgress() {
         processed += 1;
         if (processed % 1000 === 0) {
-            const progress = 15 + (processed / total) * 85;
+            const progress = 5 + (processed / total) * 95;
             progressBar.style.width = `${progress}%`;
         }
     }
