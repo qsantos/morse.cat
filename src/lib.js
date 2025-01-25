@@ -845,32 +845,36 @@ const translations = {
 
 /** @return {Promise<undefined>} */
 function prepareDB() {
+    /** @param {IDBVersionChangeEvent} event */
+    function onVersionChange(event) {
+        const request = /** @type {IDBOpenDBRequest} */ (event.target);
+        const db = request.result;
+        if (event.oldVersion === 0) {
+            // create object stores
+            const sessionsStore = db.createObjectStore("sessions", { keyPath: "id" });
+            sessionsStore.createIndex("started", "started");
+            db.createObjectStore("characters", { keyPath: "id" });
+        }
+        if (event.oldVersion <= 1) {
+            // rename copiedWords to copiedGroups
+            const transaction = request.transaction;
+            if (!transaction) {
+                return;
+            }
+            const objectStore = transaction.objectStore("sessions");
+            asyncGetAll(objectStore).then((sessions) => {
+                for (const session of sessions) {
+                    session.copiedGroups = session.copiedWords;
+                    delete session.copiedWords;
+                    objectStore.put(session);
+                }
+            });
+        }
+    }
     return new Promise((resolve, reject) => {
         const request = indexedDB.open("morse.cat", 2);
-        request.onerror = () => {
-            reject(t("error.database.open"));
-        };
-        request.onupgradeneeded = (event) => {
-            const db = request.result;
-            if (event.oldVersion === 0) {
-                const sessionsStore = db.createObjectStore("sessions", { keyPath: "id" });
-                sessionsStore.createIndex("started", "started");
-                db.createObjectStore("characters", { keyPath: "id" });
-            }
-            if (event.oldVersion <= 1) {
-                // @ts-ignore
-                const transaction = event.target.transaction;
-                const objectStore = transaction.objectStore("sessions");
-                const request = objectStore.getAll();
-                request.onsuccess = () => {
-                    for (const session of request.result) {
-                        session.copiedGroups = session.copiedWords;
-                        delete session.copiedWords;
-                        objectStore.put(session);
-                    }
-                };
-            }
-        };
+        request.onerror = () => reject(t("error.database.open"));
+        request.onupgradeneeded = onVersionChange;
         request.onsuccess = () => {
             db = request.result;
             resolve(undefined);
