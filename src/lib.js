@@ -1398,6 +1398,17 @@ function updateStats(session) {
     updateStat(stats.score, session.score, now);
 }
 
+/**
+ *  @param {import("./types").HistoryEntry[]} sessions
+ */
+function recomputeStats(sessions) {
+    sessions.sort((a, b) => a.started.localeCompare(b.started));
+    Object.assign(stats, defaultStats);
+    for (const session of sessions) {
+        updateStats(session);
+    }
+}
+
 /** Compute the duration of a character with the current settings
  *  @param {string} c - The character
  *  @param {number} [wpm] - Length of a dot in seconds
@@ -1888,22 +1899,9 @@ async function importDataOnInput(event) {
         sessionStore.put(newSession);
     }
 
-    // Sort sessions by started date to correctly update stats
-    /**
-     * @param {import("./types").HistoryEntry} a
-     * @param {import("./types").HistoryEntry} b
-     */
-    function sessionCompare(a, b) {
-        return a.started.localeCompare(b.started);
-    }
-    const sessions = existingSessions.concat(newSessions);
-    sessions.sort(sessionCompare);
-
     // Recompute stats
-    Object.assign(stats, defaultStats);
-    for (const session of sessions) {
-        updateStats(session);
-    }
+    const sessions = existingSessions.concat(newSessions);
+    recomputeStats(sessions);
 
     // Filter out characters that are already in the database
     // NOTE: since we are using a transaction, if a session has been
