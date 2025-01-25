@@ -924,9 +924,7 @@ function saveCharacter(character) {
 function asyncGetAll(objectStore) {
     return new Promise((resolve, reject) => {
         const request = objectStore.getAll();
-        request.onsuccess = () => {
-            resolve(request.result);
-        };
+        request.onsuccess = () => resolve(request.result);
         request.onerror = reject;
     });
 }
@@ -939,9 +937,7 @@ function asyncGetAll(objectStore) {
 function asyncGetAllKeys(objectStore) {
     return new Promise((resolve, reject) => {
         const request = objectStore.getAllKeys();
-        request.onsuccess = () => {
-            resolve(request.result);
-        };
+        request.onsuccess = () => resolve(request.result);
         request.onerror = reject;
     });
 }
