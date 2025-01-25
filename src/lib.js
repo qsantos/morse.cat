@@ -1832,8 +1832,7 @@ function importData() {
         // TODO: to avoid the slight pause after 15%, the loops
         // below (and in particular the ones for characters)
         // should be broken in chunks and scheduled with
-        // setTimeout; note that the commit should only happen
-        // once all the elements have been scheduled for put
+        // setTimeout
         {
             const objectStore = transaction.objectStore("sessions");
             for (const session of sessions) {
@@ -1858,7 +1857,6 @@ function importData() {
             // NOTE: render(false) will mess with the offcanvas being open
             document.location.reload();
         };
-        transaction.commit();
     };
     input.click();
 }
