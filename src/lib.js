@@ -1858,8 +1858,12 @@ async function importDataOnInput(event) {
     // broken in chunks and scheduled with setTimeout
     const characterStore = transaction.objectStore("characters");
     for (const character of characters) {
-        const request = characterStore.put(character);
-        request.onsuccess = updateProgress;
+        // NOTE: since we are using a transaction, if a session has been
+        // imported, so should all its associated characters
+        if (!sessionIds.has(character.sessionId)) {
+            const request = characterStore.put(character);
+            request.onsuccess = updateProgress;
+        }
     }
     transaction.oncomplete = () => {
         progressBar.style.width = "100%";
