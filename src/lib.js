@@ -21,7 +21,6 @@ let infoMessage = "";
 let infoMessageParams = undefined;
 /** @type {Date} */
 let sessionStart;
-let sessionDurationUpdater = 0;
 
 /** @type {keyof typeof translations} */
 let activeLanguage = "en";
@@ -1437,7 +1436,6 @@ function startSession() {
     inSession = true;
     sessionId = crypto.randomUUID();
     sessionStart = now;
-    sessionDurationUpdater = setInterval(refreshStatistics, 1000);
     cwPlayer.setWpm(settings.wpm);
     cwPlayer.setEff(settings.wpm);
     cwPlayer.setFreq(settings.tone);
@@ -1485,8 +1483,6 @@ function stopSession(sent, userInput) {
     cwPlayer.stop();
     inSession = false;
     cwPlayer.onFinished = undefined;
-    clearInterval(sessionDurationUpdater);
-    sessionDurationUpdater = 0;
 
     const elapsed = Math.round((now.getTime() - sessionStart.getTime()) / 1000);
     const session = {
