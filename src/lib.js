@@ -876,6 +876,13 @@ function prepareDB() {
         request.onerror = () => reject(t("error.database.open"));
         request.onupgradeneeded = onVersionChange;
         request.onsuccess = () => {
+            // NOTE: This has a race condition, since onVersionChange needs to
+            // use IndexedDB’s callback-based API to update anything. Thus, the
+            // upgrade might not have fully completed when this promise
+            // returns. Hopefully, this will not cause too many issues. I am
+            // unclear whether IndexedDB “transactions” would actually prevent
+            // any other reader from seeing not-yet-upgraded data. Anyway,
+            // this is yet another great feature from IndexedDB.
             db = request.result;
             resolve(undefined);
         };
