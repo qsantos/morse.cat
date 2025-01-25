@@ -1835,11 +1835,10 @@ function importData() {
 
 function deleteData() {
     indexedDB.deleteDatabase("morse.cat");
+    localStorage.clear();
     Object.assign(settings, defaultSettings);
     applySettingsToDom();
-    saveSettings();
     Object.assign(stats, defaultStats);
-    refreshStatistics();
     // NOTE: render(false) will mess with the offcanvas being open
     document.location.reload();
 }
