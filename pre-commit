@@ -25,8 +25,7 @@ fi
 # lint
 if ! git diff --cached --name-only --diff-filter=AM --quiet -- src/lib.js; then
     if ! [ -e node_modules ]; then
-        echo -e "\033[1;31mERROR:\033[m node_modules/ not found. Run 'npm ci' first."
-        exit 1
+        npm ci
     fi
     (cd $TEMPDIR; ln -sf $GIT_ROOT/node_modules node_modules; npm run lint)
 fi
