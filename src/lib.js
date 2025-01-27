@@ -1731,6 +1731,8 @@ async function exportData() {
         return;
     }
 
+    const now = new Date();
+
     // show spinner
     const button = getElement("export-button", HTMLButtonElement);
     button.classList.add("spinning");
@@ -1746,7 +1748,7 @@ async function exportData() {
     const data = JSON.stringify({ sessions, characters, settings });
     const blob = new Blob([data]);
     const compressed = await compressBlob(blob);
-    saveFile(compressed, "morse-cat-data.json.gz");
+    saveFile(compressed, `morse-cat-data-${now.toISOString()}.json.gz`);
 
     // hide spinner
     button.classList.remove("spinning");
