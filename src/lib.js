@@ -39,41 +39,22 @@ const defaultSettings = {
     session_debounce_time: 1,
 };
 
+const defaultStat = {
+    lastSession: 0,
+    bestSession: 0,
+    currentDay: 0,
+    bestDay: 0,
+    bestDayDate: "-",
+    total: 0,
+};
+
 const defaultStats = {
     updated: new Date(0),
     lastSessionStarted: "",
-    elapsed: {
-        lastSession: 0,
-        bestSession: 0,
-        currentDay: 0,
-        bestDay: 0,
-        bestDayDate: "-",
-        total: 0,
-    },
-    copiedCharacters: {
-        lastSession: 0,
-        bestSession: 0,
-        currentDay: 0,
-        bestDay: 0,
-        bestDayDate: "-",
-        total: 0,
-    },
-    copiedGroups: {
-        lastSession: 0,
-        bestSession: 0,
-        currentDay: 0,
-        bestDay: 0,
-        bestDayDate: "-",
-        total: 0,
-    },
-    score: {
-        lastSession: 0,
-        bestSession: 0,
-        currentDay: 0,
-        bestDay: 0,
-        bestDayDate: "-",
-        total: 0,
-    },
+    elapsed: defaultStat,
+    copiedCharacters: defaultStat,
+    copiedGroups: defaultStat,
+    score: defaultStat,
 };
 
 const stats = readStats();
