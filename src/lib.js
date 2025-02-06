@@ -29,6 +29,7 @@ let activeLanguage = "en";
 const cwPlayer = new jscw();
 cwPlayer.q = 13;
 
+/** @type {import("./types").Settings} */
 const defaultSettings = Object.freeze({
     wpm: 20,
     tone: 600,
@@ -39,6 +40,7 @@ const defaultSettings = Object.freeze({
     session_debounce_time: 1,
 });
 
+/** @type {import("./types").Stat} */
 const defaultStat = Object.freeze({
     lastSession: 0,
     bestSession: 0,
@@ -48,6 +50,7 @@ const defaultStat = Object.freeze({
     total: 0,
 });
 
+/** @type {import("./types").Stats} */
 const defaultStats = Object.freeze({
     updated: new Date(0),
     lastSessionStarted: "",
