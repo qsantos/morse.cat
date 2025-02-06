@@ -57,15 +57,15 @@ const defaultStats = Object.freeze({
     score: defaultStat,
 });
 
-const stats = readStats();
+let stats = readStats();
 
 /** @type{import("./types").Settings} */
-const settings = (() => {
+let settings = (() => {
     try {
         const settings = JSON.parse(localStorage.getItem("settings") || "");
         return settings;
     } catch (e) {
-        return Object.assign({}, defaultSettings);
+        return structuredClone(defaultSettings);
     }
 })();
 
@@ -976,7 +976,7 @@ function readStats() {
         stats.updated = new Date(stats.updated);
         return stats;
     }
-    return Object.assign({}, defaultStats);
+    return structuredClone(defaultStats);
 }
 
 /**
@@ -1384,7 +1384,7 @@ function updateStats(session) {
  */
 function recomputeStats(sessions) {
     sessions.sort((a, b) => a.started.localeCompare(b.started));
-    Object.assign(stats, defaultStats);
+    stats = structuredClone(defaultStats);
     for (const session of sessions) {
         updateStats(session);
     }
@@ -1852,7 +1852,7 @@ async function importDataOnInput(event) {
     const { sessions: newSessions, characters, settings: newSettings } = j;
 
     // Load settings
-    Object.assign(settings, newSettings);
+    settings = newSettings;
     applySettingsToDom();
     saveSettings();
 
