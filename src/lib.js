@@ -29,7 +29,7 @@ let activeLanguage = "en";
 const cwPlayer = new jscw();
 cwPlayer.q = 13;
 
-const defaultSettings = {
+const defaultSettings = Object.freeze({
     wpm: 20,
     tone: 600,
     error_tone: 200,
@@ -37,25 +37,25 @@ const defaultSettings = {
     max_group_size: 5,
     charset: lcwoLessons,
     session_debounce_time: 1,
-};
+});
 
-const defaultStat = {
+const defaultStat = Object.freeze({
     lastSession: 0,
     bestSession: 0,
     currentDay: 0,
     bestDay: 0,
     bestDayDate: "-",
     total: 0,
-};
+});
 
-const defaultStats = {
+const defaultStats = Object.freeze({
     updated: new Date(0),
     lastSessionStarted: "",
     elapsed: defaultStat,
     copiedCharacters: defaultStat,
     copiedGroups: defaultStat,
     score: defaultStat,
-};
+});
 
 const stats = readStats();
 
