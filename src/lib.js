@@ -54,10 +54,10 @@ const defaultStat = Object.freeze({
 const defaultStats = Object.freeze({
     updated: new Date(0),
     lastSessionStarted: "",
-    elapsed: defaultStat,
-    copiedCharacters: defaultStat,
-    copiedGroups: defaultStat,
-    score: defaultStat,
+    elapsed: structuredClone(defaultStat),
+    copiedCharacters: structuredClone(defaultStat),
+    copiedGroups: structuredClone(defaultStat),
+    score: structuredClone(defaultStat),
 });
 
 let stats = readStats();
