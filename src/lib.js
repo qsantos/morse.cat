@@ -44,6 +44,7 @@ const defaultSettings = Object.freeze({
 const defaultStat = Object.freeze({
     lastSession: 0,
     bestSession: 0,
+    bestSessionDate: "-",
     currentDay: 0,
     bestDay: 0,
     bestDayDate: "-",
@@ -1366,7 +1367,10 @@ function updateStat(stat, amount, now) {
         stat.bestDay = stat.currentDay;
         stat.bestDayDate = now.toISOString().slice(0, 10);
     }
-    stat.bestSession = Math.max(stat.bestSession, amount);
+    if (amount > stat.bestSession) {
+        stat.bestSession = amount;
+        stat.bestSessionDate = now.toISOString().slice(0, 10);
+    }
 }
 
 /**

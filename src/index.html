@@ -140,6 +140,13 @@
                             <td>${stats.score.bestSession.toLocaleString(lang)}</td>
                         </tr>
                         <tr>
+                            <th scope="row"></th>
+                            <td>${stats.elapsed.bestSessionDate}</td>
+                            <td>${stats.copiedCharacters.bestSessionDate}</td>
+                            <td>${stats.copiedGroups.bestSessionDate}</td>
+                            <td>${stats.score.bestSessionDate}</td>
+                        </tr>
+                        <tr>
                             <th scope="row">${t('stats.currentDay')}</th>
                             <td>${stats.elapsed.currentDay.toLocaleString(lang)}${t('secondsSuffix')}</td>
                             <td>${stats.copiedCharacters.currentDay.toLocaleString(lang)}</td>

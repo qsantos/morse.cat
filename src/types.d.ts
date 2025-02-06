@@ -1,6 +1,7 @@
 export type Stat = {
     lastSession: number,
     bestSession: number,
+    bestSessionDate: string,
     currentDay: number,
     bestDay: number,
     bestDayDate: string,
