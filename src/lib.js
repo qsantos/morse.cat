@@ -1270,7 +1270,7 @@ function renderInfoMessage() {
 
 /**
  * @param {keyof typeof translations.en | ""} message
- * @param {{[key: string]: string}=} params
+ * @param {{[key: string]: string}} [params]
  */
 function setInfoMessage(message, params) {
     infoMessage = message;
