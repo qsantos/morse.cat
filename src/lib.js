@@ -1922,7 +1922,8 @@ function onCurrentSessionBlur() {
     }
 }
 
-function main() {
+async function main() {
+    await Promise.all([whenDomReady(), prepareDB()]);
     cwPlayer.onLampOff = () => {
         getElement("nose", SVGElement).style.fill = "#E75A70";
     };
@@ -1947,4 +1948,4 @@ function whenDomReady() {
     });
 }
 
-Promise.all([whenDomReady(), prepareDB()]).then(main).catch(alert);
+main().catch(alert);
