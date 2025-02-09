@@ -1904,7 +1904,9 @@ async function importDataOnInput(event) {
     let processed = 0;
     nonBlockingPuts(characterStore, characters, () => {
         processed += 1;
-        progressBar.style.width = `${5 + (processed / toProcess) * 95}%`;
+        if (processed % 1000 === 0) {
+            progressBar.style.width = `${5 + (processed / toProcess) * 95}%`;
+        }
     });
 }
 
