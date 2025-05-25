@@ -1924,6 +1924,26 @@ function onCurrentSessionBlur() {
     }
 }
 
+// NOTE:
+// When exiting the page in the middle of session, stopSession() schedules a
+// future to save the current session to IndexedDB. However, the page will be
+// closed before the future is executed. Asking for confirmation delays that
+// enough to save the session.
+//
+// This is not great as a user experience, but it is the simplest way to
+// address this problem.
+//
+// A better fix would be to save the session to localStorage, and move it to
+// IndexedDB on next page load.
+function onPageExit() {
+    if (inSession) {
+        stopSession();
+        return "Sure?";
+    }
+    return null;
+}
+window.onbeforeunload = onPageExit;
+
 async function main() {
     await Promise.all([whenDomReady(), prepareDB()]);
     cwPlayer.onLampOff = () => {
