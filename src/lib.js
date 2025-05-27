@@ -885,6 +885,7 @@ function saveSession(session) {
     if (!db) {
         return;
     }
+    localStorage.setItem("lastSession", JSON.stringify(session));
     const transaction = db.transaction(["sessions"], "readwrite");
     const objectStore = transaction.objectStore("sessions");
     objectStore.add(session);
