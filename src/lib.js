@@ -1962,6 +1962,26 @@ async function main() {
     };
     detectNewDay(new Date()); // clears “Today” row in stats on first page load of the day
     setLanguage(getPreferredLanguage());
+
+    if (!db) {
+        return;
+    }
+    const lastSessionJson = localStorage.getItem("lastSession");
+    if (lastSessionJson) {
+        try {
+            const lastSession = JSON.parse(lastSessionJson);
+            const transaction = db.transaction(["sessions"], "readwrite");
+            const objectStore = transaction.objectStore("sessions");
+            objectStore.add(lastSession);
+            transaction.oncomplete = () => {
+                localStorage.removeItem("lastSession");
+                console.info("Last session restored from localStorage");
+                render(false);
+            };
+        } catch (e) {
+            console.warn("Failed to parse last session", e);
+        }
+    }
 }
 
 /**
