@@ -25,9 +25,28 @@ let sessionStart;
 /** @type {keyof typeof translations} */
 let activeLanguage = "en";
 
-// @ts-ignore
-const cwPlayer = new jscw();
-cwPlayer.q = 13;
+/** @type {any} */
+let cwPlayer = null;
+
+// NOTE: this function must only be called after a user action, since jscw()
+// will create an AudioContext; the player does recover from that, but this
+// generates a warning
+function initCwPlayer() {
+    // @ts-ignore
+    if (cwPlayer !== null) {
+        return;
+    }
+    // @ts-ignore
+    cwPlayer = new jscw();
+    cwPlayer.q = 13;
+    cwPlayer.onLampOff = () => {
+        getElement("nose", SVGElement).style.fill = "#E75A70";
+    };
+    cwPlayer.onLampOn = () => {
+        getElement("nose", SVGElement).style.fill = "yellow";
+    };
+    cwPlayer.onCharacterPlay = onCharacterPlay;
+}
 
 /** @type {import("./types").Settings} */
 const defaultSettings = Object.freeze({
@@ -1473,7 +1492,6 @@ function startSession() {
         setInfoMessage("info.emptyCharset");
         return;
     }
-    pushGroup();
     played.length = 0;
     copiedText = "";
     copiedCharacters = 0;
@@ -1482,10 +1500,12 @@ function startSession() {
     inSession = true;
     sessionId = crypto.randomUUID();
     sessionStart = now;
+    initCwPlayer();
     cwPlayer.setWpm(settings.wpm);
     cwPlayer.setEff(settings.wpm);
     cwPlayer.setFreq(settings.tone);
     cwPlayer.onFinished = onFinished;
+    pushGroup();
     cwPlayer.play();
     setInfoMessage("");
     const textarea = getElement("current-session", HTMLTextAreaElement);
@@ -1652,7 +1672,7 @@ function onKeyDown(event) {
 /** Event handler for when a character has been fully played
  *  @param {{c: string}} c - The character played
  */
-cwPlayer.onCharacterPlay = (c) => {
+function onCharacterPlay(c) {
     if (!inSession) {
         return;
     }
@@ -1674,7 +1694,7 @@ cwPlayer.onCharacterPlay = (c) => {
         fail();
         setInfoMessage("info.tooSlow");
     }
-};
+}
 
 /**
  *  @param {Blob} blob
@@ -1934,12 +1954,6 @@ function onCurrentSessionBlur() {
 
 async function main() {
     await Promise.all([whenDomReady(), prepareDB()]);
-    cwPlayer.onLampOff = () => {
-        getElement("nose", SVGElement).style.fill = "#E75A70";
-    };
-    cwPlayer.onLampOn = () => {
-        getElement("nose", SVGElement).style.fill = "yellow";
-    };
     detectNewDay(new Date()); // clears “Today” row in stats on first page load of the day
     setLanguage(getPreferredLanguage());
 
