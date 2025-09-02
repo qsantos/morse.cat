@@ -25,7 +25,9 @@ let sessionStart;
 /** @type {keyof typeof translations} */
 let activeLanguage = "en";
 
-/** @type {any} */
+// cwPlayer is almost always non-null, so it is more convenient to convince TypeScript so
+/** @type {MorsePlayer} */
+// @ts-ignore
 let cwPlayer = null;
 
 // NOTE: this function must only be called after a user action, since jscw()
@@ -41,13 +43,13 @@ function initCwPlayer() {
         q: 13,
         onCharacterPlayed,
         onFinished: pushGroup,
+        onOn: () => {
+            getElement("nose", SVGElement).style.fill = "#E75A70";
+        },
+        onOff: () => {
+            getElement("nose", SVGElement).style.fill = "yellow";
+        },
     });
-    cwPlayer.onLampOff = () => {
-        getElement("nose", SVGElement).style.fill = "#E75A70";
-    };
-    cwPlayer.onLampOn = () => {
-        getElement("nose", SVGElement).style.fill = "yellow";
-    };
 }
 
 /** @type {import("./types").Settings} */
@@ -1093,6 +1095,7 @@ function onSettingsChange() {
 
     if (cwPlayer !== null) {
         cwPlayer.close();
+        // @ts-ignore
         cwPlayer = null;
     }
     initCwPlayer();
@@ -1576,7 +1579,7 @@ function stopSession(sent, userInput) {
  */
 function replayAfterMistake(character) {
     cwPlayer.setOnFinishedCallback(() => {
-        cwPlayer.setOnFinishedCallback(null);
+        cwPlayer.setOnFinishedCallback(undefined);
         cwPlayer.setFrequency(settings.tone);
         if (character !== undefined) {
             cwPlayer.pushText(` ${character}`);

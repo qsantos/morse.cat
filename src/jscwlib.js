@@ -565,6 +565,8 @@ function MorsePlayer(params) {
     const volume = params?.volume || 1;
     let filterFrequency = params?.filterFrequency || frequency;
     const q = params?.q || 10;
+    const onOn = params?.onOn;
+    const onOff = params?.onOff;
     const onCharacterPlayed = params?.onCharacterPlayed;
     let onFinished = params?.onFinished;
 
@@ -610,7 +612,7 @@ function MorsePlayer(params) {
     /** @type {number | undefined} */
     let finishedTimeout = undefined;
     /** @type {number[]} */
-    const characterPlayedTimeouts = [];
+    const otherTimeouts = [];
 
     /**
      *  @param {string} rawMorse
@@ -631,13 +633,25 @@ function MorsePlayer(params) {
         for (const c of morse) {
             if (c === ".") {
                 modulationGain.gain.setValueAtTime(0.5, endTime);
+                if (onOn !== undefined) {
+                    otherTimeouts.push(setTimeout(onOn, (endTime - now) * 1000));
+                }
                 endTime += dotDuration;
                 modulationGain.gain.setValueAtTime(0, endTime);
+                if (onOff !== undefined) {
+                    otherTimeouts.push(setTimeout(onOff, (endTime - now) * 1000));
+                }
                 endTime += dotDuration; // inter-element gap
             } else if (c === "-") {
                 modulationGain.gain.setValueAtTime(0.5, endTime);
+                if (onOn !== undefined) {
+                    otherTimeouts.push(setTimeout(onOn, (endTime - now) * 1000));
+                }
                 endTime += dotDuration * 3;
                 modulationGain.gain.setValueAtTime(0, endTime);
+                if (onOff !== undefined) {
+                    otherTimeouts.push(setTimeout(onOff, (endTime - now) * 1000));
+                }
                 endTime += dotDuration; // inter-element gap
             } else if (c === " ") {
                 // short gap / letter space
@@ -670,7 +684,7 @@ function MorsePlayer(params) {
                 endTime += 7 * dotDuration;
             } else {
                 if (onCharacterPlayed !== undefined) {
-                    characterPlayedTimeouts.push(setTimeout(() => onCharacterPlayed(c), (endTime - now) * 1000));
+                    otherTimeouts.push(setTimeout(() => onCharacterPlayed(c), (endTime - now) * 1000));
                 }
                 this.push(letter_to_morse[c] || "?");
                 // short gap / letter space
@@ -682,7 +696,7 @@ function MorsePlayer(params) {
     function resetTimeouts() {
         clearTimeout(finishedTimeout);
         finishedTimeout = undefined;
-        characterPlayedTimeouts.splice(0).forEach(clearTimeout);
+        otherTimeouts.splice(0).forEach(clearTimeout);
     }
 
     this.stop = () => {
@@ -708,7 +722,7 @@ function MorsePlayer(params) {
     };
 
     /**
-     *  @param {() => void} callback
+     *  @param {(() => void) | undefined} callback
      */
     this.setOnFinishedCallback = (callback) => {
         onFinished = callback;
