@@ -74,3 +74,13 @@ export type HistoryEntry = {
 export type History = HistoryEntry[];
 
 export type HTMLFormFieldElement = HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement;
+
+export type MorsePlayerParams = {
+    wpm?: number,
+    frequency?: number,
+    volume?: number,
+    filterFrequency?: number,
+    q?: number,
+    onCharacterPlayed?: (character: string) => void,
+    onFinished?: () => void,
+};

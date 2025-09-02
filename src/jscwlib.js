@@ -6,6 +6,7 @@
 // simplified to allow playing arbitrary Morse code elements and remove all UI-related code
 
 // biome-ignore format: having two columns is very convenient here
+/** @type {{[key: string]: string}} */
 const letter_to_morse = {
     " ": " ",  // word space
 
@@ -552,6 +553,9 @@ const letter_to_morse = {
     "ء": ".",      // hamzah
 };
 
+/**
+ * @param {import("./types").MorsePlayerParams} params
+ */
 function MorsePlayer(params) {
     const audioContext = new AudioContext();
 
@@ -603,9 +607,14 @@ function MorsePlayer(params) {
     // so a dot lasts for 1.2 / wpm seconds
     const dotDuration = 1.2 / wpm;
 
-    let finishedTimeout = null;
+    /** @type {number | undefined} */
+    let finishedTimeout = undefined;
+    /** @type {number[]} */
     const characterPlayedTimeouts = [];
 
+    /**
+     *  @param {string} rawMorse
+     */
     // Example: morsePlayer.push("-- --- .-. ... . / -.-. --- -.. .");
     this.push = (rawMorse) => {
         // ignore spaces around "/"
@@ -645,6 +654,9 @@ function MorsePlayer(params) {
         }
     };
 
+    /**
+     *  @param {string} text
+     */
     this.pushText = function (text) {
         // if we are done playing stuff, start again
         const now = audioContext.currentTime;
@@ -660,7 +672,7 @@ function MorsePlayer(params) {
                 if (onCharacterPlayed !== undefined) {
                     characterPlayedTimeouts.push(setTimeout(() => onCharacterPlayed(c), (endTime - now) * 1000));
                 }
-                this.push(letter_to_morse[c]);
+                this.push(letter_to_morse[c] || "?");
                 // short gap / letter space
                 endTime += 3 * dotDuration;
             }
@@ -669,7 +681,7 @@ function MorsePlayer(params) {
 
     function resetTimeouts() {
         clearTimeout(finishedTimeout);
-        finishedTimeout = null;
+        finishedTimeout = undefined;
         characterPlayedTimeouts.splice(0).forEach(clearTimeout);
     }
 
@@ -685,6 +697,9 @@ function MorsePlayer(params) {
         audioContext.close();
     };
 
+    /**
+     *  @param {number} newFrequency
+     */
     this.setFrequency = (newFrequency) => {
         frequency = newFrequency;
         filterFrequency = newFrequency;
@@ -692,6 +707,9 @@ function MorsePlayer(params) {
         biquadFilter.frequency.setValueAtTime(filterFrequency, audioContext.currentTime);
     };
 
+    /**
+     *  @param {() => void} callback
+     */
     this.setOnFinishedCallback = (callback) => {
         onFinished = callback;
     };

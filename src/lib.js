@@ -32,11 +32,9 @@ let cwPlayer = null;
 // will create an AudioContext; the player does recover from that, but this
 // generates a warning
 function initCwPlayer() {
-    // @ts-ignore
     if (cwPlayer !== null) {
         return;
     }
-    // @ts-ignore
     cwPlayer = new MorsePlayer({
         wpm: settings.wpm,
         frequency: settings.tone,
@@ -1441,7 +1439,6 @@ function recomputeStats(sessions) {
 function characterDuration(c) {
     const dotlen = 1.2 / settings.wpm;
     let time = 0;
-    // @ts-ignore
     const elements = letter_to_morse[c] || " ";
     for (const element of elements) {
         // add duration of dots or dits
@@ -1607,8 +1604,7 @@ function characterNameWithMorse(character) {
         return `<code>${t("spaceKey")}</code>`;
     } else {
         const name = character.toUpperCase();
-        // @ts-ignore
-        const morse = letter_to_morse[character].replaceAll(".", "·").replaceAll("-", "−");
+        const morse = (letter_to_morse[character] || "").replace(/./g, "·").replace(/-/g, "−");
         return `<code>${name}</code> (<code>${morse}</code>)`;
     }
 }

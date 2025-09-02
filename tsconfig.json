@@ -25,6 +25,7 @@
         "strict": true
     },
     "files": [
+        "src/jscwlib.js",
         "src/lib.js"
     ]
 }
