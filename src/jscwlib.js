@@ -607,9 +607,9 @@ function MorsePlayer(params) {
     const characterPlayedTimeouts = [];
 
     // Example: morsePlayer.push("-- --- .-. ... . / -.-. --- -.. .");
-    this.push = function (morse) {
+    this.push = (rawMorse) => {
         // ignore spaces around "/"
-        morse = morse.replace(/\s*\/\s*/g, "/");
+        const morse = rawMorse.replace(/\s*\/\s*/g, "/");
 
         // if we are done playing stuff, start again
         const now = audioContext.currentTime;
@@ -620,20 +620,20 @@ function MorsePlayer(params) {
         // set gain to 0 or 0.5 to modulate CW
         // NOTE: use 0.5 to have the same volume as jscwlib
         for (const c of morse) {
-            if (c == ".") {
+            if (c === ".") {
                 modulationGain.gain.setValueAtTime(0.5, endTime);
                 endTime += dotDuration;
                 modulationGain.gain.setValueAtTime(0, endTime);
                 endTime += dotDuration; // inter-element gap
-            } else if (c == "-") {
+            } else if (c === "-") {
                 modulationGain.gain.setValueAtTime(0.5, endTime);
                 endTime += dotDuration * 3;
                 modulationGain.gain.setValueAtTime(0, endTime);
                 endTime += dotDuration; // inter-element gap
-            } else if (c == " ") {
+            } else if (c === " ") {
                 // short gap / letter space
                 endTime += 3 * dotDuration;
-            } else if (c == "/") {
+            } else if (c === "/") {
                 // medium gap / word space
                 endTime += 7 * dotDuration;
             }
@@ -653,7 +653,7 @@ function MorsePlayer(params) {
         }
 
         for (const c of text) {
-            if (c == " ") {
+            if (c === " ") {
                 // medium gap / word space
                 endTime += 7 * dotDuration;
             } else {
@@ -673,26 +673,26 @@ function MorsePlayer(params) {
         characterPlayedTimeouts.splice(0).forEach(clearTimeout);
     }
 
-    this.stop = function () {
+    this.stop = () => {
         endTime = 0;
         modulationGain.gain.cancelScheduledValues(audioContext.currentTime);
         modulationGain.gain.setValueAtTime(0, audioContext.currentTime);
         resetTimeouts();
     };
 
-    this.close = function () {
+    this.close = () => {
         resetTimeouts();
         audioContext.close();
     };
 
-    this.setFrequency = function (newFrequency) {
+    this.setFrequency = (newFrequency) => {
         frequency = newFrequency;
         filterFrequency = newFrequency;
         oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime);
         biquadFilter.frequency.setValueAtTime(filterFrequency, audioContext.currentTime);
     };
 
-    this.setOnFinishedCallback = function (callback) {
+    this.setOnFinishedCallback = (callback) => {
         onFinished = callback;
     };
 }
