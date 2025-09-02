@@ -37,15 +37,19 @@ function initCwPlayer() {
         return;
     }
     // @ts-ignore
-    cwPlayer = new jscw();
-    cwPlayer.q = 13;
+    cwPlayer = new MorsePlayer({
+        wpm: settings.wpm,
+        frequency: settings.tone,
+        q: 13,
+        onCharacterPlayed,
+        onFinished: pushGroup,
+    });
     cwPlayer.onLampOff = () => {
         getElement("nose", SVGElement).style.fill = "#E75A70";
     };
     cwPlayer.onLampOn = () => {
         getElement("nose", SVGElement).style.fill = "yellow";
     };
-    cwPlayer.onCharacterPlay = onCharacterPlay;
 }
 
 /** @type {import("./types").Settings} */
@@ -994,7 +998,7 @@ function getLastSessions(count) {
 function pushGroup() {
     const groupLength = randint(settings.min_group_size, settings.max_group_size);
     const group = choices(settings.charset, groupLength).join("");
-    cwPlayer.setText(` ${group}`);
+    cwPlayer.pushText(` ${group}`);
 }
 
 /** Load the stats from the local storage
@@ -1088,6 +1092,12 @@ function onSettingsChange() {
     settings.charset = getElement("settings-charset", HTMLTextAreaElement).value;
     settings.session_debounce_time = Number.parseFloat(getElement("settings-session-debounce-time", HTMLInputElement).value);
     saveSettings();
+
+    if (cwPlayer !== null) {
+        cwPlayer.close();
+        cwPlayer = null;
+    }
+    initCwPlayer();
 }
 
 function saveSettings() {
@@ -1426,16 +1436,13 @@ function recomputeStats(sessions) {
 
 /** Compute the duration of a character with the current settings
  *  @param {string} c - The character
- *  @param {number} [wpm] - Length of a dot in seconds
  *  @return {number} - Duration of the character, in seconds
  */
-function characterDuration(c, wpm) {
-    if (cwPlayer.alphabet === undefined) {
-        throw new Error("characterDuration called before JSCWlib initialized");
-    }
-    const dotlen = wpm ? 60 / (wpm * 50) : cwPlayer.dotlen;
+function characterDuration(c) {
+    const dotlen = 1.2 / settings.wpm;
     let time = 0;
-    const elements = cwPlayer.alphabet[c] || " ";
+    // @ts-ignore
+    const elements = letter_to_morse[c] || " ";
     for (const element of elements) {
         // add duration of dots or dits
         // NOTE: to make things slightly more regular in some cases, a space
@@ -1476,11 +1483,6 @@ function recordCopiedCharacter(sent) {
     getElement("current-session", HTMLTextAreaElement).value = copiedText;
 }
 
-function onFinished() {
-    pushGroup();
-    cwPlayer.play();
-}
-
 function startSession() {
     if (getElement("start-button", HTMLButtonElement).classList.contains("disabled")) {
         return;
@@ -1501,12 +1503,7 @@ function startSession() {
     sessionId = crypto.randomUUID();
     sessionStart = now;
     initCwPlayer();
-    cwPlayer.setWpm(settings.wpm);
-    cwPlayer.setEff(settings.wpm);
-    cwPlayer.setFreq(settings.tone);
-    cwPlayer.onFinished = onFinished;
     pushGroup();
-    cwPlayer.play();
     setInfoMessage("");
     const textarea = getElement("current-session", HTMLTextAreaElement);
     textarea.removeAttribute("readonly");
@@ -1548,7 +1545,6 @@ function stopSession(sent, userInput) {
 
     cwPlayer.stop();
     inSession = false;
-    cwPlayer.onFinished = undefined;
 
     const elapsed = Math.round((now.getTime() - sessionStart.getTime()) / 1000);
     const session = {
@@ -1579,18 +1575,18 @@ function stopSession(sent, userInput) {
 }
 
 /** Play a buzzer and then replay the correct character
- *  @param {string} [c] - The expected character (if any)
+ *  @param {string} [character] - The expected character (if any)
  */
-function replayAfterMistake(c) {
-    cwPlayer.onFinished = () => {
-        cwPlayer.onFinished = undefined;
-        cwPlayer.setFreq(settings.tone);
-        if (c !== undefined) {
-            cwPlayer.play(` ${c}`);
+function replayAfterMistake(character) {
+    cwPlayer.setOnFinishedCallback(() => {
+        cwPlayer.setOnFinishedCallback(null);
+        cwPlayer.setFrequency(settings.tone);
+        if (character !== undefined) {
+            cwPlayer.pushText(` ${character}`);
         }
-    };
-    cwPlayer.setFreq(settings.error_tone);
-    cwPlayer.play("T");
+    });
+    cwPlayer.setFrequency(settings.error_tone);
+    cwPlayer.push("-");
 }
 
 /** Interrupt a session due to an user error
@@ -1611,7 +1607,8 @@ function characterNameWithMorse(character) {
         return `<code>${t("spaceKey")}</code>`;
     } else {
         const name = character.toUpperCase();
-        const morse = cwPlayer.alphabet[character].replaceAll(".", "·").replaceAll("-", "−");
+        // @ts-ignore
+        const morse = letter_to_morse[character].replaceAll(".", "·").replaceAll("-", "−");
         return `<code>${name}</code> (<code>${morse}</code>)`;
     }
 }
@@ -1670,23 +1667,23 @@ function onKeyDown(event) {
 }
 
 /** Event handler for when a character has been fully played
- *  @param {{c: string}} c - The character played
+ *  @param {string} character - The character played
  */
-function onCharacterPlay(c) {
+function onCharacterPlayed(character) {
     if (!inSession) {
         return;
     }
 
     // skip leading space
-    if (played.length === 0 && c.c === " ") {
+    if (played.length === 0 && character === " ") {
         return;
     }
 
     // add character
     played.push({
         time: new Date().toISOString(),
-        character: c.c,
-        duration: characterDuration(c.c),
+        character,
+        duration: characterDuration(character),
     });
 
     // detect when user has stopped copying
