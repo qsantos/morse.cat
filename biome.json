@@ -27,5 +27,10 @@
                 "noPrototypeBuiltins": "off"
             }
         }
+    },
+    "javascript": {
+        "formatter": {
+            "quoteProperties": "preserve"
+        }
     }
 }
