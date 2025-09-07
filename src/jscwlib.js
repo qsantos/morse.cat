@@ -684,7 +684,7 @@ function MorsePlayer(params) {
                 endTime += 7 * dotDuration;
             } else {
                 if (onCharacterPlayed !== undefined) {
-                    otherTimeouts.push(setTimeout(() => onCharacterPlayed(c), (endTime - now) * 1000));
+                    otherTimeouts.push(setTimeout(onCharacterPlayed, (endTime - now) * 1000, c));
                 }
                 this.push(letter_to_morse[c] || "?");
                 // short gap / letter space
