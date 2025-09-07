@@ -7,7 +7,7 @@
 
 // biome-ignore format: having two columns is very convenient here
 /** @type {{[key: string]: string}} */
-const letter_to_morse = {
+const morseOfLetter = {
     " ": " ",  // word space
 
     // International Morse code, as per ITU-R M.1677-1
@@ -707,7 +707,7 @@ function MorsePlayer(params) {
                 if (onCharacterPlayed !== undefined) {
                     otherTimeouts.push(setTimeout(onCharacterPlayed, (endTime - now) * 1000, c));
                 }
-                this.push(letter_to_morse[c] || "?");
+                this.push(morseOfLetter[c] || "?");
                 // short gap / letter space
                 endTime += 3 * dotDuration;
             }

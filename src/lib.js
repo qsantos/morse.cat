@@ -1442,7 +1442,7 @@ function recomputeStats(sessions) {
 function characterDuration(c) {
     const dotlen = 1.2 / settings.wpm;
     let time = 0;
-    const elements = letter_to_morse[c] || " ";
+    const elements = morseOfLetter[c] || " ";
     for (const element of elements) {
         // add duration of dots or dits
         // NOTE: to make things slightly more regular in some cases, a space
@@ -1607,7 +1607,7 @@ function characterNameWithMorse(character) {
         return `<code>${t("spaceKey")}</code>`;
     } else {
         const name = character.toUpperCase();
-        const morse = (letter_to_morse[character] || "").replace(/./g, "·").replace(/-/g, "−");
+        const morse = (morseOfLetter[character] || "").replace(/./g, "·").replace(/-/g, "−");
         return `<code>${name}</code> (<code>${morse}</code>)`;
     }
 }
