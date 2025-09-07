@@ -125,9 +125,7 @@ function onKeyDown(event) {
 
 function onKeyUp(event) {
     if (event.code == "Space") {
-        if (cwPlayer !== undefined) {
-            cwPlayer.off();
-        }
+        cwPlayer?.off();
         return;
     }
     if (event.code == "ControlLeft") {
@@ -141,9 +139,7 @@ function onKeyUp(event) {
 function onBlur(event) {
     ditKeyPressed = false;
     dahKeyPressed = false;
-    if (cwPlayer !== undefined) {
-        cwPlayer.off();
-    }
+    cwPlayer?.off();
 }
 
 document.addEventListener('blur', onBlur);

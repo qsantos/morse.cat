@@ -621,9 +621,7 @@ function MorsePlayer(params) {
         this.stop(); // clear timeouts and play schedule
         resetTimeouts();
         modulationGain.gain.setValueAtTime(0.5, endTime);
-        if (onOn !== undefined) {
-            onOn();
-        }
+        onOn?.();
         lastElementStartTime = Date.now();
     };
 
