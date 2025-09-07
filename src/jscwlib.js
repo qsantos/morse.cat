@@ -695,7 +695,6 @@ function MorsePlayer(params) {
 
     function resetTimeouts() {
         clearTimeout(finishedTimeout);
-        finishedTimeout = undefined;
         otherTimeouts.splice(0).forEach(clearTimeout);
     }
 
