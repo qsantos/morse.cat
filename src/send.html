@@ -141,6 +141,9 @@ function onKeyUp(event) {
 function onBlur(event) {
     ditKeyPressed = false;
     dahKeyPressed = false;
+    if (cwPlayer !== undefined) {
+        cwPlayer.off();
+    }
 }
 
 document.addEventListener('blur', onBlur);
