@@ -96,6 +96,10 @@ function maybePlayElement() {
 }
 
 function onKeyDown(event) {
+    if (event.code == "Space") {
+        cwPlayer.on();
+        return;
+    }
     if (event.code == "ControlLeft") {
         ditKeyPressed = true;
     }
@@ -106,6 +110,10 @@ function onKeyDown(event) {
 }
 
 function onKeyUp(event) {
+    if (event.code == "Space") {
+        cwPlayer.off();
+        return;
+    }
     if (event.code == "ControlLeft") {
         ditKeyPressed = false;
     }

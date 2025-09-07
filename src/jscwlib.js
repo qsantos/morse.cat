@@ -603,6 +603,9 @@ function MorsePlayer(params) {
 
     // end of the last pushed event (typically, end of the last dit or dah being played)
     let endTime = 0;
+    // start of the last element that has been played (real time)
+    /** @type {number | undefined} */
+    let lastElementStartTime = undefined;
 
     // 1 word = "PARIS" = ".--. .- .-. .. ..." = duration of 50 dots
     // thus, at a given wpm, there are 50 * wpm / 60 dots per second
@@ -613,6 +616,25 @@ function MorsePlayer(params) {
     let finishedTimeout = undefined;
     /** @type {number[]} */
     const otherTimeouts = [];
+
+    this.on = () => {
+        this.stop(); // clear timeouts and play schedule
+        resetTimeouts();
+        modulationGain.gain.setValueAtTime(0.5, endTime);
+        if (onOn !== undefined) {
+            onOn();
+        }
+        lastElementStartTime = Date.now();
+    };
+
+    this.off = () => {
+        resetTimeouts();
+        modulationGain.gain.setValueAtTime(0, endTime);
+        if (onOff !== undefined && lastElementStartTime !== undefined) {
+            const elementDuration = (Date.now() - lastElementStartTime) / 1000;
+            onOff(elementDuration);
+        }
+    };
 
     /**
      *  @param {number} now
