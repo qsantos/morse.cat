@@ -725,4 +725,11 @@ function MorsePlayer(params) {
     this.setOnFinishedCallback = (callback) => {
         onFinished = callback;
     };
+
+    /**
+     *  @return {number}
+     */
+    this.remainingTime = () => {
+        return Math.max(endTime - audioContext.currentTime, 0);
+    };
 }

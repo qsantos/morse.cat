@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+    <head>
+        <meta charset="utf-8">
+        <title>Morse Cat</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" >
+        <link rel="icon" href="cat.svg" />
+    </head>
+<script src="./jscwlib.js"></script>
+<script>
+
+/** @type {MorsePlayer} */
+// @ts-ignore
+let cwPlayer = null;
+
+// For iambic keying, remember when both paddles are pressed, remember whether
+// the last element sent was a dit or a dah, to send the other one next
+let lastElementSent = null;
+// Whether the dit paddle is active (e.g. Control Left key pressed)
+let ditKeyPressed = false;
+// Whether the dah paddle is active (e.g. Control Right key pressed)
+let dahKeyPressed = false;
+// Timeout handle when we should check the state of the paddles to decide
+// whether to send a new element (and which)
+let maybePlayElementTimeout = undefined;
+// Accumulates elements until a full character is identified
+const letterElements = [];
+let interLetterTimeout = undefined;
+let wordSpaceTimeout = undefined;
+
+const dotDuration = 1.2 / 20;  // TODO: variable wpm
+
+function initCwPlayer() {
+    if (cwPlayer !== null) {
+        return;
+    }
+    cwPlayer = new MorsePlayer({
+        wpm: 20, // TODO: variable wpm
+        q: 13,
+        onOn,
+        onOff,
+    });
+}
+
+function endLetter() {
+    console.log("end of letter!", letterElements);
+    letterElements.length = 0;
+}
+
+function endWord() {
+    console.log("end of word!");
+}
+
+function onOn(gapDuration) {
+    clearTimeout(interLetterTimeout);
+    clearTimeout(wordSpaceTimeout);
+}
+
+function onOff(elementDuration) {
+    if (elementDuration < dotDuration * 1.5) {
+        // dit
+        letterElements.push(".");
+    } else {
+        // dah
+        letterElements.push("-");
+    }
+    // Schedule detecting an inter-letter gap and an word space
+    // decide on inter-letter gap half-way between inter-element gap (1 dot) and inter-letter gap (3 dot)
+    interLetterTimeout = setTimeout(endLetter, dotDuration * 2000);
+    // decide on word space half-way between inter-letter gap (3 dots) and word space (7 dots)
+    wordSpaceTimeout = setTimeout(endWord, dotDuration * 5000);
+}
+
+/** Push a new element to the Morse player, and schedule the next element decision */
+function playElement(element) {
+    initCwPlayer();
+    cwPlayer.push(element);
+    lastElementSent = element;
+    clearTimeout(maybePlayElementTimeout);
+    // cwPlayer.remainingTime() includes the time needed for a inter-element
+    // gap (one dot long); we need to keep some margin in case the timeout is
+    // scheduled late
+    maybePlayElementTimeout = setTimeout(maybePlayElement, (cwPlayer.remainingTime() - dotDuration / 2) * 1000);
+}
+
+/** To be called when we need to decide whether sending a new element */
+function maybePlayElement() {
+    if (ditKeyPressed && dahKeyPressed) {
+        playElement(lastElementSent == "-" ? "." : "-");
+    } else if (ditKeyPressed) {
+        playElement(".");
+    } else if (dahKeyPressed) {
+        playElement("-");
+    } else {
+        // stop
+    }
+}
+
+function onKeyDown(event) {
+    if (event.code == "ControlLeft") {
+        ditKeyPressed = true;
+    }
+    if (event.code == "ControlRight") {
+        dahKeyPressed = true;
+    }
+    maybePlayElement();
+}
+
+function onKeyUp(event) {
+    if (event.code == "ControlLeft") {
+        ditKeyPressed = false;
+    }
+    if (event.code == "ControlRight") {
+        dahKeyPressed = false;
+    }
+}
+
+function onBlur(event) {
+    ditKeyPressed = false;
+    dahKeyPressed = false;
+}
+
+document.addEventListener('blur', onBlur);
+document.addEventListener('keydown', onKeyDown);
+document.addEventListener('keyup', onKeyUp);
+
+</script>
