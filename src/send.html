@@ -8,6 +8,16 @@
 <script src="./jscwlib.js"></script>
 <script>
 
+// Map Morse code to characters, using the first match from morseOfCharacter
+/** @type {{[key: string]: string}} */
+const characterOfMorse = {};
+for (const character in morseOfCharacter) {
+    const morse = morseOfCharacter[character];
+    if (characterOfMorse[morse] === undefined) {
+        characterOfMorse[morse] = character;
+    }
+}
+
 /** @type {MorsePlayer} */
 // @ts-ignore
 let cwPlayer = null;
@@ -42,7 +52,9 @@ function initCwPlayer() {
 }
 
 function endCharacter() {
-    console.log("end of character!", characterElements);
+    const morse = characterElements.join("");
+    const character = characterOfMorse[morse]
+    console.log("end of character!", morse, character);
     characterElements.length = 0;
 }
 
