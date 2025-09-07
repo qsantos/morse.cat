@@ -44,10 +44,10 @@ function initCwPlayer() {
         onCharacterPlayed,
         onFinished: pushGroup,
         onOn: () => {
-            getElement("nose", SVGElement).style.fill = "#E75A70";
+            getElement("nose", SVGElement).style.fill = "yellow";
         },
         onOff: () => {
-            getElement("nose", SVGElement).style.fill = "yellow";
+            getElement("nose", SVGElement).style.fill = "#E75A70";
         },
     });
 }
