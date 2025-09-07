@@ -64,6 +64,7 @@ function onOff(elementDuration) {
         letterElements.push("-");
     }
     // Schedule detecting an inter-letter gap and an word space
+    // TODO: make it less dependent on JavaScript timeout scheduling (including that of onOff)
     // decide on inter-letter gap half-way between inter-element gap (1 dot) and inter-letter gap (3 dot)
     interLetterTimeout = setTimeout(endLetter, dotDuration * 2000);
     // decide on word space half-way between inter-letter gap (3 dots) and word space (7 dots)
