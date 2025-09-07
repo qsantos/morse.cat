@@ -615,6 +615,23 @@ function MorsePlayer(params) {
     const otherTimeouts = [];
 
     /**
+     *  @param {number} now
+     *  @param {number} elementDuration
+     */
+    function pushElement(now, elementDuration) {
+        modulationGain.gain.setValueAtTime(0.5, endTime);
+        if (onOn !== undefined) {
+            otherTimeouts.push(setTimeout(onOn, (endTime - now) * 1000));
+        }
+        endTime += elementDuration;
+        modulationGain.gain.setValueAtTime(0, endTime);
+        if (onOff !== undefined) {
+            otherTimeouts.push(setTimeout(onOff, (endTime - now) * 1000));
+        }
+        endTime += dotDuration; // inter-element gap
+    }
+
+    /**
      *  @param {string} rawMorse
      */
     // Example: morsePlayer.push("-- --- .-. ... . / -.-. --- -.. .");
@@ -632,27 +649,9 @@ function MorsePlayer(params) {
         // NOTE: use 0.5 to have the same volume as jscwlib
         for (const c of morse) {
             if (c === ".") {
-                modulationGain.gain.setValueAtTime(0.5, endTime);
-                if (onOn !== undefined) {
-                    otherTimeouts.push(setTimeout(onOn, (endTime - now) * 1000));
-                }
-                endTime += dotDuration;
-                modulationGain.gain.setValueAtTime(0, endTime);
-                if (onOff !== undefined) {
-                    otherTimeouts.push(setTimeout(onOff, (endTime - now) * 1000));
-                }
-                endTime += dotDuration; // inter-element gap
+                pushElement(now, dotDuration);
             } else if (c === "-") {
-                modulationGain.gain.setValueAtTime(0.5, endTime);
-                if (onOn !== undefined) {
-                    otherTimeouts.push(setTimeout(onOn, (endTime - now) * 1000));
-                }
-                endTime += dotDuration * 3;
-                modulationGain.gain.setValueAtTime(0, endTime);
-                if (onOff !== undefined) {
-                    otherTimeouts.push(setTimeout(onOff, (endTime - now) * 1000));
-                }
-                endTime += dotDuration; // inter-element gap
+                pushElement(now, dotDuration * 3);
             } else if (c === " ") {
                 // short gap / letter space
                 endTime += 3 * dotDuration;
