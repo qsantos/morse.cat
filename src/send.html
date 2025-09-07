@@ -110,6 +110,7 @@ function maybePlayElement() {
 
 function onKeyDown(event) {
     if (event.code == "Space") {
+        initCwPlayer();
         cwPlayer.on();
         return;
     }
@@ -124,7 +125,9 @@ function onKeyDown(event) {
 
 function onKeyUp(event) {
     if (event.code == "Space") {
-        cwPlayer.off();
+        if (cwPlayer !== undefined) {
+            cwPlayer.off();
+        }
         return;
     }
     if (event.code == "ControlLeft") {
