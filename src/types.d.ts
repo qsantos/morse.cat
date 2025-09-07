@@ -82,7 +82,7 @@ export type MorsePlayerParams = {
     filterFrequency?: number,
     q?: number,
     onOn?: () => void,
-    onOff?: () => void,
+    onOff?: (elementDuration: number) => void,
     onCharacterPlayed?: (character: string) => void,
     onFinished?: () => void,
 };

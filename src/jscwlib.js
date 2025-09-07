@@ -626,7 +626,7 @@ function MorsePlayer(params) {
         endTime += elementDuration;
         modulationGain.gain.setValueAtTime(0, endTime);
         if (onOff !== undefined) {
-            otherTimeouts.push(setTimeout(onOff, (endTime - now) * 1000));
+            otherTimeouts.push(setTimeout(onOff, (endTime - now) * 1000, elementDuration));
         }
         endTime += dotDuration; // inter-element gap
     }
