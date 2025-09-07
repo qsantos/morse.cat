@@ -25,7 +25,7 @@
         "strict": true
     },
     "files": [
-        "src/jscwlib.js",
+        "src/MorsePlayer.js",
         "src/lib.js"
     ]
 }
