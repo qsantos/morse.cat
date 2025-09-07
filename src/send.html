@@ -23,8 +23,8 @@ let dahKeyPressed = false;
 // whether to send a new element (and which)
 let maybePlayElementTimeout = undefined;
 // Accumulates elements until a full character is identified
-const letterElements = [];
-let interLetterTimeout = undefined;
+const characterElements = [];
+let interCharacterTimeout = undefined;
 let wordSpaceTimeout = undefined;
 
 const dotDuration = 1.2 / 20;  // TODO: variable wpm
@@ -41,9 +41,9 @@ function initCwPlayer() {
     });
 }
 
-function endLetter() {
-    console.log("end of letter!", letterElements);
-    letterElements.length = 0;
+function endCharacter() {
+    console.log("end of character!", characterElements);
+    characterElements.length = 0;
 }
 
 function endWord() {
@@ -51,23 +51,23 @@ function endWord() {
 }
 
 function onOn(gapDuration) {
-    clearTimeout(interLetterTimeout);
+    clearTimeout(interCharacterTimeout);
     clearTimeout(wordSpaceTimeout);
 }
 
 function onOff(elementDuration) {
     if (elementDuration < dotDuration * 1.5) {
         // dit
-        letterElements.push(".");
+        characterElements.push(".");
     } else {
         // dah
-        letterElements.push("-");
+        characterElements.push("-");
     }
-    // Schedule detecting an inter-letter gap and an word space
+    // Schedule detecting an inter-character gap and an word space
     // TODO: make it less dependent on JavaScript timeout scheduling (including that of onOff)
-    // decide on inter-letter gap half-way between inter-element gap (1 dot) and inter-letter gap (3 dot)
-    interLetterTimeout = setTimeout(endLetter, dotDuration * 2000);
-    // decide on word space half-way between inter-letter gap (3 dots) and word space (7 dots)
+    // decide on inter-character gap half-way between inter-element gap (1 dot) and inter-character gap (3 dot)
+    interCharacterTimeout = setTimeout(endCharacter, dotDuration * 2000);
+    // decide on word space half-way between inter-character gap (3 dots) and word space (7 dots)
     wordSpaceTimeout = setTimeout(endWord, dotDuration * 5000);
 }
 
