@@ -86,3 +86,9 @@ export type MorsePlayerParams = {
     onCharacterPlayed?: (character: string) => void,
     onFinished?: () => void,
 };
+
+export type MorseKeyerParams = MorsePlayerParams & {
+    elementCallback: (element: string) => void,
+    characterCallback: (character: string) => void,
+    wordCallback: (word: string) => void,
+}

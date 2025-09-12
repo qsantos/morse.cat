@@ -6,140 +6,39 @@
         <link rel="icon" href="cat.svg" />
     </head>
 <script src="./morsePlayer.js"></script>
+<script src="./morseKeyer.js"></script>
 <script>
-
-// Map Morse code to characters, using the first match from morseOfCharacter
-/** @type {{[key: string]: string}} */
-const characterOfMorse = {};
-for (const character in morseOfCharacter) {
-    const morse = morseOfCharacter[character];
-    if (characterOfMorse[morse] === undefined) {
-        characterOfMorse[morse] = character;
-    }
-}
-
-/** @type {MorsePlayer} */
-// @ts-ignore
-let cwPlayer = null;
-
-// For iambic keying, remember when both paddles are pressed, remember whether
-// the last element sent was a dit or a dah, to send the other one next
-let lastElementSent = null;
-// Whether the dit paddle is active (e.g. Control Left key pressed)
-let ditKeyPressed = false;
-// Whether the dah paddle is active (e.g. Control Right key pressed)
-let dahKeyPressed = false;
-// Timeout handle when we should check the state of the paddles to decide
-// whether to send a new element (and which)
-let maybePlayElementTimeout = undefined;
-// Accumulates elements until a full character is identified
-const characterElements = [];
-let interCharacterTimeout = undefined;
-let wordSpaceTimeout = undefined;
-
-const dotDuration = 1.2 / 20;  // TODO: variable wpm
-
-function initCwPlayer() {
-    if (cwPlayer !== null) {
-        return;
-    }
-    cwPlayer = new MorsePlayer({
-        wpm: 20, // TODO: variable wpm
-        q: 13,
-        onOn,
-        onOff,
-    });
-}
-
-function endCharacter() {
-    const morse = characterElements.join("");
-    const character = characterOfMorse[morse]
-    console.log("end of character!", morse, character);
-    characterElements.length = 0;
-}
-
-function endWord() {
-    console.log("end of word!");
-}
-
-function onOn(gapDuration) {
-    clearTimeout(interCharacterTimeout);
-    clearTimeout(wordSpaceTimeout);
-}
-
-function onOff(elementDuration) {
-    if (elementDuration < dotDuration * 1.5) {
-        // dit
-        characterElements.push(".");
-    } else {
-        // dah
-        characterElements.push("-");
-    }
-    // Schedule detecting an inter-character gap and an word space
-    // TODO: make it less dependent on JavaScript timeout scheduling (including that of onOff)
-    // decide on inter-character gap half-way between inter-element gap (1 dot) and inter-character gap (3 dot)
-    interCharacterTimeout = setTimeout(endCharacter, dotDuration * 2000);
-    // decide on word space half-way between inter-character gap (3 dots) and word space (7 dots)
-    wordSpaceTimeout = setTimeout(endWord, dotDuration * 5000);
-}
-
-/** Push a new element to the Morse player, and schedule the next element decision */
-function playElement(element) {
-    initCwPlayer();
-    cwPlayer.push(element);
-    lastElementSent = element;
-    clearTimeout(maybePlayElementTimeout);
-    // cwPlayer.remainingTime() includes the time needed for a inter-element
-    // gap (one dot long); we need to keep some margin in case the timeout is
-    // scheduled late
-    maybePlayElementTimeout = setTimeout(maybePlayElement, (cwPlayer.remainingTime() - dotDuration / 2) * 1000);
-}
-
-/** To be called when we need to decide whether sending a new element */
-function maybePlayElement() {
-    if (ditKeyPressed && dahKeyPressed) {
-        playElement(lastElementSent == "-" ? "." : "-");
-    } else if (ditKeyPressed) {
-        playElement(".");
-    } else if (dahKeyPressed) {
-        playElement("-");
-    } else {
-        // stop
-    }
-}
+const keyer = new MorseKeyer({
+    wpm: 30,
+    elementCallback: console.log,
+    characterCallback: console.log,
+    wordCallback: console.log,
+});
 
 function onKeyDown(event) {
     if (event.code == "Space") {
-        initCwPlayer();
-        cwPlayer.on();
-        return;
+        keyer.pressStraightKey();
+    } else if (event.code == "ControlLeft") {
+        keyer.pressDitKey();
+    } else if (event.code == "ControlRight") {
+        keyer.pressDahKey();
     }
-    if (event.code == "ControlLeft") {
-        ditKeyPressed = true;
-    }
-    if (event.code == "ControlRight") {
-        dahKeyPressed = true;
-    }
-    maybePlayElement();
 }
 
 function onKeyUp(event) {
     if (event.code == "Space") {
-        cwPlayer?.off();
-        return;
-    }
-    if (event.code == "ControlLeft") {
-        ditKeyPressed = false;
-    }
-    if (event.code == "ControlRight") {
-        dahKeyPressed = false;
+        keyer.releaseStraightKey();
+    } else if (event.code == "ControlLeft") {
+        keyer.releaseDitKey();
+    } else if (event.code == "ControlRight") {
+        keyer.releaseDahKey();
     }
 }
 
 function onBlur(event) {
-    ditKeyPressed = false;
-    dahKeyPressed = false;
-    cwPlayer?.off();
+    keyer.releaseDitKey();
+    keyer.releaseDahKey();
+    keyer.releaseStraightKey();
 }
 
 document.addEventListener('blur', onBlur);

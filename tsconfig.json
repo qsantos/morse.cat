@@ -25,7 +25,8 @@
         "strict": true
     },
     "files": [
-        "src/MorsePlayer.js",
+        "src/morsePlayer.js",
+        "src/morseKeyer.js",
         "src/lib.js"
     ]
 }
