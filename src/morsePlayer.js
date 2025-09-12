@@ -605,7 +605,7 @@ function MorsePlayer(params) {
     let endTime = 0;
     // start of the last element that has been played (real time)
     /** @type {number | undefined} */
-    let lastElementStartTime = undefined;
+    let currentElementStartTime = undefined;
 
     // 1 word = "PARIS" = ".--. .- .-. .. ..." = duration of 50 dots
     // thus, at a given wpm, there are 50 * wpm / 60 dots per second
@@ -618,20 +618,24 @@ function MorsePlayer(params) {
     const otherTimeouts = [];
 
     this.on = () => {
+        if (currentElementStartTime !== undefined) {
+            return;
+        }
         this.stop(); // clear timeouts and play schedule
         resetTimeouts();
         modulationGain.gain.setValueAtTime(0.5, endTime);
         onOn?.();
-        lastElementStartTime = Date.now();
+        currentElementStartTime = Date.now();
     };
 
     this.off = () => {
         resetTimeouts();
         modulationGain.gain.setValueAtTime(0, endTime);
-        if (onOff !== undefined && lastElementStartTime !== undefined) {
-            const elementDuration = (Date.now() - lastElementStartTime) / 1000;
+        if (onOff !== undefined && currentElementStartTime !== undefined) {
+            const elementDuration = (Date.now() - currentElementStartTime) / 1000;
             onOff(elementDuration);
         }
+        currentElementStartTime = undefined;
     };
 
     /**
