@@ -89,6 +89,6 @@ export type MorsePlayerParams = {
 
 export type MorseKeyerParams = MorsePlayerParams & {
     elementCallback: (element: string) => void,
-    characterCallback: (character: string) => void,
+    characterCallback: (character: string | undefined) => void,
     wordCallback: (word: string) => void,
 }

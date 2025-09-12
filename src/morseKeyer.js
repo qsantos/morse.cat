@@ -9,7 +9,7 @@ function MorseKeyer(params) {
     const characterOfMorse = {};
     for (const character in morseOfCharacter) {
         const morse = morseOfCharacter[character];
-        if (characterOfMorse[morse] === undefined) {
+        if (morse !== undefined && characterOfMorse[morse] === undefined) {
             characterOfMorse[morse] = character;
         }
     }
@@ -22,6 +22,7 @@ function MorseKeyer(params) {
 
     // For iambic keying, remember when both paddles are pressed, remember whether
     // the last element sent was a dit or a dah, to send the other one next
+    /** @type {string | null} */
     let lastElementSent = null;
     // Whether the dit paddle is active (e.g. Control Left key pressed)
     let ditKeyPressed = false;
@@ -29,12 +30,17 @@ function MorseKeyer(params) {
     let dahKeyPressed = false;
     // Timeout handle when we should check the state of the paddles to decide
     // whether to send a new element (and which)
+    /** @type {number | undefined} */
     let maybePlayElementTimeout = undefined;
     // Accumulates elements until a full character is identified
+    /** @type {string[]} */
     const characterElements = [];
     // Accumulates character until a full word is formed
+    /** @type {string[]} */
     const wordCharacters = [];
+    /** @type {number | undefined} */
     let interCharacterTimeout = undefined;
+    /** @type {number | undefined} */
     let wordSpaceTimeout = undefined;
 
     const dotDuration = 1.2 / wpm;
@@ -50,16 +56,21 @@ function MorseKeyer(params) {
         });
     }
 
+    /**
+     *  @param {string} element
+     */
     function endElement(element) {
         characterElements.push(element);
-        params?.characterCallback?.(element);
+        params?.elementCallback?.(element);
     }
 
     function endCharacter() {
         const morse = characterElements.join("");
-        const character = characterOfMorse[morse]
+        const character = characterOfMorse[morse];
         characterElements.length = 0;
-        wordCharacters.push(character);
+        if (character !== undefined) {
+            wordCharacters.push(character);
+        }
         params?.characterCallback?.(character);
     }
 
@@ -69,12 +80,15 @@ function MorseKeyer(params) {
         params?.wordCallback?.(word);
     }
 
-    function onOn(gapDuration) {
+    function onOn() {
         clearTimeout(interCharacterTimeout);
         clearTimeout(wordSpaceTimeout);
         params?.onOn?.();
     }
 
+    /**
+     *  @param {number} elementDuration
+     */
     function onOff(elementDuration) {
         if (elementDuration < dotDuration * 1.5) {
             // dit
@@ -89,10 +103,13 @@ function MorseKeyer(params) {
         interCharacterTimeout = setTimeout(endCharacter, dotDuration * 2000);
         // decide on word space half-way between inter-character gap (3 dots) and word space (7 dots)
         wordSpaceTimeout = setTimeout(endWord, dotDuration * 5000);
-        params?.onOff?.();
+        params?.onOff?.(elementDuration);
     }
 
     /** Push a new element to the Morse player, and schedule the next element decision */
+    /**
+     *  @param {string} element
+     */
     function playElement(element) {
         initCwPlayer();
         cwPlayer.push(element);
