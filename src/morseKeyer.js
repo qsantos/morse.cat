@@ -43,7 +43,7 @@ function MorseKeyer(params) {
     /** @type {number | undefined} */
     let wordSpaceTimeout = undefined;
 
-    const dotDuration = 1.2 / wpm;
+    const ditDuration = 1.2 / wpm;
 
     function initCwPlayer() {
         if (cwPlayer !== null) {
@@ -90,7 +90,7 @@ function MorseKeyer(params) {
      *  @param {number} elementDuration
      */
     function onOff(elementDuration) {
-        if (elementDuration < dotDuration * 1.5) {
+        if (elementDuration < ditDuration * 1.5) {
             // dit
             endElement(".");
         } else {
@@ -99,10 +99,10 @@ function MorseKeyer(params) {
         }
         // Schedule detecting an inter-character gap and an word space
         // TODO: make it less dependent on JavaScript timeout scheduling (including that of onOff)
-        // decide on inter-character gap half-way between inter-element gap (1 dot) and inter-character gap (3 dot)
-        interCharacterTimeout = setTimeout(endCharacter, dotDuration * 2000);
-        // decide on word space half-way between inter-character gap (3 dots) and word space (7 dots)
-        wordSpaceTimeout = setTimeout(endWord, dotDuration * 5000);
+        // decide on inter-character gap half-way between inter-element gap (1 dit) and inter-character gap (3 dits)
+        interCharacterTimeout = setTimeout(endCharacter, ditDuration * 2000);
+        // decide on word space half-way between inter-character gap (3 dits) and word space (7 dits)
+        wordSpaceTimeout = setTimeout(endWord, ditDuration * 5000);
         params?.onOff?.(elementDuration);
     }
 
@@ -116,9 +116,9 @@ function MorseKeyer(params) {
         lastElementSent = element;
         clearTimeout(maybePlayElementTimeout);
         // cwPlayer.remainingTime() includes the time needed for a inter-element
-        // gap (one dot long); we need to keep some margin in case the timeout is
+        // gap (one dit long); we need to keep some margin in case the timeout is
         // scheduled late
-        maybePlayElementTimeout = setTimeout(maybePlayElement, (cwPlayer.remainingTime() - dotDuration / 2) * 1000);
+        maybePlayElementTimeout = setTimeout(maybePlayElement, (cwPlayer.remainingTime() - ditDuration / 2) * 1000);
     }
 
     /** To be called when we need to decide whether sending a new element */

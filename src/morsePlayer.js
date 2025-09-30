@@ -607,10 +607,10 @@ function MorsePlayer(params) {
     /** @type {number | undefined} */
     let currentElementStartTime = undefined;
 
-    // 1 word = "PARIS" = ".--. .- .-. .. ..." = duration of 50 dots
-    // thus, at a given wpm, there are 50 * wpm / 60 dots per second
-    // so a dot lasts for 1.2 / wpm seconds
-    const dotDuration = 1.2 / wpm;
+    // 1 word = "PARIS" = ".--. .- .-. .. ..." = duration of 50 dits
+    // thus, at a given wpm, there are 50 * wpm / 60 dits per second
+    // so a dit lasts for 1.2 / wpm seconds
+    const ditDuration = 1.2 / wpm;
 
     /** @type {number | undefined} */
     let finishedTimeout = undefined;
@@ -652,7 +652,7 @@ function MorsePlayer(params) {
         if (onOff !== undefined) {
             otherTimeouts.push(setTimeout(onOff, (endTime - now) * 1000, elementDuration));
         }
-        endTime += dotDuration; // inter-element gap
+        endTime += ditDuration; // inter-element gap
     }
 
     /**
@@ -675,15 +675,15 @@ function MorsePlayer(params) {
         // NOTE: use 0.5 to have the same volume as jscwlib
         for (const c of morse) {
             if (c === ".") {
-                pushElement(now, dotDuration);
+                pushElement(now, ditDuration);
             } else if (c === "-") {
-                pushElement(now, dotDuration * 3);
+                pushElement(now, ditDuration * 3);
             } else if (c === " ") {
                 // short gap / character space
-                endTime += 3 * dotDuration;
+                endTime += 3 * ditDuration;
             } else if (c === "/") {
                 // medium gap / word space
-                endTime += 7 * dotDuration;
+                endTime += 7 * ditDuration;
             }
         }
 
@@ -708,14 +708,14 @@ function MorsePlayer(params) {
         for (const c of text) {
             if (c === " ") {
                 // medium gap / word space
-                endTime += 7 * dotDuration;
+                endTime += 7 * ditDuration;
             } else {
                 if (onCharacterPlayed !== undefined) {
                     otherTimeouts.push(setTimeout(onCharacterPlayed, (endTime - now) * 1000, c));
                 }
                 this.push(morseOfCharacter[c] || "?");
                 // short gap / character space
-                endTime += 3 * dotDuration;
+                endTime += 3 * ditDuration;
             }
         }
     };
