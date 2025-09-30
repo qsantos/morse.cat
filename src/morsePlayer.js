@@ -665,10 +665,10 @@ function MorsePlayer(params) {
 
         // if we are done playing stuff, start again
         const now = audioContext.currentTime;
-        if (now > endTime) {
+        if (now >= endTime) {
             // leave 10ms of delay to give room for the AudioContext to react,
             // and avoid clipping the start of the element
-            endTime = now + 0.1;
+            endTime = now + 0.01;
         }
 
         // set gain to 0 or 0.5 to modulate CW
@@ -699,10 +699,10 @@ function MorsePlayer(params) {
     this.pushText = function (text) {
         // if we are done playing stuff, start again
         const now = audioContext.currentTime;
-        if (now > endTime) {
+        if (now >= endTime) {
             // leave 10ms of delay to give room for the AudioContext to react,
             // and avoid clipping the start of the first element
-            endTime = now + 0.1;
+            endTime = now + 0.01;
         }
 
         for (const c of text) {
