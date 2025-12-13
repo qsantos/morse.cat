@@ -115,6 +115,7 @@ function MorseKeyer(params) {
         cwPlayer.push(element);
         lastElementSent = element;
         clearTimeout(maybePlayElementTimeout);
+        // TODO: do not use player remainingTime as a reference
         // cwPlayer.remainingTime() includes the time needed for a inter-element
         // gap (one dit long); we need to keep some margin in case the timeout is
         // scheduled late
