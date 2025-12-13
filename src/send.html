@@ -5,15 +5,46 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" >
         <link rel="icon" href="cat.svg" />
     </head>
+
+<ul>
+    <li id="elements"></li>
+    <li id="characters"></li>
+    <li id="words"></li>
+</ul>
+
 <script src="./morsePlayer.js"></script>
 <script src="./morseKeyer.js"></script>
 <script>
 const keyer = new MorseKeyer({
-    wpm: 30,
-    elementCallback: console.log,
-    characterCallback: console.log,
-    wordCallback: console.log,
+    wpm: 20,
+    elementCallback,
+    characterCallback,
+    wordCallback,
 });
+
+const elements = [];
+const characters = [];
+const words = [];
+
+function elementCallback(element) {
+    elements.push(element);
+    document.getElementById("elements").innerHTML = elements.join("");
+}
+
+function characterCallback(character) {
+    elements.length = 0;
+    characters.push(character);
+    document.getElementById("elements").innerHTML = "";
+    document.getElementById("characters").innerHTML = characters.join("");
+}
+
+function wordCallback(word) {
+    characters.length = 0;
+    words.push(word);
+    document.getElementById("elements").innerHTML = "";
+    document.getElementById("characters").innerHTML = "";
+    document.getElementById("words").innerHTML = words.join(" ");
+}
 
 function onKeyDown(event) {
     if (event.code == "Space") {
