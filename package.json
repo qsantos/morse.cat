@@ -4,7 +4,7 @@
     "typescript": "^5.7.3"
   },
   "scripts": {
-      "lint": "npx tsc && npx @biomejs/biome check src/lib.js src/jscwlib.js",
-      "format": "npx @biomejs/biome format --write src/lib.js src/jscwlib.js"
+      "lint": "npx tsc && npx @biomejs/biome check src/morsePlayer.js src/morseKeyer.js src/copy.js",
+      "format": "npx @biomejs/biome format --write src/morsePlayer.js src/morseKeyer.js src/copy.js"
   }
 }

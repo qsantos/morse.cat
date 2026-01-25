@@ -1097,8 +1097,8 @@ function onSettingsChange() {
         cwPlayer.close();
         // @ts-ignore
         cwPlayer = null;
+        initCwPlayer();
     }
-    initCwPlayer();
 }
 
 function saveSettings() {
