@@ -1,5 +1,5 @@
-const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
-const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+const tooltipList = [...tooltipTriggerList].map((tooltipTriggerEl) => new bootstrap.Tooltip(tooltipTriggerEl));
 
 let yourRealNumber = 1;
 let theirRealCallSign = null;
@@ -52,7 +52,7 @@ function gauss(mu, sigma) {
  * @return {number}
  */
 function lognormvariate(mu, sigma) {
-  return Math.exp(gauss(mu, sigma));
+    return Math.exp(gauss(mu, sigma));
 }
 
 /**
@@ -69,7 +69,7 @@ function choices(charset, count) {
  * @return {string} -- random call sign
  */
 function randomCallSign() {
-    const charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     const prefixLength = randint(1, 2);
     const suffixLength = randint(1, 3);
 
@@ -85,7 +85,7 @@ function randomCallSign() {
  * @return {string} -- formatted number
  */
 function formatNumber(number) {
-    return String(number).padStart(3, '0');
+    return String(number).padStart(3, "0");
 }
 
 /**
@@ -93,7 +93,7 @@ function formatNumber(number) {
  * @return {string} -- normalized number
  */
 function normalizeNumber(number) {
-    return formatNumber(parseInt(number));
+    return formatNumber(Number.parseInt(number));
 }
 
 /**
@@ -140,19 +140,7 @@ function sendMorse(sender, message) {
         // Decoded Morse
         const decodedMorse = document.createElement("SPAN");
         logEntry.appendChild(decodedMorse);
-        let played = [""];
-        cwPlayer.onCharacterPlay = (c) => {
-            played.push(c.c);
-            decodedMorse.innerHTML = played.join("").toUpperCase();
-        };
-
-        // Promise handling
-        cwPlayer.onFinished = () => {
-            accept();
-        };
-
-        // Start
-        cwPlayer.play();
+        const played = [""];
     });
 }
 
@@ -165,7 +153,7 @@ async function youSend(message) {
         return false;
     }
     youSending = true;
-    await sendMorse('You', message);
+    await sendMorse("You", message);
     youSending = false;
     return true;
 }
@@ -175,7 +163,7 @@ async function youSend(message) {
  * @return {Promise<void>} -- resolved when message is sent
  */
 async function theySend(message) {
-    await sendMorse('Them', message);
+    await sendMorse("Them", message);
 }
 
 /**
@@ -194,8 +182,8 @@ async function initiateContact() {
  */
 async function cq() {
     document.getElementById("their-call-sign").focus();
-    const yourCallSign = document.getElementById("your-call-sign").value
-    if (!await youSend(`CQCQ TEST ${yourCallSign}`)) {
+    const yourCallSign = document.getElementById("your-call-sign").value;
+    if (!(await youSend(`CQCQ TEST ${yourCallSign}`))) {
         return;
     }
     await sleep(1000);
@@ -207,7 +195,7 @@ async function cq() {
  */
 async function repeatCallSign() {
     const theirCallSign = document.getElementById("their-call-sign").value;
-    if (!await youSend(theirCallSign)) {
+    if (!(await youSend(theirCallSign))) {
         return;
     }
     await sleep(1000);
@@ -243,12 +231,12 @@ async function sendReportAndNumber() {
     const theirReport = document.getElementById("their-report");
     const theirNumber = document.getElementById("their-number");
     // Complete exchange
-    if (!await youSend(`${yourReport.value} ${yourNumber.value}`)) {
+    if (!(await youSend(`${yourReport.value} ${yourNumber.value}`))) {
         return;
     }
     // Log contact
     const time = new Date().toISOString();
-    const contactLogEntry = document.createElement('TR');
+    const contactLogEntry = document.createElement("TR");
     contactLogEntry.innerHTML = `
         <td>${yourNumber.value}</td>
         <td><time datetime="${time}" title="${time}">${time.slice(11, 16)}</time></td>
@@ -258,10 +246,10 @@ async function sendReportAndNumber() {
         <td>${correctify(normalizeNumber(theirNumber.value), formatNumber(theirRealNumber))}</td>
 `;
     document.getElementById("contact-log").appendChild(contactLogEntry);
-    await theySend('TU GL');
+    await theySend("TU GL");
     // Reset inputs
-    theirCallSign.value = '';
-    theirNumber.value = '';
+    theirCallSign.value = "";
+    theirNumber.value = "";
     theirCallSign.focus();
     // Increment your number
     yourRealNumber += 1;
@@ -274,7 +262,7 @@ async function sendReportAndNumber() {
  * @param {KeyboardEvent} event -- key down event
  */
 function yourCallSignKeyDown(event) {
-    if (event.key == "Enter" && event.target.value) {
+    if (event.key === "Enter" && event.target.value) {
         cq();
     }
 }
@@ -283,7 +271,7 @@ function yourCallSignKeyDown(event) {
  * @param {KeyboardEvent} event -- key down event
  */
 function theirCallSignKeyDown(event) {
-    if (event.key == "Enter" && event.target.value) {
+    if (event.key === "Enter" && event.target.value) {
         repeatCallSign();
     }
 }
@@ -292,7 +280,7 @@ function theirCallSignKeyDown(event) {
  * @param {KeyboardEvent} event -- key down event
  */
 function theirReportKeyDown(event) {
-    if (event.key == "Enter" && event.target.value) {
+    if (event.key === "Enter" && event.target.value) {
         document.getElementById("their-number").focus();
     }
 }
@@ -301,7 +289,7 @@ function theirReportKeyDown(event) {
  * @param {KeyboardEvent} event -- key down event
  */
 function theirNumberKeyDown(event) {
-    if (event.key == "Enter" && event.target.value) {
+    if (event.key === "Enter" && event.target.value) {
         sendReportAndNumber();
     }
 }
