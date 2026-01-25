@@ -115,8 +115,8 @@ function sendMorse(sender, message) {
             wpm: 30,
             frequency: 600,
             q: 13,
-            onCharacterPlay: (c) => {
-                played.push(c.c);
+            onCharacterPlayed: (c) => {
+                played.push(c);
                 decodedMorse.innerHTML = played.join("").toUpperCase();
             },
             onFinished: accept,
