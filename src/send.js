@@ -30,21 +30,21 @@ function wordCallback(word) {
 }
 
 function onKeyDown(event) {
-    if (event.code == "Space") {
+    if (event.code === "Space") {
         keyer.pressStraightKey();
-    } else if (event.code == "ControlLeft") {
+    } else if (event.code === "ControlLeft") {
         keyer.pressDitKey();
-    } else if (event.code == "ControlRight") {
+    } else if (event.code === "ControlRight") {
         keyer.pressDahKey();
     }
 }
 
 function onKeyUp(event) {
-    if (event.code == "Space") {
+    if (event.code === "Space") {
         keyer.releaseStraightKey();
-    } else if (event.code == "ControlLeft") {
+    } else if (event.code === "ControlLeft") {
         keyer.releaseDitKey();
-    } else if (event.code == "ControlRight") {
+    } else if (event.code === "ControlRight") {
         keyer.releaseDahKey();
     }
 }
@@ -55,6 +55,6 @@ function onBlur(event) {
     keyer.releaseStraightKey();
 }
 
-document.addEventListener('blur', onBlur);
-document.addEventListener('keydown', onKeyDown);
-document.addEventListener('keyup', onKeyUp);
+document.addEventListener("blur", onBlur);
+document.addEventListener("keydown", onKeyDown);
+document.addEventListener("keyup", onKeyUp);
