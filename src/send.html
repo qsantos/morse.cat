@@ -1,79 +1,19 @@
 <!DOCTYPE html>
+<html lang="en">
     <head>
         <meta charset="utf-8">
         <title>Morse Cat</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" >
         <link rel="icon" href="cat.svg" />
+        <script defer src="./morsePlayer.js"></script>
+        <script defer src="./morseKeyer.js"></script>
+        <script defer src="./send.js"></script>
     </head>
-
-<ul>
-    <li id="elements"></li>
-    <li id="characters"></li>
-    <li id="words"></li>
-</ul>
-
-<script src="./morsePlayer.js"></script>
-<script src="./morseKeyer.js"></script>
-<script>
-const keyer = new MorseKeyer({
-    wpm: 20,
-    elementCallback,
-    characterCallback,
-    wordCallback,
-});
-
-const elements = [];
-const characters = [];
-const words = [];
-
-function elementCallback(element) {
-    elements.push(element);
-    document.getElementById("elements").innerHTML = elements.join("");
-}
-
-function characterCallback(character) {
-    elements.length = 0;
-    characters.push(character);
-    document.getElementById("elements").innerHTML = "";
-    document.getElementById("characters").innerHTML = characters.join("");
-}
-
-function wordCallback(word) {
-    characters.length = 0;
-    words.push(word);
-    document.getElementById("elements").innerHTML = "";
-    document.getElementById("characters").innerHTML = "";
-    document.getElementById("words").innerHTML = words.join(" ");
-}
-
-function onKeyDown(event) {
-    if (event.code == "Space") {
-        keyer.pressStraightKey();
-    } else if (event.code == "ControlLeft") {
-        keyer.pressDitKey();
-    } else if (event.code == "ControlRight") {
-        keyer.pressDahKey();
-    }
-}
-
-function onKeyUp(event) {
-    if (event.code == "Space") {
-        keyer.releaseStraightKey();
-    } else if (event.code == "ControlLeft") {
-        keyer.releaseDitKey();
-    } else if (event.code == "ControlRight") {
-        keyer.releaseDahKey();
-    }
-}
-
-function onBlur(event) {
-    keyer.releaseDitKey();
-    keyer.releaseDahKey();
-    keyer.releaseStraightKey();
-}
-
-document.addEventListener('blur', onBlur);
-document.addEventListener('keydown', onKeyDown);
-document.addEventListener('keyup', onKeyUp);
-
-</script>
+    <body>
+        <ul>
+            <li id="elements"></li>
+            <li id="characters"></li>
+            <li id="words"></li>
+        </ul>
+    </body>
+</html>
