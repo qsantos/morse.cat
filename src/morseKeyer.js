@@ -1,7 +1,7 @@
 // depends on morsePlayer.js
 
 /**
- * @param {import("./types").MorseKeyerParams} params
+ * @param {import("./types").MorseKeyerParams | undefined} params
  */
 function MorseKeyer(params) {
     // Map Morse code to characters, using the first match from morseOfCharacter
