@@ -111,12 +111,17 @@ async function sleep(delay) {
 function sendMorse(sender, message) {
     return new Promise((accept) => {
         // Set up cwPlayer
-        const cwPlayer = new jscw();
-        cwPlayer.q = 13;
-        cwPlayer.setText(message);
-        cwPlayer.setWpm(30);
-        cwPlayer.setEff(30);
-        cwPlayer.setFreq(600);
+        const cwPlayer = new MorsePlayer({
+            wpm: 30,
+            frequency: 600,
+            q: 13,
+            onCharacterPlay: (c) => {
+                played.push(c.c);
+                decodedMorse.innerHTML = played.join("").toUpperCase();
+            },
+            onFinished: accept,
+        });
+        cwPlayer.pushText(message);
 
         // Log Entry
         const log = document.getElementById("log");
