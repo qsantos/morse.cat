@@ -706,13 +706,13 @@ function MorsePlayer(params) {
         }
 
         for (const c of text) {
+            if (onCharacterPlayed !== undefined) {
+                otherTimeouts.push(setTimeout(onCharacterPlayed, (endTime - now) * 1000, c));
+            }
             if (c === " ") {
                 // medium gap / word space
                 endTime += 7 * ditDuration;
             } else {
-                if (onCharacterPlayed !== undefined) {
-                    otherTimeouts.push(setTimeout(onCharacterPlayed, (endTime - now) * 1000, c));
-                }
                 this.push(morseOfCharacter[c] || "?");
                 // short gap / character space
                 endTime += 3 * ditDuration;
