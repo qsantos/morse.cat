@@ -33,23 +33,30 @@ let cwPlayer = null;
 // NOTE: this function must only be called after a user action, since jscw()
 // will create an AudioContext; the player does recover from that, but this
 // generates a warning
-function initCwPlayer() {
+/**
+ * @param {boolean=} disarmCallbacks?
+ */
+function initCwPlayer(disarmCallbacks) {
     if (cwPlayer !== null) {
-        return;
+        cwPlayer.close();
     }
-    cwPlayer = new MorsePlayer({
+    /** @type {import("./types").MorsePlayerParams} */
+    const params = {
         wpm: settings.wpm,
         frequency: settings.tone,
         q: 13,
-        onCharacterPlayed,
-        onFinished: pushGroup,
         onOn: () => {
             getElement("nose", SVGElement).style.fill = "yellow";
         },
         onOff: () => {
             getElement("nose", SVGElement).style.fill = "#E75A70";
         },
-    });
+    };
+    if (!disarmCallbacks) {
+        params.onCharacterPlayed = onCharacterPlayed;
+        params.onFinished = pushGroup;
+    }
+    cwPlayer = new MorsePlayer(params);
 }
 
 /** @type {import("./types").Settings} */
@@ -105,6 +112,7 @@ const translations = {
         spaceKey: "Space",
         secondsSuffix: " s",
         start: "Start",
+        testSoundOutput: "Test sound output",
         "history.title": "History",
         "history.started": "Start time",
         "history.copiedText": "Copied Text",
@@ -168,6 +176,7 @@ const translations = {
         spaceKey: "Espace",
         secondsSuffix: " s",
         start: "Démarrer",
+        testSoundOutput: "Testestr la sortie audio",
         "history.title": "Historique",
         "history.started": "Heure de début",
         "history.copiedText": "Texte copié",
@@ -231,6 +240,7 @@ const translations = {
         spaceKey: "スペース",
         secondsSuffix: "秒",
         start: "開始する",
+        testSoundOutput: "音声出力を確認",
         "history.title": "履歴",
         "history.started": "開始時間",
         "history.copiedText": "コピーしたテキスト",
@@ -294,6 +304,7 @@ const translations = {
         spaceKey: "Espacio",
         secondsSuffix: " s",
         start: "Iniciar",
+        testSoundOutput: "Probar salida de audio",
         "history.title": "Historial",
         "history.started": "Hora de inicio",
         "history.copiedText": "Texto copiado",
@@ -357,6 +368,7 @@ const translations = {
         spaceKey: "Espai",
         secondsSuffix: " s",
         start: "Iniciar",
+        testSoundOutput: "Provar la sortida d’àudio",
         "history.title": "Historial",
         "history.started": "Hora d’inici",
         "history.copiedText": "Text copiat",
@@ -420,6 +432,7 @@ const translations = {
         spaceKey: "空格键",
         secondsSuffix: "秒",
         start: "开始",
+        testSoundOutput: "测试音频输出",
         "history.title": "历史记录",
         "history.started": "开始时间",
         "history.copiedText": "复制的文本",
@@ -483,6 +496,7 @@ const translations = {
         spaceKey: "स्पेस कुंजी",
         secondsSuffix: " सेकंड",
         start: "शुरू करें",
+        testSoundOutput: "ऑडियो आउटपुट जाँचें",
         "history.title": "इतिहास",
         "history.started": "शुरुआत का समय",
         "history.copiedText": "प्रतिलिपि किया गया टेक्स्ट",
@@ -546,6 +560,7 @@ const translations = {
         spaceKey: "مفتاح المسافة",
         secondsSuffix: " ثانية",
         start: "ابدأ",
+        testSoundOutput: "اختبار إخراج الصوت",
         "history.title": "السجل",
         "history.started": "وقت البدء",
         "history.copiedText": "النص المنسوخ",
@@ -609,6 +624,7 @@ const translations = {
         spaceKey: "স্পেস কী",
         secondsSuffix: " সেকেন্ড",
         start: "শুরু করুন",
+        testSoundOutput: "অডিও আউটপুট পরীক্ষা",
         "history.title": "ইতিহাস",
         "history.started": "শুরুর সময়",
         "history.copiedText": "কপি করা লেখা",
@@ -672,6 +688,7 @@ const translations = {
         spaceKey: "Tecla Espaço",
         secondsSuffix: " s",
         start: "Começar",
+        testSoundOutput: "Testar saída de áudio",
         "history.title": "Histórico",
         "history.started": "Hora de Início",
         "history.copiedText": "Texto Copiado",
@@ -735,6 +752,7 @@ const translations = {
         spaceKey: "Пробел",
         secondsSuffix: " с",
         start: "Начать",
+        testSoundOutput: "Проверить вывод звука",
         "history.title": "История",
         "history.started": "Время начала",
         "history.copiedText": "Скопированный текст",
@@ -798,6 +816,7 @@ const translations = {
         spaceKey: "اسپیس کی",
         secondsSuffix: " سیکنڈ",
         start: "شروع کریں",
+        testSoundOutput: "آڈیو آؤٹ پٹ چیک کریں",
         "history.title": "تاریخ",
         "history.started": "شروع ہونے کا وقت",
         "history.copiedText": "کاپی کیا گیا متن",
@@ -1094,9 +1113,6 @@ function onSettingsChange() {
     saveSettings();
 
     if (cwPlayer !== null) {
-        cwPlayer.close();
-        // @ts-ignore
-        cwPlayer = null;
         initCwPlayer();
     }
 }
@@ -1946,6 +1962,12 @@ function onCurrentSessionBlur() {
         setInfoMessage("info.lostFocus");
         stopSession();
     }
+}
+
+function testSoundOutput() {
+    stopSession();
+    initCwPlayer(true);
+    cwPlayer.pushText("PARIS");
 }
 
 async function main() {
