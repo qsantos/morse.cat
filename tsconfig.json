@@ -27,6 +27,7 @@
     "files": [
         "src/morsePlayer.js",
         "src/morseKeyer.js",
-        "src/copy.js"
+        "src/copy.js",
+        "src/send.js"
     ]
 }

@@ -1,3 +1,21 @@
+// TODO: deduplicate with copy.js
+/** Get an HTML element by id and throw if it does not exist
+ *  @template T
+ *  @param {string} id - The element’s id
+ *  @param {new() => T} type - The type of HTML Element
+ *  @return {T} - The element
+ */
+function getElement(id, type) {
+    const element = document.getElementById(id);
+    if (!element) {
+        throw new Error(`Expected HTML element with id ${id} but none found`);
+    }
+    if (!(element instanceof type)) {
+        throw new Error(`Expected ${type.name} with id ${id} but found ${element} instead`);
+    }
+    return element;
+}
+
 const keyer = new MorseKeyer({
     wpm: 20,
     elementCallback,
@@ -5,30 +23,45 @@ const keyer = new MorseKeyer({
     wordCallback,
 });
 
+/** @type string[] */
 const elements = [];
+/** @type string[] */
 const characters = [];
+/** @type string[] */
 const words = [];
 
+/**
+ *  @param {string} element
+ */
 function elementCallback(element) {
     elements.push(element);
-    document.getElementById("elements").innerHTML = elements.join("");
+    getElement("elements", HTMLLIElement).innerHTML = elements.join("");
 }
 
+/**
+ *  @param {string | undefined} character
+ */
 function characterCallback(character) {
     elements.length = 0;
-    characters.push(character);
-    document.getElementById("elements").innerHTML = "";
-    document.getElementById("characters").innerHTML = characters.join("");
+    characters.push(character || "?");
+    getElement("elements", HTMLLIElement).innerHTML = "";
+    getElement("characters", HTMLLIElement).innerHTML = characters.join("");
 }
 
+/**
+ *  @param {string} word
+ */
 function wordCallback(word) {
-    characters.length = 0;
     words.push(word);
-    document.getElementById("elements").innerHTML = "";
-    document.getElementById("characters").innerHTML = "";
-    document.getElementById("words").innerHTML = words.join(" ");
+    characters.length = 0;
+    getElement("elements", HTMLLIElement).innerHTML = "";
+    getElement("characters", HTMLLIElement).innerHTML = "";
+    getElement("words", HTMLLIElement).innerHTML = words.join(" ");
 }
 
+/**
+ *  @param {KeyboardEvent} event
+ */
 function onKeyDown(event) {
     if (event.code === "Space") {
         keyer.pressStraightKey();
@@ -39,6 +72,9 @@ function onKeyDown(event) {
     }
 }
 
+/**
+ *  @param {KeyboardEvent} event
+ */
 function onKeyUp(event) {
     if (event.code === "Space") {
         keyer.releaseStraightKey();
@@ -49,7 +85,7 @@ function onKeyUp(event) {
     }
 }
 
-function onBlur(event) {
+function onBlur() {
     keyer.releaseDitKey();
     keyer.releaseDahKey();
     keyer.releaseStraightKey();
