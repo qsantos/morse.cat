@@ -176,7 +176,7 @@ const translations = {
         spaceKey: "Espace",
         secondsSuffix: " s",
         start: "Démarrer",
-        testSoundOutput: "Testestr la sortie audio",
+        testSoundOutput: "Tester la sortie audio",
         "history.title": "Historique",
         "history.started": "Heure de début",
         "history.copiedText": "Texte copié",
