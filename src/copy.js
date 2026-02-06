@@ -1968,6 +1968,7 @@ function testSoundOutput() {
     stopSession();
     initCwPlayer(true);
     cwPlayer.pushText("PARIS");
+    getElement("start-button", HTMLButtonElement).focus();
 }
 
 async function main() {
