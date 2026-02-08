@@ -1623,7 +1623,7 @@ function characterNameWithMorse(character) {
         return `<code>${t("spaceKey")}</code>`;
     } else {
         const name = character.toUpperCase();
-        const morse = (morseOfCharacter[character] || "").replace(/./g, "·").replace(/-/g, "−");
+        const morse = (morseOfCharacter[character] || "").replace(/\./g, "·").replace(/-/g, "−");
         return `<code>${name}</code> (<code>${morse}</code>)`;
     }
 }
