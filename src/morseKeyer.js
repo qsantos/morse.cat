@@ -21,13 +21,13 @@ function MorseKeyer(params) {
     let cwPlayer = null;
 
     // For iambic keying, remember when both paddles are pressed, remember whether
-    // the last element sent was a dit or a dah, to send the other one next
+    // the last element sent was a dot or a dash, to send the other one next
     /** @type {string | null} */
     let lastElementSent = null;
-    // Whether the dit paddle is active (e.g. Control Left key pressed)
-    let ditKeyPressed = false;
-    // Whether the dah paddle is active (e.g. Control Right key pressed)
-    let dahKeyPressed = false;
+    // Whether the dot paddle is active (e.g. Control Left key pressed)
+    let dotKeyPressed = false;
+    // Whether the dash paddle is active (e.g. Control Right key pressed)
+    let dashKeyPressed = false;
     // Timeout handle when we should check the state of the paddles to decide
     // whether to send a new element (and which)
     /** @type {number | undefined} */
@@ -43,7 +43,7 @@ function MorseKeyer(params) {
     /** @type {number | undefined} */
     let wordSpaceTimeout = undefined;
 
-    const ditDuration = 1.2 / wpm;
+    const dotDuration = 1.2 / wpm;
 
     function initCwPlayer() {
         if (cwPlayer !== null) {
@@ -90,19 +90,19 @@ function MorseKeyer(params) {
      *  @param {number} elementDuration
      */
     function onOff(elementDuration) {
-        if (elementDuration < ditDuration * 1.5) {
-            // dit
+        if (elementDuration < dotDuration * 1.5) {
+            // dot
             endElement(".");
         } else {
-            // dah
+            // dash
             endElement("-");
         }
         // Schedule detecting an inter-character gap and an word space
         // TODO: make it less dependent on JavaScript timeout scheduling (including that of onOff)
-        // decide on inter-character gap half-way between inter-element gap (1 dit) and inter-character gap (3 dits)
-        interCharacterTimeout = setTimeout(endCharacter, ditDuration * 2000);
-        // decide on word space half-way between inter-character gap (3 dits) and word space (7 dits)
-        wordSpaceTimeout = setTimeout(endWord, ditDuration * 5000);
+        // decide on inter-character gap half-way between inter-element gap (1 dot) and inter-character gap (3 dots)
+        interCharacterTimeout = setTimeout(endCharacter, dotDuration * 2000);
+        // decide on word space half-way between inter-character gap (3 dots) and word space (7 dots)
+        wordSpaceTimeout = setTimeout(endWord, dotDuration * 5000);
         params?.onOff?.(elementDuration);
     }
 
@@ -117,18 +117,18 @@ function MorseKeyer(params) {
         clearTimeout(maybePlayElementTimeout);
         // TODO: do not use player remainingTime as a reference
         // cwPlayer.remainingTime() includes the time needed for a inter-element
-        // gap (one dit long); we need to keep some margin in case the timeout is
+        // gap (one dot long); we need to keep some margin in case the timeout is
         // scheduled late
-        maybePlayElementTimeout = setTimeout(maybePlayElement, (cwPlayer.remainingTime() - ditDuration / 2) * 1000);
+        maybePlayElementTimeout = setTimeout(maybePlayElement, (cwPlayer.remainingTime() - dotDuration / 2) * 1000);
     }
 
     /** To be called when we need to decide whether sending a new element */
     function maybePlayElement() {
-        if (ditKeyPressed && dahKeyPressed) {
+        if (dotKeyPressed && dashKeyPressed) {
             playElement(lastElementSent === "-" ? "." : "-");
-        } else if (ditKeyPressed) {
+        } else if (dotKeyPressed) {
             playElement(".");
-        } else if (dahKeyPressed) {
+        } else if (dashKeyPressed) {
             playElement("-");
         } else {
             // stop
@@ -144,22 +144,22 @@ function MorseKeyer(params) {
         cwPlayer?.off();
     };
 
-    this.pressDitKey = () => {
-        ditKeyPressed = true;
+    this.pressDotKey = () => {
+        dotKeyPressed = true;
         maybePlayElement();
     };
 
-    this.releaseDitKey = () => {
-        ditKeyPressed = false;
+    this.releaseDotKey = () => {
+        dotKeyPressed = false;
     };
 
-    this.pressDahKey = () => {
-        dahKeyPressed = true;
+    this.pressDashKey = () => {
+        dashKeyPressed = true;
         maybePlayElement();
     };
 
-    this.releaseDahKey = () => {
-        dahKeyPressed = false;
+    this.releaseDashKey = () => {
+        dashKeyPressed = false;
     };
 
     function resetTimeouts() {

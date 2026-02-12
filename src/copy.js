@@ -1460,13 +1460,13 @@ function characterDuration(c) {
     let time = 0;
     const elements = morseOfCharacter[c] || " ";
     for (const element of elements) {
-        // add duration of dots or dits
+        // add duration of dots or dashes
         // NOTE: to make things slightly more regular in some cases, a space
-        // will count as a regular character of length 1 dit; when adding the
-        // previous and next inter-character gap, this totals a gap of 7 dits,
+        // will count as a regular character of length 1 dot; when adding the
+        // previous and next inter-character gap, this totals a gap of 7 dots,
         // which is the actual duration of the inter-group gap
-        const dits = element === "-" ? 3 : 1;
-        time += dotlen * dits;
+        const dots = element === "-" ? 3 : 1;
+        time += dotlen * dots;
     }
     // add duration of inter-element gaps
     time += dotlen * (elements.length - 1);

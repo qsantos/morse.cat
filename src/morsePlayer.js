@@ -601,16 +601,16 @@ function MorsePlayer(params) {
     oscillator.connect(modulationGain);
     oscillator.start();
 
-    // end of the last pushed event (typically, end of the last dit or dah being played)
+    // end of the last pushed event (typically, end of the last dot or dash being played)
     let endTime = 0;
     // start of the last element that has been played (real time)
     /** @type {number | undefined} */
     let currentElementStartTime = undefined;
 
-    // 1 word = "PARIS" = ".--. .- .-. .. ..." = duration of 50 dits
-    // thus, at a given wpm, there are 50 * wpm / 60 dits per second
-    // so a dit lasts for 1.2 / wpm seconds
-    const ditDuration = 1.2 / wpm;
+    // 1 word = "PARIS" = ".--. .- .-. .. ..." = duration of 50 dots
+    // thus, at a given wpm, there are 50 * wpm / 60 dots per second
+    // so a dot lasts for 1.2 / wpm seconds
+    const dotDuration = 1.2 / wpm;
 
     /** @type {number | undefined} */
     let finishedTimeout = undefined;
@@ -652,7 +652,7 @@ function MorsePlayer(params) {
         if (onOff !== undefined) {
             otherTimeouts.push(setTimeout(onOff, (endTime - now) * 1000, elementDuration));
         }
-        endTime += ditDuration; // inter-element gap
+        endTime += dotDuration; // inter-element gap
     }
 
     /**
@@ -675,15 +675,15 @@ function MorsePlayer(params) {
         // NOTE: use 0.5 to have the same volume as jscwlib
         for (const c of morse) {
             if (c === ".") {
-                pushElement(now, ditDuration);
+                pushElement(now, dotDuration);
             } else if (c === "-") {
-                pushElement(now, ditDuration * 3);
+                pushElement(now, dotDuration * 3);
             } else if (c === " ") {
                 // short gap / character space
-                endTime += 3 * ditDuration;
+                endTime += 3 * dotDuration;
             } else if (c === "/") {
                 // medium gap / word space
-                endTime += 7 * ditDuration;
+                endTime += 7 * dotDuration;
             }
         }
 
@@ -711,11 +711,11 @@ function MorsePlayer(params) {
             }
             if (c === " ") {
                 // medium gap / word space
-                endTime += 7 * ditDuration;
+                endTime += 7 * dotDuration;
             } else {
                 this.push(morseOfCharacter[c] || "?");
                 // short gap / character space
-                endTime += 3 * ditDuration;
+                endTime += 3 * dotDuration;
             }
         }
     };

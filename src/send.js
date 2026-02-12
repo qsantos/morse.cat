@@ -66,9 +66,9 @@ function onKeyDown(event) {
     if (event.code === "Space") {
         keyer.pressStraightKey();
     } else if (event.code === "ControlLeft") {
-        keyer.pressDitKey();
+        keyer.pressDotKey();
     } else if (event.code === "ControlRight") {
-        keyer.pressDahKey();
+        keyer.pressDashKey();
     }
 }
 
@@ -79,15 +79,15 @@ function onKeyUp(event) {
     if (event.code === "Space") {
         keyer.releaseStraightKey();
     } else if (event.code === "ControlLeft") {
-        keyer.releaseDitKey();
+        keyer.releaseDotKey();
     } else if (event.code === "ControlRight") {
-        keyer.releaseDahKey();
+        keyer.releaseDashKey();
     }
 }
 
 function onBlur() {
-    keyer.releaseDitKey();
-    keyer.releaseDahKey();
+    keyer.releaseDotKey();
+    keyer.releaseDashKey();
     keyer.releaseStraightKey();
 }
 
